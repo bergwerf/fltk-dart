@@ -1,0 +1,28 @@
+root = true
+
+[*]
+end_of_line = lf             # All files use Unix-style newlines.
+insert_final_newline = true  # All files have a final newline.
+charset = utf-8              # All files use UTF-8 encoding.
+indent_style = space         # All files use space indentation by default.
+indent_size = 2              # With 2 spaces as indentation width
+
+# reST uses 3 spaces for indentation.
+[*.rst]
+indent_style = space
+indent_size = 3
+
+# Makefiles use tabs for indentation.
+[Makefile]
+indent_style = tab
+indent_size = 4
+
+# Go uses tabs for indentation.
+[*.go]
+indent_style = tab
+indent_size = 2
+
+# Python uses 4 spaces for indentation.
+[*.py]
+indent_style = space
+indent_size = 4
