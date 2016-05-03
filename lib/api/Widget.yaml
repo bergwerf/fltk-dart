@@ -12,7 +12,13 @@ typdefs:
   Fl_Labeltype: unsigned int
 
 methods:
-- name: show
+- name: box
+  argslist: static_cast<Fl_Boxtype>(type)
+  args:
+  - argi: 1
+    name: type
+    type: int64_t
+    conv: Dart_IntegerToInt64
 - name: label
   argslist: str
   args:
@@ -20,3 +26,4 @@ methods:
     name: str
     type: const char*
     conv: Dart_StringToCString
+- name: show

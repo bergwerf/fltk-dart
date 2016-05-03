@@ -8,6 +8,7 @@ int main(List<String> args) {
   fl.scheme('gleam');
   var window = new fl.Window(500, 500, 'My custom label!');
   window.label('Oops, I want this label!');
+  window.box(fl.UP_BOX);
   window.end();
   window.show();
   return fl.run();

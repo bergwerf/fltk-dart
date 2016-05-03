@@ -1,5 +1,5 @@
-#ifndef {{ header }}
-#define {{ header }}
+#ifndef {{{ header }}}
+#define {{{ header }}}
 
 {{# include }}
 #include {{{ . }}}
@@ -7,11 +7,11 @@
 
 #include "dart_api.h"
 
-// Dart bindings for {{ cname }}
-class {{ dartname }} {
+// Dart bindings for {{{ cname }}}
+class {{{ dartname }}} {
 public:
 {{# methods }}
-  static void {{ name }}(Dart_NativeArguments arguments);
+  static void {{{ name }}}(Dart_NativeArguments arguments);
 {{/ methods }}
 };
 

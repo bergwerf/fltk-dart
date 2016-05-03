@@ -1,0 +1,125 @@
+// Copyright (c) 2016, Herman Bergwerf. All rights reserved.
+// Use of this source code is governed by a MIT-style license
+// that can be found in the LICENSE file.
+
+part of fltk;
+
+// Fl_Boxtype
+enum Boxtype {
+  FL_NO_BOX,
+  FL_FLAT_BOX,
+  FL_UP_BOX,
+  FL_DOWN_BOX,
+  FL_UP_FRAME,
+  FL_DOWN_FRAME,
+  FL_THIN_UP_BOX,
+  FL_THIN_DOWN_BOX,
+  FL_THIN_UP_FRAME,
+  FL_THIN_DOWN_FRAME,
+  FL_ENGRAVED_BOX,
+  FL_EMBOSSED_BOX,
+  FL_ENGRAVED_FRAME,
+  FL_EMBOSSED_FRAME,
+  FL_BORDER_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_SHADOW_BOX,
+  FL_BORDER_FRAME,
+  // ignore: UNUSED_FIELD
+  _FL_SHADOW_FRAME,
+  // ignore: UNUSED_FIELD
+  _FL_ROUNDED_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_RSHADOW_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_ROUNDED_FRAME,
+  // ignore: UNUSED_FIELD
+  _FL_RFLAT_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_ROUND_UP_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_ROUND_DOWN_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_DIAMOND_UP_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_DIAMOND_DOWN_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_OVAL_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_OSHADOW_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_OVAL_FRAME,
+  // ignore: UNUSED_FIELD
+  _FL_OFLAT_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_PLASTIC_UP_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_PLASTIC_DOWN_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_PLASTIC_UP_FRAME,
+  // ignore: UNUSED_FIELD
+  _FL_PLASTIC_DOWN_FRAME,
+  // ignore: UNUSED_FIELD
+  _FL_PLASTIC_THIN_UP_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_PLASTIC_THIN_DOWN_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_PLASTIC_ROUND_UP_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_PLASTIC_ROUND_DOWN_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_GTK_UP_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_GTK_DOWN_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_GTK_UP_FRAME,
+  // ignore: UNUSED_FIELD
+  _FL_GTK_DOWN_FRAME,
+  // ignore: UNUSED_FIELD
+  _FL_GTK_THIN_UP_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_GTK_THIN_DOWN_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_GTK_THIN_UP_FRAME,
+  // ignore: UNUSED_FIELD
+  _FL_GTK_THIN_DOWN_FRAME,
+  // ignore: UNUSED_FIELD
+  _FL_GTK_ROUND_UP_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_GTK_ROUND_DOWN_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_GLEAM_UP_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_GLEAM_DOWN_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_GLEAM_UP_FRAME,
+  // ignore: UNUSED_FIELD
+  _FL_GLEAM_DOWN_FRAME,
+  // ignore: UNUSED_FIELD
+  _FL_GLEAM_THIN_UP_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_GLEAM_THIN_DOWN_BOX,
+  // ignore: UNUSED_FIELD,
+  _FL_GLEAM_ROUND_UP_BOX,
+  // ignore: UNUSED_FIELD
+  _FL_GLEAM_ROUND_DOWN_BOX,
+  FL_FREE_BOXTYPE
+}
+
+// Quick access constants
+const NO_BOX = Boxtype.FL_NO_BOX;
+const FLAT_BOX = Boxtype.FL_FLAT_BOX;
+const UP_BOX = Boxtype.FL_UP_BOX;
+const DOWN_BOX = Boxtype.FL_DOWN_BOX;
+const UP_FRAME = Boxtype.FL_UP_FRAME;
+const DOWN_FRAME = Boxtype.FL_DOWN_FRAME;
+const THIN_UP_BOX = Boxtype.FL_THIN_UP_BOX;
+const THIN_DOWN_BOX = Boxtype.FL_THIN_DOWN_BOX;
+const THIN_UP_FRAME = Boxtype.FL_THIN_UP_FRAME;
+const THIN_DOWN_FRAME = Boxtype.FL_THIN_DOWN_FRAME;
+const ENGRAVED_BOX = Boxtype.FL_ENGRAVED_BOX;
+const EMBOSSED_BOX = Boxtype.FL_EMBOSSED_BOX;
+const ENGRAVED_FRAME = Boxtype.FL_ENGRAVED_FRAME;
+const EMBOSSED_FRAME = Boxtype.FL_EMBOSSED_FRAME;
+const BORDER_BOX = Boxtype.FL_BORDER_BOX;
+const BORDER_FRAME = Boxtype.FL_BORDER_FRAME;
+const FREE_BOXTYPE = Boxtype.FL_FREE_BOXTYPE;

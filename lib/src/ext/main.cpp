@@ -101,8 +101,9 @@ FunctionLookup functionList[] = {
   {"Fl::run", Fl_run},
   {"Fl::scheme", Fl_scheme},
   {"Fl_Window::Fl_Window", Fl_Window_create},
-  {"Fl_Widget::show", Widget::show},
+  {"Fl_Widget::box", Widget::box},
   {"Fl_Widget::label", Widget::label},
+  {"Fl_Widget::show", Widget::show},
   {"Fl_Group::end", Fl_Group_end},
   {NULL, NULL}};
 

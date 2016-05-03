@@ -29,9 +29,13 @@ class Widget extends _Ptr {
   /// Set label.
   void label(String label) => _label(ptr, label);
 
+  /// Set boxtype.
+  void box(Boxtype type) => _box(ptr, type.index);
+
   /// Bindings with native code
   static int _create(int x, int y, int w, int h, String l)
       native 'Fl_Widget::Fl_Widget';
   static void _show(int ptr) native 'Fl_Widget::show';
   static void _label(int ptr, String label) native 'Fl_Widget::label';
+  static void _box(int ptr, int type) native 'Fl_Widget::box';
 }

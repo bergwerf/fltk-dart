@@ -9,8 +9,9 @@
 // Dart bindings for Fl_Widget
 class Widget {
 public:
-  static void show(Dart_NativeArguments arguments);
+  static void box(Dart_NativeArguments arguments);
   static void label(Dart_NativeArguments arguments);
+  static void show(Dart_NativeArguments arguments);
 };
 
 #endif

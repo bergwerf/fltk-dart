@@ -1,12 +1,12 @@
-#include "{{ dartname }}.h"
+#include "{{{ dartname }}}.h"
 {{# methods }}
 
-void {{ dartname }}::{{ name }}(Dart_NativeArguments arguments) {
+void {{{ dartname }}}::{{{ name }}}(Dart_NativeArguments arguments) {
   // Local variables
   int64_t ptr;
   {{ cname }}* ref;
   {{# args }}
-  {{ type }} {{ name }};
+  {{{ type }}} {{{ name }}};
   {{/ args }}
 
   Dart_EnterScope();
@@ -17,11 +17,11 @@ void {{ dartname }}::{{ name }}(Dart_NativeArguments arguments) {
 
   // Resolve other variables.
   {{# args }}
-  {{ conv }}(Dart_GetNativeArgument(arguments, {{ argi }}), &{{ name }});
+  {{{ conv }}}(Dart_GetNativeArgument(arguments, {{{ argi }}}), &{{{ name }}});
   {{/ args }}
 
   // Execute this method.
-  ref->{{ name }}({{ argslist }});
+  ref->{{{ name }}}({{{ argslist }}});
 
   // Resolve return value,
   Dart_Handle result = Dart_Null();
