@@ -2,11 +2,13 @@
 // Use of this source code is governed by a MIT-style license
 // that can be found in the LICENSE file.
 
-library fltk;
+part of fltk;
 
-import 'dart-ext:fltk';
+// Base for C pointers in Dart
+class _Ptr {
+  // Pointer address.
+  final int ptr;
 
-part 'src/fl.dart';
-part 'src/ptr.dart';
-part 'src/widget.dart';
-part 'src/window.dart';
+  // Create pointer from integer.
+  _Ptr.fromPtr(this.ptr);
+}

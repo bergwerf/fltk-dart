@@ -5,3 +5,4 @@
 part of fltk;
 
 int run() native 'Fl::run';
+int scheme(String name) native 'Fl::scheme';

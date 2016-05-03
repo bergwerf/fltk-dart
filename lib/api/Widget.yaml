@@ -1,0 +1,22 @@
+header: FLTK_DART_WIDGET_H
+include:
+- <FL/Fl.H>
+- <FL/Fl_Widget.H>
+
+cname: Fl_Widget
+dartname: Widget
+
+typdefs:
+  Fl_Align: unsigned int
+  Fl_Color: unsigned int
+  Fl_Labeltype: unsigned int
+
+methods:
+- name: show
+- name: label
+  argslist: str
+  args:
+  - argi: 1
+    name: str
+    type: const char*
+    conv: Dart_StringToCString

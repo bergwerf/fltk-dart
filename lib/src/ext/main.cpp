@@ -1,17 +1,10 @@
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include <dlfcn.h>
-#include <unistd.h>
-#include <sys/mman.h>
-
 #include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Window.H>
 
 #include "dart_api.h"
+
+#include "gen/Widget.h"
 
 Dart_NativeFunction ResolveName(
   Dart_Handle name,
@@ -50,6 +43,21 @@ void Fl_run(Dart_NativeArguments arguments) {
   Dart_ExitScope();
 }
 
+void Fl_scheme(Dart_NativeArguments arguments) {
+  Fl_Group* group;
+  Dart_Handle dh_handle;
+
+  Dart_EnterScope();
+
+  const char* scheme;
+  Dart_StringToCString(Dart_GetNativeArgument(arguments, 0), &scheme);
+  Fl::scheme(scheme);
+
+  Dart_Handle result = Dart_Null();
+  Dart_SetReturnValue(arguments, result);
+  Dart_ExitScope();
+}
+
 void Fl_Window_create(Dart_NativeArguments arguments) {
   Fl_Window* window;
   Dart_Handle result;
@@ -84,21 +92,6 @@ void Fl_Group_end(Dart_NativeArguments arguments) {
   Dart_ExitScope();
 }
 
-void Fl_Widget_show(Dart_NativeArguments arguments) {
-  Fl_Widget* widget;
-  Dart_Handle dh_handle;
-
-  Dart_EnterScope();
-  dh_handle = Dart_GetNativeArgument(arguments, 0);
-  int64_t ptr;
-  Dart_IntegerToInt64(dh_handle, &ptr);
-  widget = (Fl_Widget*)ptr;
-  widget->show();
-  Dart_Handle result = Dart_Null();
-  Dart_SetReturnValue(arguments, result);
-  Dart_ExitScope();
-}
-
 struct FunctionLookup {
   const char* name;
   Dart_NativeFunction function;
@@ -106,8 +99,10 @@ struct FunctionLookup {
 
 FunctionLookup functionList[] = {
   {"Fl::run", Fl_run},
+  {"Fl::scheme", Fl_scheme},
   {"Fl_Window::Fl_Window", Fl_Window_create},
-  {"Fl_Widget::show", Fl_Widget_show},
+  {"Fl_Widget::show", Widget::show},
+  {"Fl_Widget::label", Widget::label},
   {"Fl_Group::end", Fl_Group_end},
   {NULL, NULL}};
 

@@ -17,12 +17,23 @@ g++ -g -fPIC -I${DART_SDK}/include -DDART_SHARED_LIB -c lib/src/ext/main.cpp \
     -lfltk -lXcursor -lXfixes -lXext -lXft -lfontconfig -lXinerama -lpthread -ldl -lm -lX11 \
     -o libfltk.o
 
+# Compile individual classes.
+for f in lib/src/ext/gen/*.cpp
+do
+  g++ -g -fPIC -I${DART_SDK}/include -DDART_SHARED_LIB -c $f \
+      -I/usr/include/freetype2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_THREAD_SAFE -D_REENTRANT \
+      -lfltk -lXcursor -lXfixes -lXext -lXft -lfontconfig -lXinerama -lpthread -ldl -lm -lX11 \
+      -o $f.o
+done
+
 # Compile shared object.
 #
 # Notes:
 # - add -m32 flag on 32 bit systems.
 # - add -g to generate debug info.
-gcc -g -shared -Wl,-soname,libfltk.so -o lib/libfltk.so libfltk.o -lfltk -lXcursor -lXfixes -lXext -lXft -lfontconfig -lXinerama -lpthread -ldl -lm -lX11
+gcc -g -shared -Wl,-soname,libfltk.so -o lib/libfltk.so libfltk.o lib/src/ext/gen/*.o \
+    -lfltk -lXcursor -lXfixes -lXext -lXft -lfontconfig -lXinerama -lpthread -ldl -lm -lX11
 
 # Clean up.
 rm libfltk.o
+rm lib/src/ext/gen/*.o
