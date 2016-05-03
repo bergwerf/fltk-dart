@@ -1,4 +1,5 @@
 compile
+libfltk.so
 
 #################
 # Linux.gitignore

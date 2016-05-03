@@ -11,7 +11,12 @@ linter:
   - avoid_init_to_null
   - avoid_return_types_on_setters
   - camel_case_types
-  - constant_identifier_names
+
+  # To retain some of the C++ look 'n feel, FL constants are formatted using
+  # UPPER_SNAKE_CASE.
+  #
+  #- constant_identifier_names
+
   - empty_constructor_bodies
   - implementation_imports
   - library_names
