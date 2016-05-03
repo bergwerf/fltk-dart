@@ -22,4 +22,18 @@ methods:
     name: text
     type: const char*
     conv: Dart_StringToCString
+- name: labelsize
+  argslist: pix
+  args:
+  - argi: 1
+    name: pix
+    type: int64_t
+    conv: Dart_IntegerToInt64
+- name: labeltype
+  argslist: static_cast<Fl_Labeltype>(type)
+  args:
+  - argi: 1
+    name: type
+    type: int64_t
+    conv: Dart_IntegerToInt64
 - name: show

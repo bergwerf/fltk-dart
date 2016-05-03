@@ -24,11 +24,19 @@ abstract class Widget extends _Ptr {
   /// Set label.
   void label(String text) => _label(ptr, text);
 
+  /// Set label size.
+  void labelsize(int pix) => _labelsize(ptr, pix);
+
+  /// Set label type.
+  void labeltype(Labeltype type) => _labeltype(ptr, type.index);
+
   /// Set boxtype.
   void box(Boxtype type) => _box(ptr, type.index);
 
   // Bindings with native code
   static void _show(int ptr) native 'fldart::Widget::show';
   static void _label(int ptr, String text) native 'fldart::Widget::label';
+  static void _labelsize(int ptr, int pix) native 'fldart::Widget::labelsize';
+  static void _labeltype(int ptr, int type) native 'fldart::Widget::labeltype';
   static void _box(int ptr, int type) native 'fldart::Widget::box';
 }

@@ -7,6 +7,7 @@ library fltk;
 import 'dart-ext:fltk';
 
 part 'src/enums/boxtype.dart';
+part 'src/enums/labeltype.dart';
 part 'src/fl.dart';
 part 'src/ptr.dart';
 part 'src/widget.dart';

@@ -29,6 +29,11 @@ DART_EXPORT Dart_Handle fltk_Init(Dart_Handle parentLibrary) {
     return resultCode;
   }
 
+  // Initialize label types.
+  fl_define_FL_SHADOW_LABEL();
+  fl_define_FL_ENGRAVED_LABEL();
+  fl_define_FL_EMBOSSED_LABEL();
+
   return Dart_Null();
 }
 
