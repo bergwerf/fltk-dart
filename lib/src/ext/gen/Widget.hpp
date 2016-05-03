@@ -14,6 +14,7 @@ namespace fldart {
   public:
     static void box(Dart_NativeArguments arguments);
     static void label(Dart_NativeArguments arguments);
+    static void labelfont(Dart_NativeArguments arguments);
     static void labelsize(Dart_NativeArguments arguments);
     static void labeltype(Dart_NativeArguments arguments);
     static void show(Dart_NativeArguments arguments);

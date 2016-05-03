@@ -10,7 +10,7 @@ int main(List<String> args) {
   var box = new fl.Box(20, 40, 260, 100, 'Hello, World!');
   box.box(fl.UP_BOX);
   box.labelsize(36);
-  //box.labelfont(fl.BOLD + fl.ITALIC);
+  box.labelfont(fl.BOLD + fl.ITALIC);
   box.labeltype(fl.SHADOW_LABEL);
   window.end();
   window.show();

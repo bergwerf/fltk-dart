@@ -4,6 +4,7 @@ namespace fldart {
   FunctionMapping Widget::methods[] = {
     {"fldart::Widget::box", Widget::box},
     {"fldart::Widget::label", Widget::label},
+    {"fldart::Widget::labelfont", Widget::labelfont},
     {"fldart::Widget::labelsize", Widget::labelsize},
     {"fldart::Widget::labeltype", Widget::labeltype},
     {"fldart::Widget::show", Widget::show},
@@ -52,6 +53,31 @@ namespace fldart {
 
     // Execute this method.
     ref -> label(strcpy(new char[strlen(text) + 1], text));
+
+    // Resolve return value,
+    Dart_Handle result = Dart_Null();
+    Dart_SetReturnValue(arguments, result);
+
+    Dart_ExitScope();
+  }
+
+  void Widget::labelfont(Dart_NativeArguments arguments) {
+    // Local variables
+    int64_t ptr;
+    Fl_Widget* ref;
+    int64_t f;
+
+    Dart_EnterScope();
+
+    // Resolve reference.
+    Dart_IntegerToInt64(Dart_GetNativeArgument(arguments, 0), &ptr);
+    ref = (Fl_Widget*)ptr;
+
+    // Resolve other variables.
+    Dart_IntegerToInt64(Dart_GetNativeArgument(arguments, 1), &f);
+
+    // Execute this method.
+    ref -> labelfont(f);
 
     // Resolve return value,
     Dart_Handle result = Dart_Null();

@@ -24,6 +24,9 @@ abstract class Widget extends _Ptr {
   /// Set label.
   void label(String text) => _label(ptr, text);
 
+  /// Set label type.
+  void labelfont(int f) => _labelfont(ptr, f);
+
   /// Set label size.
   void labelsize(int pix) => _labelsize(ptr, pix);
 
@@ -36,6 +39,7 @@ abstract class Widget extends _Ptr {
   // Bindings with native code
   static void _show(int ptr) native 'fldart::Widget::show';
   static void _label(int ptr, String text) native 'fldart::Widget::label';
+  static void _labelfont(int ptr, int f) native 'fldart::Widget::labelfont';
   static void _labelsize(int ptr, int pix) native 'fldart::Widget::labelsize';
   static void _labeltype(int ptr, int type) native 'fldart::Widget::labeltype';
   static void _box(int ptr, int type) native 'fldart::Widget::box';
