@@ -4,7 +4,4 @@
 
 part of fltk;
 
-/// Fl class as in Fl.h
-class Fl {
-  static int run() native 'Fl::run';
-}
+int run() native 'Fl::run';

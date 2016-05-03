@@ -5,17 +5,17 @@
 part of fltk;
 
 /// Fl_Window
-class FlWindow {
+class Window {
   /// Integer to store the pointer address.
   final int _ptr;
 
   /// Public constuctor
-  factory FlWindow(int w, int h, [String l = '']) {
-    return new FlWindow._internal(_create(w, h, l));
+  factory Window(int w, int h, [String l = '']) {
+    return new Window._internal(_create(w, h, l));
   }
 
   /// Internal constuctor
-  FlWindow._internal(this._ptr);
+  Window._internal(this._ptr);
 
   /// End window group
   void end() => _end(_ptr);

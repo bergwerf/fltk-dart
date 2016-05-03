@@ -2,11 +2,11 @@
 // Use of this source code is governed by a MIT-style license
 // that can be found in the LICENSE file.
 
-import 'package:fltk/fltk.dart';
+import 'package:fltk/fltk.dart' as fl;
 
 int main(List<String> args) {
-  var window = new FlWindow(500, 500, 'My custom label!');
+  var window = new fl.Window(500, 500, 'My custom label!');
   window.end();
   window.show();
-  return Fl.run();
+  return fl.run();
 }
