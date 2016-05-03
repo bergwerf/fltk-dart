@@ -10,4 +10,6 @@ part 'src/enums/boxtype.dart';
 part 'src/fl.dart';
 part 'src/ptr.dart';
 part 'src/widget.dart';
+part 'src/group.dart';
+part 'src/box.dart';
 part 'src/window.dart';

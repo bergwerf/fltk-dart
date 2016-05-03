@@ -4,5 +4,5 @@
 
 part of fltk;
 
-int run() native 'Fl::run';
-int scheme(String name) native 'Fl::scheme';
+int run() native 'fldart::run';
+int scheme(String name) native 'fldart::scheme';

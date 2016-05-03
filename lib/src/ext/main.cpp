@@ -1,10 +1,16 @@
+#include <vector>
+
 #include <FL/Fl.H>
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Window.H>
 
 #include "dart_api.h"
+#include "common.hpp"
 
-#include "gen/Widget.h"
+#include "gen/Widget.hpp"
+#include "gen/Group.hpp"
+#include "gen/Box.hpp"
+#include "gen/Window.hpp"
 
 Dart_NativeFunction ResolveName(
   Dart_Handle name,
@@ -58,54 +64,19 @@ void Fl_scheme(Dart_NativeArguments arguments) {
   Dart_ExitScope();
 }
 
-void Fl_Window_create(Dart_NativeArguments arguments) {
-  Fl_Window* window;
-  Dart_Handle result;
-
-  Dart_EnterScope();
-
-  // Extract arguments.
-  int64_t w, h;
-  const char* l;
-  Dart_IntegerToInt64(Dart_GetNativeArgument(arguments, 0), &w);
-  Dart_IntegerToInt64(Dart_GetNativeArgument(arguments, 1), &h);
-  Dart_StringToCString(Dart_GetNativeArgument(arguments, 2), &l);
-
-  window = new Fl_Window(w, h, l);
-  result = Dart_NewInteger((int64_t)window);
-  Dart_SetReturnValue(arguments, result);
-  Dart_ExitScope();
-}
-
-void Fl_Group_end(Dart_NativeArguments arguments) {
-  Fl_Group* group;
-  Dart_Handle dh_handle;
-
-  Dart_EnterScope();
-  dh_handle = Dart_GetNativeArgument(arguments, 0);
-  int64_t ptr;
-  Dart_IntegerToInt64(dh_handle, &ptr);
-  group = (Fl_Group*)ptr;
-  group->end();
-  Dart_Handle result = Dart_Null();
-  Dart_SetReturnValue(arguments, result);
-  Dart_ExitScope();
-}
-
-struct FunctionLookup {
-  const char* name;
-  Dart_NativeFunction function;
+fldart::FunctionMapping flFunctions[] = {
+  {"fldart::run", Fl_run},
+  {"fldart::scheme", Fl_scheme},
+  {NULL, NULL}
 };
 
-FunctionLookup functionList[] = {
-  {"Fl::run", Fl_run},
-  {"Fl::scheme", Fl_scheme},
-  {"Fl_Window::Fl_Window", Fl_Window_create},
-  {"Fl_Widget::box", Widget::box},
-  {"Fl_Widget::label", Widget::label},
-  {"Fl_Widget::show", Widget::show},
-  {"Fl_Group::end", Fl_Group_end},
-  {NULL, NULL}};
+std::vector<fldart::FunctionMapping*> allFunctions = {
+  flFunctions,
+  fldart::Widget::methods,
+  fldart::Group::methods,
+  fldart::Box::methods,
+  fldart::Window::methods
+};
 
 Dart_NativeFunction ResolveName(Dart_Handle name, int argc, bool* autoSetupScope) {
   if (!Dart_IsString(name)) {
@@ -117,10 +88,12 @@ Dart_NativeFunction ResolveName(Dart_Handle name, int argc, bool* autoSetupScope
   const char* cname;
   HandleError(Dart_StringToCString(name, &cname));
 
-  for (int i = 0; functionList[i].name != NULL; ++i) {
-    if (strcmp(functionList[i].name, cname) == 0) {
-      result = functionList[i].function;
-      break;
+  for (int ii = 0; ii < allFunctions.size(); ++ii) {
+    for (int i = 0; allFunctions[ii][i].name != NULL; ++i) {
+      if (strcmp(allFunctions[ii][i].name, cname) == 0) {
+        result = allFunctions[ii][i].function;
+        break;
+      }
     }
   }
 

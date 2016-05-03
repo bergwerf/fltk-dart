@@ -1,0 +1,33 @@
+header: FLDART_BOX_H
+include:
+- <FL/Fl.H>
+- <FL/Fl_Box.H>
+
+cname: Fl_Box
+dartname: Box
+
+constructors:
+- argslist: x, y, w, h, strcpy(new char[strlen(l) + 1], l)
+  args:
+  - argi: 0
+    name: x
+    type: int64_t
+    conv: Dart_IntegerToInt64
+  - argi: 1
+    name: y
+    type: int64_t
+    conv: Dart_IntegerToInt64
+  - argi: 2
+    name: w
+    type: int64_t
+    conv: Dart_IntegerToInt64
+  - argi: 3
+    name: h
+    type: int64_t
+    conv: Dart_IntegerToInt64
+  - argi: 4
+    name: l
+    type: const char*
+    conv: Dart_StringToCString
+
+methods: []

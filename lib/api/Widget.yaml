@@ -1,15 +1,11 @@
-header: FLTK_DART_WIDGET_H
+header: FLDART_WIDGET_H
 include:
+- <string>
 - <FL/Fl.H>
 - <FL/Fl_Widget.H>
 
 cname: Fl_Widget
 dartname: Widget
-
-typdefs:
-  Fl_Align: unsigned int
-  Fl_Color: unsigned int
-  Fl_Labeltype: unsigned int
 
 methods:
 - name: box
@@ -20,10 +16,10 @@ methods:
     type: int64_t
     conv: Dart_IntegerToInt64
 - name: label
-  argslist: str
+  argslist: strcpy(new char[strlen(text) + 1], text)
   args:
   - argi: 1
-    name: str
+    name: text
     type: const char*
     conv: Dart_StringToCString
 - name: show

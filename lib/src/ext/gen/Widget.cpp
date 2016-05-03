@@ -1,74 +1,83 @@
-#include "Widget.h"
+#include "Widget.hpp"
 
-void Widget::box(Dart_NativeArguments arguments) {
-  // Local variables
-  int64_t ptr;
-  Fl_Widget* ref;
-  int64_t type;
+namespace fldart {
+  FunctionMapping Widget::methods[] = {
+    {"fldart::Widget::box", Widget::box},
+    {"fldart::Widget::label", Widget::label},
+    {"fldart::Widget::show", Widget::show},
+    {NULL, NULL}
+  };
 
-  Dart_EnterScope();
+  void Widget::box(Dart_NativeArguments arguments) {
+    // Local variables
+    int64_t ptr;
+    Fl_Widget* ref;
+    int64_t type;
 
-  // Resolve reference.
-  Dart_IntegerToInt64(Dart_GetNativeArgument(arguments, 0), &ptr);
-  ref = (Fl_Widget*)ptr;
+    Dart_EnterScope();
 
-  // Resolve other variables.
-  Dart_IntegerToInt64(Dart_GetNativeArgument(arguments, 1), &type);
+    // Resolve reference.
+    Dart_IntegerToInt64(Dart_GetNativeArgument(arguments, 0), &ptr);
+    ref = (Fl_Widget*)ptr;
 
-  // Execute this method.
-  ref->box(static_cast<Fl_Boxtype>(type));
+    // Resolve other variables.
+    Dart_IntegerToInt64(Dart_GetNativeArgument(arguments, 1), &type);
 
-  // Resolve return value,
-  Dart_Handle result = Dart_Null();
-  Dart_SetReturnValue(arguments, result);
+    // Execute this method.
+    ref -> box(static_cast<Fl_Boxtype>(type));
 
-  Dart_ExitScope();
-}
+    // Resolve return value,
+    Dart_Handle result = Dart_Null();
+    Dart_SetReturnValue(arguments, result);
 
-void Widget::label(Dart_NativeArguments arguments) {
-  // Local variables
-  int64_t ptr;
-  Fl_Widget* ref;
-  const char* str;
+    Dart_ExitScope();
+  }
 
-  Dart_EnterScope();
+  void Widget::label(Dart_NativeArguments arguments) {
+    // Local variables
+    int64_t ptr;
+    Fl_Widget* ref;
+    const char* text;
 
-  // Resolve reference.
-  Dart_IntegerToInt64(Dart_GetNativeArgument(arguments, 0), &ptr);
-  ref = (Fl_Widget*)ptr;
+    Dart_EnterScope();
 
-  // Resolve other variables.
-  Dart_StringToCString(Dart_GetNativeArgument(arguments, 1), &str);
+    // Resolve reference.
+    Dart_IntegerToInt64(Dart_GetNativeArgument(arguments, 0), &ptr);
+    ref = (Fl_Widget*)ptr;
 
-  // Execute this method.
-  ref->label(str);
+    // Resolve other variables.
+    Dart_StringToCString(Dart_GetNativeArgument(arguments, 1), &text);
 
-  // Resolve return value,
-  Dart_Handle result = Dart_Null();
-  Dart_SetReturnValue(arguments, result);
+    // Execute this method.
+    ref -> label(strcpy(new char[strlen(text) + 1], text));
 
-  Dart_ExitScope();
-}
+    // Resolve return value,
+    Dart_Handle result = Dart_Null();
+    Dart_SetReturnValue(arguments, result);
 
-void Widget::show(Dart_NativeArguments arguments) {
-  // Local variables
-  int64_t ptr;
-  Fl_Widget* ref;
+    Dart_ExitScope();
+  }
 
-  Dart_EnterScope();
+  void Widget::show(Dart_NativeArguments arguments) {
+    // Local variables
+    int64_t ptr;
+    Fl_Widget* ref;
 
-  // Resolve reference.
-  Dart_IntegerToInt64(Dart_GetNativeArgument(arguments, 0), &ptr);
-  ref = (Fl_Widget*)ptr;
+    Dart_EnterScope();
 
-  // Resolve other variables.
+    // Resolve reference.
+    Dart_IntegerToInt64(Dart_GetNativeArgument(arguments, 0), &ptr);
+    ref = (Fl_Widget*)ptr;
 
-  // Execute this method.
-  ref->show();
+    // Resolve other variables.
 
-  // Resolve return value,
-  Dart_Handle result = Dart_Null();
-  Dart_SetReturnValue(arguments, result);
+    // Execute this method.
+    ref -> show();
 
-  Dart_ExitScope();
+    // Resolve return value,
+    Dart_Handle result = Dart_Null();
+    Dart_SetReturnValue(arguments, result);
+
+    Dart_ExitScope();
+  }
 }

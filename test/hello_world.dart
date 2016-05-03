@@ -5,13 +5,13 @@
 import 'package:fltk/fltk.dart' as fl;
 
 int main(List<String> args) {
-  // fl.scheme('gleam');
-  var window = new fl.Window(300, 180);
-  /*-var box = new fl.Box(20, 40, 260, 100, 'Hello, World!');
+  fl.scheme('gleam');
+  var window = new fl.Window(300, 180, 'FLTK');
+  var box = new fl.Box(20, 40, 260, 100, 'Hello, World!');
   box.box(fl.UP_BOX);
-  box.labelsize(36);
+  /*box.labelsize(36);
   box.labelfont(fl.BOLD + fl.ITALIC);
-  box.labeltype(fl.SHADOW_LABEL); */
+  box.labeltype(fl.SHADOW_LABEL);*/
   window.end();
   window.show();
   return fl.run();

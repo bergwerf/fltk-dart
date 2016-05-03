@@ -5,7 +5,7 @@
 part of fltk;
 
 /// Fl_Window
-class Window extends Widget {
+class Window extends Group {
   /// Public constuctor
   factory Window(int w, int h, [String l = '']) {
     return new Window.fromPtr(_create(w, h, l));
@@ -14,10 +14,7 @@ class Window extends Widget {
   /// Internal constuctor
   Window.fromPtr(int ptr) : super.fromPtr(ptr);
 
-  /// End window group
-  void end() => _end(ptr);
-
   /// Bindings with native code
-  static int _create(int w, int h, String l) native 'Fl_Window::Fl_Window';
-  static void _end(int ptr) native 'Fl_Group::end';
+  static int _create(int w, int h, String l)
+      native 'fldart::Window::createWindowShort';
 }

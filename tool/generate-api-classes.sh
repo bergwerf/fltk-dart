@@ -9,7 +9,7 @@ for f in lib/api/*.yaml
 do
   if [[ $f =~ $regex ]]
   then
-    mustache lib/api/${BASH_REMATCH[1]}.yaml lib/api/header.mustache > lib/src/ext/gen/${BASH_REMATCH[1]}.h
-    mustache lib/api/${BASH_REMATCH[1]}.yaml lib/api/source.mustache > lib/src/ext/gen/${BASH_REMATCH[1]}.cpp
+    mustache lib/api/${BASH_REMATCH[1]}.yaml lib/api/templates/header.mustache > lib/src/ext/gen/${BASH_REMATCH[1]}.hpp
+    mustache lib/api/${BASH_REMATCH[1]}.yaml lib/api/templates/source.mustache > lib/src/ext/gen/${BASH_REMATCH[1]}.cpp
   fi
 done

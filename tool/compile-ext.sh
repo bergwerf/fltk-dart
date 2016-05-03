@@ -12,7 +12,7 @@ echo "Found Dart SDK at ${DART_SDK}"
 # Notes:
 # - add -m32 flag on 32 bit systems.
 # - add -g to generate debug info.
-g++ -g -fPIC -I${DART_SDK}/include -DDART_SHARED_LIB -c lib/src/ext/main.cpp \
+g++ -g -std=c++11 -fPIC -I${DART_SDK}/include -DDART_SHARED_LIB -c lib/src/ext/main.cpp \
     -I/usr/include/freetype2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_THREAD_SAFE -D_REENTRANT \
     -lfltk -lXcursor -lXfixes -lXext -lXft -lfontconfig -lXinerama -lpthread -ldl -lm -lX11 \
     -o libfltk.o
@@ -20,7 +20,7 @@ g++ -g -fPIC -I${DART_SDK}/include -DDART_SHARED_LIB -c lib/src/ext/main.cpp \
 # Compile individual classes.
 for f in lib/src/ext/gen/*.cpp
 do
-  g++ -g -fPIC -I${DART_SDK}/include -DDART_SHARED_LIB -c $f \
+  g++ -g -std=c++11 -fPIC -I${DART_SDK}/include -DDART_SHARED_LIB -c $f \
       -I/usr/include/freetype2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_THREAD_SAFE -D_REENTRANT \
       -lfltk -lXcursor -lXfixes -lXext -lXft -lfontconfig -lXinerama -lpthread -ldl -lm -lX11 \
       -o $f.o
