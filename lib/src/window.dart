@@ -14,7 +14,7 @@ class Window extends Group {
   /// Internal constuctor
   Window.fromPtr(int ptr) : super.fromPtr(ptr);
 
-  /// Bindings with native code
+  // Bindings with native code
   static int _create(int w, int h, String l)
       native 'fldart::Window::createWindowShort';
 }

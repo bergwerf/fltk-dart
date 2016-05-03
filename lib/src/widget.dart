@@ -27,7 +27,7 @@ abstract class Widget extends _Ptr {
   /// Set boxtype.
   void box(Boxtype type) => _box(ptr, type.index);
 
-  /// Bindings with native code
+  // Bindings with native code
   static void _show(int ptr) native 'fldart::Widget::show';
   static void _label(int ptr, String text) native 'fldart::Widget::label';
   static void _box(int ptr, int type) native 'fldart::Widget::box';

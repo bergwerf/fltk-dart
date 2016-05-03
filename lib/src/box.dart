@@ -14,7 +14,7 @@ class Box extends Widget {
   /// Internal constuctor
   Box.fromPtr(int ptr) : super.fromPtr(ptr);
 
-  /// Bindings with native code
+  // Bindings with native code
   static int _create(int x, int y, int w, int h, String l)
       native 'fldart::Box::createBox';
 }

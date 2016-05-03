@@ -17,7 +17,7 @@ class Group extends Widget {
   /// End group.
   void end() => _end(ptr);
 
-  /// Bindings with native code
+  // Bindings with native code
   static int _create(int x, int y, int w, int h, String l)
       native 'fldart::Group::createGroup';
   static void _end(int ptr) native 'fldart::Group::end';
