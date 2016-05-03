@@ -1,3 +1,3 @@
-FLTK bindings for Dart!
+Dart bindings for FLTK!
 =======================
 How awesome is that!
