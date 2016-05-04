@@ -9,8 +9,9 @@ part of fltk;
 void color(int c) native 'fldart::color';
 
 // Line drawing
-void _line1(int x, int y, int x1, int y1) native 'fldart::line';
-void _line2(int x, int y, int x1, int y1, int x2, int y2) native 'fldart::line';
+void _line1(int x, int y, int x1, int y1) native 'fldart::line1';
+void _line2(int x, int y, int x1, int y1, int x2, int y2)
+    native 'fldart::line2';
 void line(int x, int y, int x1, int y1, [int x2 = null, int y2 = null]) {
   if (x2 != null && y2 != null) {
     _line2(x, y, x1, y1, x2, y2);

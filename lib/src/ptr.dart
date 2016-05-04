@@ -7,8 +7,5 @@ part of fltk;
 // Base for C pointers in Dart
 class _Ptr {
   // Pointer address.
-  final int ptr;
-
-  // Create pointer from integer.
-  _Ptr.fromPtr(this.ptr);
+  int ptr;
 }

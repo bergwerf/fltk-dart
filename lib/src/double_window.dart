@@ -7,12 +7,11 @@ part of fltk;
 /// Fl_Double_Window
 class DoubleWindow extends Window {
   /// Public constuctor
-  factory DoubleWindow(int w, int h, [String l = '']) {
-    return new DoubleWindow.fromPtr(_create(w, h, l));
+  DoubleWindow(int w, int h, [String l = '']) : super.empty() {
+    ptr = _create(w, h, l);
   }
 
-  /// Internal constuctor
-  DoubleWindow.fromPtr(int ptr) : super.fromPtr(ptr);
+  DoubleWindow.empty() : super.empty();
 
   // Bindings with native code
   static int _create(int w, int h, String l)

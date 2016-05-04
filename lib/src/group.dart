@@ -7,12 +7,11 @@ part of fltk;
 /// Fl_Group
 class Group extends Widget {
   /// Public constuctor
-  factory Group(int x, int y, int w, int h, [String l = '']) {
-    return new Group.fromPtr(_create(x, y, w, h, l));
+  Group(int x, int y, int w, int h, [String l = '']) : super.empty() {
+    ptr = _create(x, y, w, h, l);
   }
 
-  /// Internal constuctor
-  Group.fromPtr(int ptr) : super.fromPtr(ptr);
+  Group.empty() : super.empty();
 
   /// End group.
   void end() => _end(ptr);

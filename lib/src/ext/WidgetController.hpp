@@ -13,9 +13,11 @@
 
 namespace fldart {
 class WidgetController : public Fl_Widget {
+  Dart_PersistentHandle dartref;
+
  public:
   /// Constuctor
-  WidgetController(int x, int y, int w, int h, const char *l);
+  WidgetController(Dart_Handle ref, int x, int y, int w, int h, const char *l);
 
   static void createWidgetController(Dart_NativeArguments arguments);
 

@@ -7,12 +7,11 @@ part of fltk;
 /// Fl_Box
 class Box extends Widget {
   /// Public constuctor
-  factory Box(int x, int y, int w, int h, [String l = '']) {
-    return new Box.fromPtr(_create(x, y, w, h, l));
+  Box(int x, int y, int w, int h, [String l = '']) : super.empty() {
+    ptr = _create(x, y, w, h, l);
   }
 
-  /// Internal constuctor
-  Box.fromPtr(int ptr) : super.fromPtr(ptr);
+  Box.empty() : super.empty();
 
   // Bindings with native code
   static int _create(int x, int y, int w, int h, String l)

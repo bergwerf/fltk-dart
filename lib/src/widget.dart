@@ -16,12 +16,11 @@ class Widget extends _Ptr {
   Callback callback;
 
   /// Create Fl_Widget (uses a wrapper class under the hood).
-  factory Widget(int x, int y, int w, int h, [String l = '']) {
-    return new Widget.fromPtr(_create(x, y, w, h, l));
+  Widget(int x, int y, int w, int h, [String l = '']) {
+    ptr = _create(this, x, y, w, h, l);
   }
 
-  /// Propagate fromPtr constructor.
-  Widget.fromPtr(int ptr) : super.fromPtr(ptr);
+  Widget.empty();
 
   /// Draw
   void draw() {}
@@ -51,7 +50,7 @@ class Widget extends _Ptr {
   void box(Boxtype type) => _box(ptr, type.index);
 
   // Bindings with native code
-  static int _create(int x, int y, int w, int h, String l)
+  static int _create(Widget handle, int x, int y, int w, int h, String l)
       native 'fldart::WidgetController::createWidgetController';
 
   static int _x(int ptr) native 'fldart::Widget::x';

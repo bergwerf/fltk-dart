@@ -7,12 +7,11 @@ part of fltk;
 /// Fl_Window
 class Window extends Group {
   /// Public constuctor
-  factory Window(int w, int h, [String l = '']) {
-    return new Window.fromPtr(_create(w, h, l));
+  Window(int w, int h, [String l = '']) : super.empty() {
+    ptr = _create(w, h, l);
   }
 
-  /// Internal constuctor
-  Window.fromPtr(int ptr) : super.fromPtr(ptr);
+  Window.empty() : super.empty();
 
   // Bindings with native code
   static int _create(int w, int h, String l)
