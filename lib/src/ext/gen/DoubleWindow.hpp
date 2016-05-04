@@ -2,22 +2,21 @@
 // Use of this source code is governed by a MIT-style license
 // that can be found in the LICENSE file.
 
-#ifndef FLDART_GROUP_H
-#define FLDART_GROUP_H
+#ifndef FLDART_DOUBLE_WINDOW_H
+#define FLDART_DOUBLE_WINDOW_H
 
 #include <FL/Fl.H>
-#include <FL/Fl_Group.H>
+#include <FL/Fl_Double_Window.H>
 
 #include "dart_api.h"
 #include "../common.hpp"
 
 namespace fldart {
-/// Dart bindings for Fl_Group
-class Group {
+/// Dart bindings for Fl_Double_Window
+class DoubleWindow {
  public:
-  static void createGroup(Dart_NativeArguments arguments);
-  static void end(Dart_NativeArguments arguments);
-  static void resizable(Dart_NativeArguments arguments);
+  static void createDoubleWindowShort(Dart_NativeArguments arguments);
+  static void createDoubleWindow(Dart_NativeArguments arguments);
 
   // Method mapping
   static FunctionMapping methods[];

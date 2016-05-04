@@ -1,3 +1,7 @@
+// Copyright (c) 2016, Herman Bergwerf. All rights reserved.
+// Use of this source code is governed by a MIT-style license
+// that can be found in the LICENSE file.
+
 // Based on: http://seriss.com/people/erco/fltk/#FltkX
 
 #include <FL/Fl.H>
@@ -6,7 +10,7 @@
 
 /// Widget that draws two diagonal lines
 class XWidget : public Fl_Widget {
-public:
+ public:
   /// Constuctor
   XWidget(int x, int y, int w, int h) : Fl_Widget(x, y, w, h, 0) {}
 

@@ -2,24 +2,22 @@
 // Use of this source code is governed by a MIT-style license
 // that can be found in the LICENSE file.
 
-#ifndef FLDART_GROUP_H
-#define FLDART_GROUP_H
+#ifndef FLDART_DRAW_H
+#define FLDART_DRAW_H
 
 #include <FL/Fl.H>
-#include <FL/Fl_Group.H>
+#include <FL/fl_draw.H>
 
 #include "dart_api.h"
 #include "../common.hpp"
 
 namespace fldart {
-/// Dart bindings for Fl_Group
-class Group {
- public:
-  static void createGroup(Dart_NativeArguments arguments);
-  static void end(Dart_NativeArguments arguments);
-  static void resizable(Dart_NativeArguments arguments);
+void color(Dart_NativeArguments arguments);
+void line1(Dart_NativeArguments arguments);
+void line2(Dart_NativeArguments arguments);
 
-  // Method mapping
+class _draw {
+ public:
   static FunctionMapping methods[];
 };
 }

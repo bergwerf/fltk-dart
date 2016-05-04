@@ -1,0 +1,22 @@
+#ifndef {{{ header }}}
+#define {{{ header }}}
+
+{{# include }}
+#include {{{ . }}}
+{{/ include }}
+
+#include "dart_api.h"
+#include "../common.hpp"
+
+namespace fldart {
+{{# functions }}
+void {{{ name }}}(Dart_NativeArguments arguments);
+{{/ functions }}
+
+class _{{{ name }}} {
+public:
+  static FunctionMapping methods[];
+};
+}
+
+#endif

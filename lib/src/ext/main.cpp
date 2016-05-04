@@ -1,3 +1,7 @@
+// Copyright (c) 2016, Herman Bergwerf. All rights reserved.
+// Use of this source code is governed by a MIT-style license
+// that can be found in the LICENSE file.
+
 #include <vector>
 
 #include <FL/Fl.H>
@@ -7,10 +11,16 @@
 #include "dart_api.h"
 #include "common.hpp"
 
+#include "gen/fl.hpp"
+#include "gen/draw.hpp"
+
 #include "gen/Widget.hpp"
 #include "gen/Group.hpp"
 #include "gen/Box.hpp"
 #include "gen/Window.hpp"
+#include "gen/DoubleWindow.hpp"
+
+#include "WidgetController.hpp"
 
 Dart_NativeFunction ResolveName(
   Dart_Handle name,
@@ -23,7 +33,7 @@ DART_EXPORT Dart_Handle fltk_Init(Dart_Handle parentLibrary) {
   }
 
   Dart_Handle resultCode = Dart_SetNativeResolver(
-    parentLibrary, ResolveName, NULL);
+                             parentLibrary, ResolveName, NULL);
 
   if (Dart_IsError(resultCode)) {
     return resultCode;
@@ -37,50 +47,17 @@ DART_EXPORT Dart_Handle fltk_Init(Dart_Handle parentLibrary) {
   return Dart_Null();
 }
 
-Dart_Handle HandleError(Dart_Handle handle) {
-  if (Dart_IsError(handle)) {
-    Dart_PropagateError(handle);
-  } else {
-    return handle;
-  }
-}
-
-void Fl_run(Dart_NativeArguments arguments) {
-  Dart_Handle result;
-
-  Dart_EnterScope();
-  result = Dart_NewInteger(Fl::run());
-  Dart_SetReturnValue(arguments, result);
-  Dart_ExitScope();
-}
-
-void Fl_scheme(Dart_NativeArguments arguments) {
-  Fl_Group* group;
-  Dart_Handle dh_handle;
-
-  Dart_EnterScope();
-
-  const char* scheme;
-  Dart_StringToCString(Dart_GetNativeArgument(arguments, 0), &scheme);
-  Fl::scheme(scheme);
-
-  Dart_Handle result = Dart_Null();
-  Dart_SetReturnValue(arguments, result);
-  Dart_ExitScope();
-}
-
-fldart::FunctionMapping flFunctions[] = {
-  {"fldart::run", Fl_run},
-  {"fldart::scheme", Fl_scheme},
-  {NULL, NULL}
-};
-
 std::vector<fldart::FunctionMapping*> allFunctions = {
-  flFunctions,
+  fldart::_fl::methods,
+  fldart::_draw::methods,
+
   fldart::Widget::methods,
   fldart::Group::methods,
   fldart::Box::methods,
-  fldart::Window::methods
+  fldart::Window::methods,
+  fldart::DoubleWindow::methods,
+
+  fldart::WidgetController::methods
 };
 
 Dart_NativeFunction ResolveName(Dart_Handle name, int argc, bool* autoSetupScope) {
@@ -91,7 +68,7 @@ Dart_NativeFunction ResolveName(Dart_Handle name, int argc, bool* autoSetupScope
   Dart_NativeFunction result = NULL;
   Dart_EnterScope();
   const char* cname;
-  HandleError(Dart_StringToCString(name, &cname));
+  fldart::HandleError(Dart_StringToCString(name, &cname));
 
   for (int ii = 0; ii < allFunctions.size(); ++ii) {
     for (int i = 0; allFunctions[ii][i].name != NULL; ++i) {

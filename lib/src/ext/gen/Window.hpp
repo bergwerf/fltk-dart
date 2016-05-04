@@ -1,3 +1,7 @@
+// Copyright (c) 2016, Herman Bergwerf. All rights reserved.
+// Use of this source code is governed by a MIT-style license
+// that can be found in the LICENSE file.
+
 #ifndef FLDART_WINDOW_H
 #define FLDART_WINDOW_H
 
@@ -8,15 +12,15 @@
 #include "../common.hpp"
 
 namespace fldart {
-  // Dart bindings for Fl_Window
-  class Window {
-  public:
-    static void createWindowShort(Dart_NativeArguments arguments);
-    static void createWindow(Dart_NativeArguments arguments);
+/// Dart bindings for Fl_Window
+class Window {
+ public:
+  static void createWindowShort(Dart_NativeArguments arguments);
+  static void createWindow(Dart_NativeArguments arguments);
 
-    // Method mapping
-    static FunctionMapping methods[];
-  };
+  // Method mapping
+  static FunctionMapping methods[];
+};
 }
 
 #endif

@@ -9,38 +9,58 @@ dartname: Widget
 
 methods:
 - name: box
-  argslist: static_cast<Fl_Boxtype>(type)
+  retf: Dart_Null()
+  pass: static_cast<Fl_Boxtype>(type)
   args:
   - argi: 1
     name: type
     type: int64_t
     conv: Dart_IntegerToInt64
+
 - name: label
-  argslist: strcpy(new char[strlen(text) + 1], text)
+  retf: Dart_Null()
+  pass: strcpy(new char[strlen(text) + 1], text)
   args:
   - argi: 1
     name: text
     type: const char*
     conv: Dart_StringToCString
+
 - name: labelfont
-  argslist: f
+  retf: Dart_Null()
+  pass: f
   args:
   - argi: 1
     name: f
     type: int64_t
     conv: Dart_IntegerToInt64
+
 - name: labelsize
-  argslist: pix
+  retf: Dart_Null()
+  pass: pix
   args:
   - argi: 1
     name: pix
     type: int64_t
     conv: Dart_IntegerToInt64
+
 - name: labeltype
-  argslist: static_cast<Fl_Labeltype>(type)
+  retf: Dart_Null()
+  pass: static_cast<Fl_Labeltype>(type)
   args:
   - argi: 1
     name: type
     type: int64_t
     conv: Dart_IntegerToInt64
+
 - name: show
+  retf: Dart_Null()
+
+- name: x
+  retf: HandleError(Dart_NewInteger(ref -> x()))
+- name: y
+  retf: HandleError(Dart_NewInteger(ref -> y()))
+- name: w
+  retf: HandleError(Dart_NewInteger(ref -> w()))
+- name: h
+  retf: HandleError(Dart_NewInteger(ref -> h()))

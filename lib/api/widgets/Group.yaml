@@ -1,13 +1,13 @@
-header: FLDART_BOX_H
+header: FLDART_GROUP_H
 include:
 - <FL/Fl.H>
-- <FL/Fl_Box.H>
+- <FL/Fl_Group.H>
 
-cname: Fl_Box
-dartname: Box
+cname: Fl_Group
+dartname: Group
 
 constructors:
-- argslist: x, y, w, h, strcpy(new char[strlen(l) + 1], l)
+- pass: x, y, w, h, strcpy(new char[strlen(l) + 1], l)
   args:
   - argi: 0
     name: x
@@ -30,4 +30,15 @@ constructors:
     type: const char*
     conv: Dart_StringToCString
 
-methods: []
+methods:
+- name: end
+  retf: Dart_Null()
+
+- name: resizable
+  retf: Dart_Null()
+  pass: (Fl_Widget*)o
+  args:
+  - argi: 1
+    name: o
+    type: int64_t
+    conv: Dart_IntegerToInt64

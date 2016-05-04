@@ -2,16 +2,18 @@
 // Use of this source code is governed by a MIT-style license
 // that can be found in the LICENSE file.
 
-#include "Box.hpp"
+#include "WidgetController.hpp"
 
 namespace fldart {
-FunctionMapping Box::methods[] = {
-  {"fldart::Box::createBox", Box::createBox},
+FunctionMapping WidgetController::methods[] = {
+  {"fldart::WidgetController::createWidgetController", WidgetController::createWidgetController},
   {NULL, NULL}
 };
 
-void Box::createBox(Dart_NativeArguments arguments) {
-  Fl_Box* instance;
+WidgetController::WidgetController(int x, int y, int w, int h, const char *l=0) : Fl_Widget(x, y, w, h, l) {}
+
+void WidgetController::createWidgetController(Dart_NativeArguments arguments) {
+  WidgetController* instance;
   int64_t x;
   int64_t y;
   int64_t w;
@@ -27,10 +29,12 @@ void Box::createBox(Dart_NativeArguments arguments) {
   HandleError(Dart_IntegerToInt64(HandleError(Dart_GetNativeArgument(arguments, 3)), &h));
   HandleError(Dart_StringToCString(HandleError(Dart_GetNativeArgument(arguments, 4)), &l));
 
-  instance = new Fl_Box(x, y, w, h, strcpy(new char[strlen(l) + 1], l));
+  instance = new WidgetController(x, y, w, h, strcpy(new char[strlen(l) + 1], l));
 
   Dart_Handle result = Dart_NewInteger((int64_t)instance);
   Dart_SetReturnValue(arguments, result);
   Dart_ExitScope();
 }
+
+void WidgetController::draw() {}
 }

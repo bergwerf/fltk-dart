@@ -8,10 +8,15 @@ import 'dart-ext:fltk';
 
 part 'src/enums/boxtype.dart';
 part 'src/enums/labeltype.dart';
+part 'src/enums/colors.dart';
 part 'src/enums/font.dart';
+
 part 'src/fl.dart';
+part 'src/draw.dart';
+
 part 'src/ptr.dart';
 part 'src/widget.dart';
 part 'src/group.dart';
 part 'src/box.dart';
 part 'src/window.dart';
+part 'src/double_window.dart';
