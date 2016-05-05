@@ -4,15 +4,16 @@
 
 import 'package:fltk/fltk.dart' as fl;
 
+void buttonCb(fl.Widget obj, _) {
+  obj.label = obj.label == 'ON' ? 'OFF' : 'ON';
+}
+
 int main() {
   fl.scheme('gleam');
-  var window = new fl.Window(300, 180, 'FLTK');
-  var box = new fl.Box(20, 40, 260, 100, 'Hello, World!');
-  box.box(fl.UP_BOX);
-  box.labelsize = 36;
-  box.labelfont = fl.BOLD + fl.ITALIC;
-  box.labeltype = fl.SHADOW_LABEL;
-  window.end();
-  window.show();
+  var win = new fl.Window(300, 200, 'Click the button...');
+  var but = new fl.Button(0, 0, win.w, win.h, 'ON');
+  but.callback = buttonCb;
+  win.end();
+  win.show();
   return fl.run();
 }

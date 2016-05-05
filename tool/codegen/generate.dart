@@ -46,6 +46,7 @@ const Map<String, String> dartToCType = const {
   'String': 'const char*'
 };
 
+/// TODO: use implicit cast with fltktypes.yaml
 int main(List<String> args) {
   // Load templates.
   var widgetHppTemplate = new Template(
@@ -178,7 +179,8 @@ Map<String, dynamic> parseMethod(String method, bool constructor) {
   var match = methodRegex.firstMatch(method);
 
   Map<String, dynamic> ret = {
-    'name': match.group(2),
+    'name':
+        constructor ? match.group(2) : '${match.group(1)}_${match.group(2)}',
     'return': codeForNewDartHandle(primitiveCType(match.group(1)), '_tmp')
   };
 

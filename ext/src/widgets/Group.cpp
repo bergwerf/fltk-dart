@@ -7,8 +7,8 @@
 namespace fldart {
 FunctionMapping Group::methods[] = {
   {"fldart::Group::createGroup", Group::createGroup},
-  {"fldart::Group::end", Group::end},
-  {"fldart::Group::resizable", Group::resizable},
+  {"fldart::Group::void_end", Group::void_end},
+  {"fldart::Group::void_resizable", Group::void_resizable},
   {NULL, NULL}
 };
 
@@ -31,7 +31,7 @@ void Group::createGroup(Dart_NativeArguments arguments) {
   Dart_ExitScope();
 }
 
-void Group::end(Dart_NativeArguments arguments) {
+void Group::void_end(Dart_NativeArguments arguments) {
   int64_t ptr;
   Fl_Group* _ref;
   Dart_EnterScope();
@@ -43,7 +43,7 @@ void Group::end(Dart_NativeArguments arguments) {
   Dart_ExitScope();
 }
 
-void Group::resizable(Dart_NativeArguments arguments) {
+void Group::void_resizable(Dart_NativeArguments arguments) {
   int64_t ptr;
   Fl_Group* _ref;
   int64_t o;

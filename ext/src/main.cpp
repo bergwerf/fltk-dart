@@ -17,6 +17,7 @@
 #include "widgets/Widget.hpp"
 #include "widgets/Group.hpp"
 #include "widgets/Box.hpp"
+#include "widgets/Button.hpp"
 #include "widgets/Window.hpp"
 #include "widgets/DoubleWindow.hpp"
 
@@ -54,6 +55,7 @@ std::vector<fldart::FunctionMapping*> allFunctions = {
   fldart::Widget::methods,
   fldart::Group::methods,
   fldart::Box::methods,
+  fldart::Button::methods,
   fldart::Window::methods,
   fldart::DoubleWindow::methods,
 

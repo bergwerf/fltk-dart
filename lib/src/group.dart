@@ -22,6 +22,6 @@ class Group extends Widget {
   // Bindings with native code
   static int _create(int x, int y, int w, int h, String l)
       native 'fldart::Group::createGroup';
-  static void _end(int ptr) native 'fldart::Group::end';
-  static void _resizable(int ptr, int o) native 'fldart::Group::resizable';
+  static void _end(int ptr) native 'fldart::Group::void_end';
+  static void _resizable(int ptr, int o) native 'fldart::Group::void_resizable';
 }

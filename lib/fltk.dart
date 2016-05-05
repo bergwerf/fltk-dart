@@ -18,5 +18,6 @@ part 'src/ptr.dart';
 part 'src/widget.dart';
 part 'src/group.dart';
 part 'src/box.dart';
+part 'src/button.dart';
 part 'src/window.dart';
 part 'src/double_window.dart';

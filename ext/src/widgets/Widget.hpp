@@ -15,16 +15,20 @@ namespace fldart {
 /// Dart bindings for Fl_Widget
 class Widget {
  public:
-  static void x(Dart_NativeArguments arguments);
-  static void y(Dart_NativeArguments arguments);
-  static void w(Dart_NativeArguments arguments);
-  static void h(Dart_NativeArguments arguments);
-  static void show(Dart_NativeArguments arguments);
-  static void box(Dart_NativeArguments arguments);
-  static void label(Dart_NativeArguments arguments);
-  static void labelfont(Dart_NativeArguments arguments);
-  static void labelsize(Dart_NativeArguments arguments);
-  static void labeltype(Dart_NativeArguments arguments);
+  static void int_x(Dart_NativeArguments arguments);
+  static void int_y(Dart_NativeArguments arguments);
+  static void int_w(Dart_NativeArguments arguments);
+  static void int_h(Dart_NativeArguments arguments);
+  static void void_label(Dart_NativeArguments arguments);
+  static void String_label(Dart_NativeArguments arguments);
+  static void void_labelfont(Dart_NativeArguments arguments);
+  static void int_labelfont(Dart_NativeArguments arguments);
+  static void void_labelsize(Dart_NativeArguments arguments);
+  static void int_labelsize(Dart_NativeArguments arguments);
+  static void void_labeltype(Dart_NativeArguments arguments);
+  static void Fl_Labeltype_labeltype(Dart_NativeArguments arguments);
+  static void void_show(Dart_NativeArguments arguments);
+  static void void_box(Dart_NativeArguments arguments);
   static FunctionMapping methods[];
 };
 }

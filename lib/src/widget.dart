@@ -25,43 +25,68 @@ class Widget extends _Ptr {
   /// Draw
   void draw() {}
 
+  /// Do a callback
+  void doCallback() {
+    print('Hi!');
+    if (callback != null) {
+      callback(this, userData);
+    }
+  }
+
   // Getters for dimensions
   int get x => _x(ptr);
   int get y => _y(ptr);
   int get w => _w(ptr);
   int get h => _h(ptr);
 
-  /// Show widget.
-  void show() => _show(ptr);
+  // Getters and setters for label properties
+  String get label => _getLabel(ptr);
+  set label(String text) => _setLabel(ptr, text);
 
-  /// Set label.
-  void label(String text) => _label(ptr, text);
+  int get labelfont => _getLabelfont(ptr);
+  set labelfont(int f) => _setLabelfont(ptr, f);
 
-  /// Set label type.
-  void labelfont(int f) => _labelfont(ptr, f);
+  int get labelsize => _getLabelsize(ptr);
+  set labelsize(int pix) => _setLabelsize(ptr, pix);
 
-  /// Set label size.
-  void labelsize(int pix) => _labelsize(ptr, pix);
-
-  /// Set label type.
-  void labeltype(Labeltype type) => _labeltype(ptr, type.index);
+  Labeltype get labeltype => Labeltype.values[_getLabeltype(ptr)];
+  set labeltype(Labeltype type) => _setLabeltype(ptr, type.index);
 
   /// Set boxtype.
   void box(Boxtype type) => _box(ptr, type.index);
 
+  /// Show widget.
+  void show() => _show(ptr);
+
+  //////////////////////////////////////////////////////////////////////////////
   // Bindings with native code
+  //////////////////////////////////////////////////////////////////////////////
+
   static int _create(Widget handle, int x, int y, int w, int h, String l)
       native 'fldart::WidgetController::createWidgetController';
 
-  static int _x(int ptr) native 'fldart::Widget::x';
-  static int _y(int ptr) native 'fldart::Widget::y';
-  static int _w(int ptr) native 'fldart::Widget::w';
-  static int _h(int ptr) native 'fldart::Widget::h';
+  static int _x(int ptr) native 'fldart::Widget::int_x';
+  static int _y(int ptr) native 'fldart::Widget::int_y';
+  static int _w(int ptr) native 'fldart::Widget::int_w';
+  static int _h(int ptr) native 'fldart::Widget::int_h';
 
-  static void _show(int ptr) native 'fldart::Widget::show';
-  static void _label(int ptr, String text) native 'fldart::Widget::label';
-  static void _labelfont(int ptr, int f) native 'fldart::Widget::labelfont';
-  static void _labelsize(int ptr, int pix) native 'fldart::Widget::labelsize';
-  static void _labeltype(int ptr, int type) native 'fldart::Widget::labeltype';
-  static void _box(int ptr, int type) native 'fldart::Widget::box';
+  static String _getLabel(int ptr) native 'fldart::Widget::String_label';
+  static void _setLabel(int ptr, String text)
+      native 'fldart::Widget::void_label';
+
+  static int _getLabelfont(int ptr) native 'fldart::Widget::int_labelfont';
+  static void _setLabelfont(int ptr, int f)
+      native 'fldart::Widget::void_labelfont';
+
+  static int _getLabelsize(int ptr) native 'fldart::Widget::int_labelsize';
+  static void _setLabelsize(int ptr, int pix)
+      native 'fldart::Widget::void_labelsize';
+
+  static int _getLabeltype(int ptr)
+      native 'fldart::Widget::Fl_Labeltype_labeltype';
+  static void _setLabeltype(int ptr, int type)
+      native 'fldart::Widget::void_labeltype';
+
+  static void _box(int ptr, int type) native 'fldart::Widget::void_box';
+  static void _show(int ptr) native 'fldart::Widget::void_show';
 }
