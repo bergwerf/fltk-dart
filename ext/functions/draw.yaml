@@ -1,0 +1,15 @@
+name: draw
+include:
+- <FL/Fl.H>
+- <FL/fl_draw.H>
+
+functions:
+- name: color
+  code: void fl_color
+  args: Fl_Color c
+- name: line1
+  code: void fl_line
+  args: int x, int y, int x1, int y1
+- name: line2
+  code: void fl_line
+  args: int x, int y, int x1, int y1, int x2, int y2

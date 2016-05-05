@@ -1,0 +1,61 @@
+#include "{{{ dartname }}}.hpp"
+
+namespace fldart {
+FunctionMapping {{{ dartname }}}::methods[] = {
+  {{# constructors }}
+  {"fldart::{{{ dartname }}}::create{{{ dartname }}}{{{ name }}}", {{{ dartname }}}::create{{{ dartname }}}{{{ name }}}},
+  {{/ constructors }}
+  {{# methods }}
+  {"fldart::{{{ dartname }}}::{{{ name }}}", {{{ dartname }}}::{{{ name }}}},
+  {{/ methods }}
+  {NULL, NULL}
+};
+{{# constructors }}
+
+void {{{ dartname }}}::create{{{ dartname }}}{{{ name }}}(Dart_NativeArguments arguments) {
+  {{! Local variables }}
+  {{{ cname }}}* instance;
+  {{# args }}
+  {{{ type }}} {{{ name }}};
+  {{/ args }}
+  {{! Enter new Dart scope }}
+  Dart_EnterScope();
+  {{! Resolve variables }}
+  {{# args }}
+  HandleError({{{ conv }}}(HandleError(Dart_GetNativeArgument(arguments, {{{ argi }}})), &{{{ name }}}));
+  {{/ args }}
+  {{! Create instance }}
+  instance = new {{{ cname }}}({{{ argslist }}});
+  {{! Return instance memory address }}
+  Dart_Handle _ret = Dart_NewInteger((int64_t)instance);
+  Dart_SetReturnValue(arguments, _ret);
+  Dart_ExitScope();
+}
+{{/ constructors }}
+{{# methods }}
+
+void {{{ dartname }}}::{{{ name }}}(Dart_NativeArguments arguments) {
+  {{! Local variables }}
+  int64_t ptr;
+  {{ cname }}* _ref;
+  {{# args }}
+  {{{ type }}} {{{ name }}};
+  {{/ args }}
+  {{! Enter new Dart scope }}
+  Dart_EnterScope();
+  {{! Resolve widget reference from memory address }}
+  HandleError(Dart_IntegerToInt64(HandleError(Dart_GetNativeArgument(arguments, 0)), &ptr));
+  _ref = ({{ cname }}*)ptr;
+  {{! Resolve other method arguments }}
+  {{# args }}
+  HandleError({{{ conv }}}(HandleError(Dart_GetNativeArgument(arguments, {{{ argi }}})), &{{{ name }}}));
+  {{/ args }}
+  {{! Run method call }}
+  {{{ call }}};
+  {{! Get return value and return }}
+  Dart_Handle _ret = {{{ return }}};
+  Dart_SetReturnValue(arguments, _ret);
+  Dart_ExitScope();
+}
+{{/ methods }}
+}

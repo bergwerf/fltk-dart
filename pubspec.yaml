@@ -5,4 +5,7 @@ description:  Dart bindings for FLTK!
 homepage:     https://github.com/hermanbergwerf/fltk-dart
 environment:
   sdk:        '>=1.8.0 <2.0.0'
-dependencies:
+dev_dependencies:
+  glob:       ^1.1.2
+  yaml:       ^2.1.8
+  mustache:   ^0.2.5

@@ -1,0 +1,31 @@
+#include "{{{ name }}}.hpp"
+
+namespace fldart {
+FunctionMapping _{{{ name }}}::methods[] = {
+  {{# functions }}
+  {"fldart::{{{ name }}}", {{{ name }}}},
+  {{/ functions }}
+  {NULL, NULL}
+};
+{{# functions }}
+
+void {{{ name }}}(Dart_NativeArguments arguments) {
+  {{! Local variables }}
+  {{# args }}
+  {{{ type }}} {{{ name }}};
+  {{/ args }}
+  {{! Enter new Dart scope }}
+  Dart_EnterScope();
+  {{! Resolve input variables}}
+  {{# args }}
+  HandleError({{{ conv }}}(HandleError(Dart_GetNativeArgument(arguments, {{{ argi }}})), &{{{ name }}}));
+  {{/ args }}
+  {{! Execute the function call }}
+  {{{ call }}};
+  {{! Resolve return value }}
+  Dart_Handle result = {{{ return }}};
+  Dart_SetReturnValue(arguments, result);
+  Dart_ExitScope();
+}
+{{/ functions }}
+}

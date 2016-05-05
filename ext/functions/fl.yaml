@@ -1,0 +1,10 @@
+name: fl
+include:
+- <FL/Fl.H>
+
+functions:
+- name: run
+  code: int Fl::run
+- name: scheme
+  code: void Fl::scheme
+  args: String scheme

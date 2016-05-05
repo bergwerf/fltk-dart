@@ -1,0 +1,11 @@
+include:
+- <FL/Fl.H>
+- <FL/Fl_Box.H>
+
+cname: Fl_Box
+dartname: Box
+
+constructors:
+- void (int x, int y, int w, int h, String l)
+
+methods: []

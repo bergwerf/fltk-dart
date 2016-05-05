@@ -1,0 +1,12 @@
+include:
+- <FL/Fl.H>
+- <FL/Fl_Double_Window.H>
+
+cname: Fl_Double_Window
+dartname: DoubleWindow
+
+constructors:
+- void Short(int w, int h, String l)
+- void (int x, int y, int w, int h, String l)
+
+methods: []

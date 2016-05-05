@@ -1,0 +1,6 @@
+static_cast_int64_t:
+- Fl_Boxtype
+- Fl_Labeltype
+
+implicit_cast_int64_t:
+- Fl_Color

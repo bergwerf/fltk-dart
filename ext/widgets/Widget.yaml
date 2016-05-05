@@ -1,0 +1,20 @@
+include:
+- <FL/Fl.H>
+- <FL/Fl_Widget.H>
+
+cname: Fl_Widget
+dartname: Widget
+
+constructors: []
+
+methods:
+- int x()
+- int y()
+- int w()
+- int h()
+- void show()
+- void box(Fl_Boxtype type)
+- void label(String text)
+- void labelfont(int f)
+- void labelsize(int pix)
+- void labeltype(Fl_Labeltype type)

@@ -1,0 +1,13 @@
+include:
+- <FL/Fl.H>
+- <FL/Fl_Group.H>
+
+cname: Fl_Group
+dartname: Group
+
+constructors:
+- void (int x, int y, int w, int h, String l)
+
+methods:
+- void end()
+- void resizable(Fl_Widget* o)

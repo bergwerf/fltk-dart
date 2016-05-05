@@ -19,12 +19,12 @@ function compile {
       -o $1.o
 }
 
-compile lib/src/ext/main.cpp
-compile lib/src/ext/common.cpp
-compile lib/src/ext/WidgetController.cpp
+compile ext/src/main.cpp
+compile ext/src/common.cpp
+compile ext/src/WidgetController.cpp
 
 # Compile individual classes.
-for f in lib/src/ext/gen/*.cpp
+for f in {ext/src/widgets/*.cpp,ext/src/core/*.cpp}
 do
   compile $f
 done
@@ -34,8 +34,8 @@ done
 # Notes:
 # - add -m32 flag on 32 bit systems.
 # - add -g to generate debug info.
-gcc -g -shared -Wl,-soname,libfltk.so -o lib/libfltk.so lib/src/ext/gen/*.o lib/src/ext/*.o \
+gcc -g -shared -Wl,-soname,libfltk.so -o lib/libfltk.so ext/src/core/*.o ext/src/widgets/*.o ext/src/*.o \
     -lfltk -lXcursor -lXfixes -lXext -lXft -lfontconfig -lXinerama -lpthread -ldl -lm -lX11
 
 # Clean up.
-rm lib/src/ext/*.o lib/src/ext/gen/*.o
+rm ext/src/{core,widgets}/*.o ext/src/*.o
