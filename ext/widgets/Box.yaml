@@ -1,7 +1,3 @@
-include:
-- <FL/Fl.H>
-- <FL/Fl_Box.H>
-
 cname: Fl_Box
 dartname: Box
 

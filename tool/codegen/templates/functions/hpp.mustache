@@ -1,3 +1,7 @@
+// Copyright (c) 2016, Herman Bergwerf. All rights reserved.
+// Use of this source code is governed by a MIT-style license
+// that can be found in the LICENSE file.
+
 #ifndef {{{ header }}}
 #define {{{ header }}}
 
@@ -6,7 +10,7 @@
 {{/ include }}
 
 #include "dart_api.h"
-#include "../common.hpp"
+#include "../../common.hpp"
 
 namespace fldart {
 {{# functions }}
@@ -14,7 +18,7 @@ void {{{ name }}}(Dart_NativeArguments arguments);
 {{/ functions }}
 
 class _{{{ name }}} {
-public:
+ public:
   static FunctionMapping methods[];
 };
 }

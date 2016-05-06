@@ -8,12 +8,15 @@ part of fltk;
 class Button extends Widget {
   /// Public constuctor
   Button(int x, int y, int w, int h, [String l = '']) : super.empty() {
-    ptr = _create(x, y, w, h, l);
+    ptr = _create(this, x, y, w, h, l);
   }
 
   Button.empty() : super.empty();
 
+  //////////////////////////////////////////////////////////////////////////////
   // Bindings with native code
-  static int _create(int x, int y, int w, int h, String l)
+  //////////////////////////////////////////////////////////////////////////////
+
+  static int _create(Button me, int x, int y, int w, int h, String l)
       native 'fldart::Button::createButton';
 }

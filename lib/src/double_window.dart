@@ -8,12 +8,15 @@ part of fltk;
 class DoubleWindow extends Window {
   /// Public constuctor
   DoubleWindow(int w, int h, [String l = '']) : super.empty() {
-    ptr = _create(w, h, l);
+    ptr = _create(this, w, h, l);
   }
 
   DoubleWindow.empty() : super.empty();
 
+  //////////////////////////////////////////////////////////////////////////////
   // Bindings with native code
-  static int _create(int w, int h, String l)
+  //////////////////////////////////////////////////////////////////////////////
+
+  static int _create(DoubleWindow me, int w, int h, String l)
       native 'fldart::DoubleWindow::createDoubleWindowShort';
 }

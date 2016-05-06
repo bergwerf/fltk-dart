@@ -27,7 +27,6 @@ class Widget extends _Ptr {
 
   /// Do a callback
   void doCallback() {
-    print('Hi!');
     if (callback != null) {
       callback(this, userData);
     }
@@ -62,8 +61,8 @@ class Widget extends _Ptr {
   // Bindings with native code
   //////////////////////////////////////////////////////////////////////////////
 
-  static int _create(Widget handle, int x, int y, int w, int h, String l)
-      native 'fldart::WidgetController::createWidgetController';
+  static int _create(Widget me, int x, int y, int w, int h, String l)
+      native 'fldart::Widget::createWidget';
 
   static int _x(int ptr) native 'fldart::Widget::int_x';
   static int _y(int ptr) native 'fldart::Widget::int_y';

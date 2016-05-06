@@ -1,7 +1,3 @@
-include:
-- <FL/Fl.H>
-- <FL/Fl_Window.H>
-
 cname: Fl_Window
 dartname: Window
 
@@ -9,4 +5,5 @@ constructors:
 - void Short(int w, int h, String l)
 - void (int x, int y, int w, int h, String l)
 
-methods: []
+methods:
+- void hide()

@@ -1,7 +1,3 @@
-include:
-- <FL/Fl.H>
-- <FL/Fl_Button.H>
-
 cname: Fl_Button
 dartname: Button
 

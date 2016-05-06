@@ -5,22 +5,25 @@
 #ifndef {{{ header }}}
 #define {{{ header }}}
 
+#include <FL/Fl.H>
+#include <FL/{{{ class }}}.H>
+
 #include "dart_api.h"
 #include "../../common.hpp"
-#include "../wrappers/{{{ cname }}}_Wrapper.hpp"
 
 namespace fldart {
-/// Dart bindings for {{{ cname }}}
-class {{{ dartname }}} {
+class {{{ class }}}_Wrapper : public {{{ class }}} {
+  Dart_PersistentHandle _ref;
+
  public:
   {{# constructors }}
-  static void create{{{ dartname }}}{{{ name }}}(Dart_NativeArguments arguments);
+  {{{ class }}}_Wrapper(Dart_Handle ref, {{{ argsdef }}});
   {{/ constructors }}
-  {{# methods }}
-  static void {{{ name }}}(Dart_NativeArguments arguments);
-  {{/ methods }}
-  {{! Method mapping }}
-  static FunctionMapping methods[];
+
+  {{# isbaseclass }}
+  void draw();
+  {{/ isbaseclass }}
+  static void callback_wrapper(Fl_Widget*, void*);
 };
 }
 

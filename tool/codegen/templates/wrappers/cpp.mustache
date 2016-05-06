@@ -1,0 +1,25 @@
+// Copyright (c) 2016, Herman Bergwerf. All rights reserved.
+// Use of this source code is governed by a MIT-style license
+// that can be found in the LICENSE file.
+
+#include "{{{ class }}}_Wrapper.hpp"
+
+namespace fldart {
+{{# constructors }}
+{{{ class }}}_Wrapper::{{{ class }}}_Wrapper(Dart_Handle ref, {{{ argsdef }}}) : {{{ class }}}({{{ argslist }}}) {
+  _ref = Dart_NewPersistentHandle(ref);
+  callback(callback_wrapper, &_ref);
+}
+
+{{/ constructors }}
+{{# isbaseclass }}
+void {{{ class }}}_Wrapper::draw() {
+  Dart_Invoke(_ref, Dart_NewStringFromCString("draw"), 0, {});
+}
+
+{{/ isbaseclass }}
+void {{{ class }}}_Wrapper::callback_wrapper(Fl_Widget*, void *ptr) {
+  Dart_Handle *ref = (Dart_Handle*)ptr;
+  Dart_Invoke(*ref, Dart_NewStringFromCString("doCallback"), 0, {});
+}
+}

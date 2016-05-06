@@ -55,6 +55,12 @@ int main(List<String> args) {
   var widgetCppTemplate = new Template(
       new File('$root/templates/widgets/cpp.mustache').readAsStringSync(),
       lenient: true);
+  var wrapperHppTemplate = new Template(
+      new File('$root/templates/wrappers/hpp.mustache').readAsStringSync(),
+      lenient: true);
+  var wrapperCppTemplate = new Template(
+      new File('$root/templates/wrappers/cpp.mustache').readAsStringSync(),
+      lenient: true);
   var funcsHppTemplate = new Template(
       new File('$root/templates/functions/hpp.mustache').readAsStringSync(),
       lenient: true);
@@ -65,22 +71,30 @@ int main(List<String> args) {
   // Process widget files.
   for (var file in widgetFiles.listSync()) {
     processWidgetFile(
-        file, 'ext/src/widgets', widgetHppTemplate, widgetCppTemplate);
+        file,
+        'ext/src/gen/widgets',
+        'ext/src/gen/wrappers',
+        widgetHppTemplate,
+        widgetCppTemplate,
+        wrapperHppTemplate,
+        wrapperCppTemplate);
   }
 
   // Process function files.
   for (var file in funcsFiles.listSync()) {
-    processFuncsFile(file, 'ext/src/core', funcsHppTemplate, funcsCppTemplate);
+    processFuncsFile(
+        file, 'ext/src/gen/core', funcsHppTemplate, funcsCppTemplate);
   }
 
   return 0;
 }
 
 /// Process a YAML file with a widget definition.
-void processWidgetFile(File file, String dir, Template hpp, Template cpp) {
+void processWidgetFile(File file, String dir, String wrapperDir, Template hpp,
+    Template cpp, Template wrapperHpp, Template wrapperCpp) {
   var content = loadYaml(file.readAsStringSync());
 
-  // Parse constuctors.
+  // Parse constructors.
   var constructors = [];
   content['constructors'].forEach((String constructor) {
     constructors.add(parseMethod(constructor, true));
@@ -95,7 +109,6 @@ void processWidgetFile(File file, String dir, Template hpp, Template cpp) {
   // Generate new mustache input data.
   var mustacheData = {
     'header': 'FLDART_${content['dartname'].toUpperCase()}_H',
-    'include': content['include'],
     'cname': content['cname'],
     'dartname': content['dartname'],
     'constructors': constructors,
@@ -107,6 +120,39 @@ void processWidgetFile(File file, String dir, Template hpp, Template cpp) {
       .writeAsStringSync(hpp.renderString(mustacheData));
   new File('$dir/${content['dartname']}.cpp')
       .writeAsStringSync(cpp.renderString(mustacheData));
+
+  // Generate data for wrapper class
+  //
+  // Datastructure:
+  // header: HPP #define header
+  // class: widget class name
+  // constructors:
+  // - argslist: comma separated list of arguments
+  //   argsdef: comma separated list of arguments with types
+  var wrapperconstructors = [];
+  constructors.forEach((Map<String, dynamic> data) {
+    var args = [];
+    data['args'].forEach((Map<String, dynamic> arg) {
+      args.add(arg['name']);
+    });
+    wrapperconstructors.add({
+      'argslist': args.join(','),
+      'argsdef': data['argsdef'].replaceAll('String', 'const char*')
+    });
+  });
+
+  var wrapperData = {
+    'header': 'FLDART_${content['cname'].toUpperCase()}_WRAPPER_H',
+    'class': content['cname'],
+    'constructors': wrapperconstructors,
+    'isbaseclass': content['cname'] == 'Fl_Widget' ? [1] : []
+  };
+
+  // Write wrapper files.
+  new File('$wrapperDir/${content['cname']}_Wrapper.hpp')
+      .writeAsStringSync(wrapperHpp.renderString(wrapperData));
+  new File('$wrapperDir/${content['cname']}_Wrapper.cpp')
+      .writeAsStringSync(wrapperCpp.renderString(wrapperData));
 }
 
 /// Process a YAML file with function definitions.
@@ -168,7 +214,8 @@ Map<String, dynamic> parseMethod(String method, bool constructor) {
   //
   // - name: method name
   //   call: how the method is called (only used for pure methods)
-  //   argslist: list of method arguments (only used for constuctors)
+  //   argsdef: arguments from the input file (used to generate wrapper data)
+  //   argslist: list of method arguments (only used for constructors)
   //   return: how the return value is generated
   //   args:
   //   - argi: argument index
@@ -184,10 +231,11 @@ Map<String, dynamic> parseMethod(String method, bool constructor) {
     'return': codeForNewDartHandle(primitiveCType(match.group(1)), '_tmp')
   };
 
-  var args = parseArguments(match.group(3), constructor ? 0 : 1);
+  var args = parseArguments(match.group(3), 1);
   ret['call'] = wrapReturn(match.group(1),
       '_ref -> ${match.group(2)}(${args.list.join(',')})', '_tmp');
   ret['argslist'] = args.list.join(',');
+  ret['argsdef'] = match.group(3);
   ret['args'] = args.data;
 
   return ret;

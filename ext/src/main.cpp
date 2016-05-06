@@ -11,17 +11,15 @@
 #include "dart_api.h"
 #include "common.hpp"
 
-#include "core/fl.hpp"
-#include "core/draw.hpp"
+#include "gen/core/fl.hpp"
+#include "gen/core/draw.hpp"
 
-#include "widgets/Widget.hpp"
-#include "widgets/Group.hpp"
-#include "widgets/Box.hpp"
-#include "widgets/Button.hpp"
-#include "widgets/Window.hpp"
-#include "widgets/DoubleWindow.hpp"
-
-#include "WidgetController.hpp"
+#include "gen/widgets/Widget.hpp"
+#include "gen/widgets/Group.hpp"
+#include "gen/widgets/Box.hpp"
+#include "gen/widgets/Button.hpp"
+#include "gen/widgets/Window.hpp"
+#include "gen/widgets/DoubleWindow.hpp"
 
 Dart_NativeFunction ResolveName(
   Dart_Handle name,
@@ -57,9 +55,7 @@ std::vector<fldart::FunctionMapping*> allFunctions = {
   fldart::Box::methods,
   fldart::Button::methods,
   fldart::Window::methods,
-  fldart::DoubleWindow::methods,
-
-  fldart::WidgetController::methods
+  fldart::DoubleWindow::methods
 };
 
 Dart_NativeFunction ResolveName(Dart_Handle name, int argc, bool* autoSetupScope) {

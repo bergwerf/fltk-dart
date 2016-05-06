@@ -1,11 +1,8 @@
-include:
-- <FL/Fl.H>
-- <FL/Fl_Widget.H>
-
 cname: Fl_Widget
 dartname: Widget
 
-constructors: []
+constructors:
+- void (int x, int y, int w, int h, String l)
 
 methods:
 - int x()

@@ -1,3 +1,7 @@
+// Copyright (c) 2016, Herman Bergwerf. All rights reserved.
+// Use of this source code is governed by a MIT-style license
+// that can be found in the LICENSE file.
+
 #include "{{{ dartname }}}.hpp"
 
 namespace fldart {
@@ -14,18 +18,20 @@ FunctionMapping {{{ dartname }}}::methods[] = {
 
 void {{{ dartname }}}::create{{{ dartname }}}{{{ name }}}(Dart_NativeArguments arguments) {
   {{! Local variables }}
-  {{{ cname }}}* instance;
+  {{{ cname }}}_Wrapper* instance;
+  Dart_Handle _ref;
   {{# args }}
   {{{ type }}} {{{ name }}};
   {{/ args }}
   {{! Enter new Dart scope }}
   Dart_EnterScope();
   {{! Resolve variables }}
+  _ref = HandleError(Dart_GetNativeArgument(arguments, 0));
   {{# args }}
   HandleError({{{ conv }}}(HandleError(Dart_GetNativeArgument(arguments, {{{ argi }}})), &{{{ name }}}));
   {{/ args }}
   {{! Create instance }}
-  instance = new {{{ cname }}}({{{ argslist }}});
+  instance = new {{{ cname }}}_Wrapper(_ref,{{{ argslist }}});
   {{! Return instance memory address }}
   Dart_Handle _ret = Dart_NewInteger((int64_t)instance);
   Dart_SetReturnValue(arguments, _ret);
