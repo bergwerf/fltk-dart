@@ -11,8 +11,8 @@ import 'package:mustache/mustache.dart';
 /// Path from the repository root to this folder
 const root = 'tool/codegen';
 
-/// All widget input files.
-final widgetFiles = new Glob("ext/widgets/*.yaml");
+/// All class input files.
+final classFiles = new Glob("ext/classes/*.yaml");
 
 /// All functions input files.
 final funcsFiles = new Glob("ext/functions/*.yaml");
@@ -49,11 +49,11 @@ const Map<String, String> dartToCType = const {
 /// TODO: use implicit cast with fltktypes.yaml
 int main(List<String> args) {
   // Load templates.
-  var widgetHppTemplate = new Template(
-      new File('$root/templates/widgets/hpp.mustache').readAsStringSync(),
+  var classHppTemplate = new Template(
+      new File('$root/templates/classes/hpp.mustache').readAsStringSync(),
       lenient: true);
-  var widgetCppTemplate = new Template(
-      new File('$root/templates/widgets/cpp.mustache').readAsStringSync(),
+  var classCppTemplate = new Template(
+      new File('$root/templates/classes/cpp.mustache').readAsStringSync(),
       lenient: true);
   var wrapperHppTemplate = new Template(
       new File('$root/templates/wrappers/hpp.mustache').readAsStringSync(),
@@ -68,14 +68,14 @@ int main(List<String> args) {
       new File('$root/templates/functions/cpp.mustache').readAsStringSync(),
       lenient: true);
 
-  // Process widget files.
-  for (var file in widgetFiles.listSync()) {
-    processWidgetFile(
+  // Process class files.
+  for (var file in classFiles.listSync()) {
+    processClassFile(
         file,
-        'ext/src/gen/widgets',
+        'ext/src/gen/classes',
         'ext/src/gen/wrappers',
-        widgetHppTemplate,
-        widgetCppTemplate,
+        classHppTemplate,
+        classCppTemplate,
         wrapperHppTemplate,
         wrapperCppTemplate);
   }
@@ -89,15 +89,18 @@ int main(List<String> args) {
   return 0;
 }
 
-/// Process a YAML file with a widget definition.
-void processWidgetFile(File file, String dir, String wrapperDir, Template hpp,
+/// Process a YAML file with a class definition.
+void processClassFile(File file, String dir, String wrapperDir, Template hpp,
     Template cpp, Template wrapperHpp, Template wrapperCpp) {
   var content = loadYaml(file.readAsStringSync());
+
+  // Should we generate a wrapper to redirect core methods?
+  var createWrapper = !(content['wrapper'] == false);
 
   // Parse constructors.
   var constructors = [];
   content['constructors'].forEach((String constructor) {
-    constructors.add(parseMethod(constructor, true));
+    constructors.add(parseMethod(constructor, true, createWrapper));
   });
 
   // Parse methods.
@@ -111,6 +114,13 @@ void processWidgetFile(File file, String dir, String wrapperDir, Template hpp,
     'header': 'FLDART_${content['dartname'].toUpperCase()}_H',
     'cname': content['cname'],
     'dartname': content['dartname'],
+    'addref': createWrapper ? [1] : [], // Resolve Dart_Handle _ref
+    'targetclass': // Class that is used for construction and method calling
+        createWrapper ? '${content['cname']}_Wrapper' : content['cname'],
+    'targetclassinclude': // #include string for the class header
+        createWrapper
+        ? '"../wrappers/${content['cname']}_Wrapper.hpp"'
+        : '<FL/${content['cname']}.H>',
     'constructors': constructors,
     'methods': methods
   };
@@ -121,38 +131,40 @@ void processWidgetFile(File file, String dir, String wrapperDir, Template hpp,
   new File('$dir/${content['dartname']}.cpp')
       .writeAsStringSync(cpp.renderString(mustacheData));
 
-  // Generate data for wrapper class
-  //
-  // Datastructure:
-  // header: HPP #define header
-  // class: widget class name
-  // constructors:
-  // - argslist: comma separated list of arguments
-  //   argsdef: comma separated list of arguments with types
-  var wrapperconstructors = [];
-  constructors.forEach((Map<String, dynamic> data) {
-    var args = [];
-    data['args'].forEach((Map<String, dynamic> arg) {
-      args.add(arg['name']);
+  if (createWrapper) {
+    // Generate data for wrapper class
+    //
+    // Datastructure:
+    // header: HPP #define header
+    // class: C++ class name
+    // constructors:
+    // - argslist: comma separated list of arguments
+    //   argsdef: comma separated list of arguments with types
+    var wrapperconstructors = [];
+    constructors.forEach((Map<String, dynamic> data) {
+      var args = [];
+      data['args'].forEach((Map<String, dynamic> arg) {
+        args.add(arg['name']);
+      });
+      wrapperconstructors.add({
+        'argslist': args.join(','),
+        'argsdef': data['argsdef'].replaceAll('String', 'const char*')
+      });
     });
-    wrapperconstructors.add({
-      'argslist': args.join(','),
-      'argsdef': data['argsdef'].replaceAll('String', 'const char*')
-    });
-  });
 
-  var wrapperData = {
-    'header': 'FLDART_${content['cname'].toUpperCase()}_WRAPPER_H',
-    'class': content['cname'],
-    'constructors': wrapperconstructors,
-    'isbaseclass': content['cname'] == 'Fl_Widget' ? [1] : []
-  };
+    var wrapperData = {
+      'header': 'FLDART_${content['cname'].toUpperCase()}_WRAPPER_H',
+      'class': content['cname'],
+      'constructors': wrapperconstructors,
+      'Fl_Widget': content['cname'] == 'Fl_Widget' ? [1] : []
+    };
 
-  // Write wrapper files.
-  new File('$wrapperDir/${content['cname']}_Wrapper.hpp')
-      .writeAsStringSync(wrapperHpp.renderString(wrapperData));
-  new File('$wrapperDir/${content['cname']}_Wrapper.cpp')
-      .writeAsStringSync(wrapperCpp.renderString(wrapperData));
+    // Write wrapper files.
+    new File('$wrapperDir/${content['cname']}_Wrapper.hpp')
+        .writeAsStringSync(wrapperHpp.renderString(wrapperData));
+    new File('$wrapperDir/${content['cname']}_Wrapper.cpp')
+        .writeAsStringSync(wrapperCpp.renderString(wrapperData));
+  }
 }
 
 /// Process a YAML file with function definitions.
@@ -209,7 +221,9 @@ Map<String, dynamic> parseFunction(YamlMap function) {
 }
 
 /// Parse a single method.
-Map<String, dynamic> parseMethod(String method, bool constructor) {
+/// Generates code that targets a wrapper class if [withWrapper] is true.
+Map<String, dynamic> parseMethod(String method, bool constructor,
+    [bool withWrapper = false]) {
   // We need the following fields:
   //
   // - name: method name
@@ -232,9 +246,10 @@ Map<String, dynamic> parseMethod(String method, bool constructor) {
   };
 
   var args = parseArguments(match.group(3), 1);
-  ret['call'] = wrapReturn(match.group(1),
-      '_ref -> ${match.group(2)}(${args.list.join(',')})', '_tmp');
-  ret['argslist'] = args.list.join(',');
+  var argslist = args.list.join(',');
+  ret['call'] = wrapReturn(
+      match.group(1), '_ref -> ${match.group(2)}($argslist)', '_tmp');
+  ret['argslist'] = constructor && withWrapper ? '_ref,$argslist' : argslist;
   ret['argsdef'] = match.group(3);
   ret['args'] = args.data;
 

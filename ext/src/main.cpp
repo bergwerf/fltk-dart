@@ -14,12 +14,15 @@
 #include "gen/core/fl.hpp"
 #include "gen/core/draw.hpp"
 
-#include "gen/widgets/Widget.hpp"
-#include "gen/widgets/Group.hpp"
-#include "gen/widgets/Box.hpp"
-#include "gen/widgets/Button.hpp"
-#include "gen/widgets/Window.hpp"
-#include "gen/widgets/DoubleWindow.hpp"
+#include "gen/classes/Widget.hpp"
+#include "gen/classes/Group.hpp"
+#include "gen/classes/Box.hpp"
+#include "gen/classes/Button.hpp"
+#include "gen/classes/Input.hpp"
+#include "gen/classes/TextEditor.hpp"
+#include "gen/classes/TextBuffer.hpp"
+#include "gen/classes/Window.hpp"
+#include "gen/classes/DoubleWindow.hpp"
 
 Dart_NativeFunction ResolveName(
   Dart_Handle name,
@@ -54,6 +57,9 @@ std::vector<fldart::FunctionMapping*> allFunctions = {
   fldart::Group::methods,
   fldart::Box::methods,
   fldart::Button::methods,
+  fldart::Input::methods,
+  fldart::TextEditor::methods,
+  fldart::TextBuffer::methods,
   fldart::Window::methods,
   fldart::DoubleWindow::methods
 };

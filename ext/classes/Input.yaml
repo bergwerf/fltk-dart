@@ -1,0 +1,7 @@
+cname: Fl_Input
+dartname: Input
+
+constructors:
+- void (int x, int y, int w, int h, String l)
+
+methods: []

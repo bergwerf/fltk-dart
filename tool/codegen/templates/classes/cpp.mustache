@@ -18,20 +18,24 @@ FunctionMapping {{{ dartname }}}::methods[] = {
 
 void {{{ dartname }}}::create{{{ dartname }}}{{{ name }}}(Dart_NativeArguments arguments) {
   {{! Local variables }}
-  {{{ cname }}}_Wrapper* instance;
+  {{{ targetclass }}}* instance;
+  {{# addref }}
   Dart_Handle _ref;
+  {{/ addref }}
   {{# args }}
   {{{ type }}} {{{ name }}};
   {{/ args }}
   {{! Enter new Dart scope }}
   Dart_EnterScope();
   {{! Resolve variables }}
+  {{# addref }}
   _ref = HandleError(Dart_GetNativeArgument(arguments, 0));
+  {{/ addref }}
   {{# args }}
   HandleError({{{ conv }}}(HandleError(Dart_GetNativeArgument(arguments, {{{ argi }}})), &{{{ name }}}));
   {{/ args }}
   {{! Create instance }}
-  instance = new {{{ cname }}}_Wrapper(_ref,{{{ argslist }}});
+  instance = new {{{ targetclass }}}({{{ argslist }}});
   {{! Return instance memory address }}
   Dart_Handle _ret = Dart_NewInteger((int64_t)instance);
   Dart_SetReturnValue(arguments, _ret);
@@ -43,15 +47,15 @@ void {{{ dartname }}}::create{{{ dartname }}}{{{ name }}}(Dart_NativeArguments a
 void {{{ dartname }}}::{{{ name }}}(Dart_NativeArguments arguments) {
   {{! Local variables }}
   int64_t ptr;
-  {{ cname }}* _ref;
+  {{{ targetclass }}}* _ref;
   {{# args }}
   {{{ type }}} {{{ name }}};
   {{/ args }}
   {{! Enter new Dart scope }}
   Dart_EnterScope();
-  {{! Resolve widget reference from memory address }}
+  {{! Resolve class instance reference from memory address }}
   HandleError(Dart_IntegerToInt64(HandleError(Dart_GetNativeArgument(arguments, 0)), &ptr));
-  _ref = ({{ cname }}*)ptr;
+  _ref = ({{{ targetclass }}}*)ptr;
   {{! Resolve other method arguments }}
   {{# args }}
   HandleError({{{ conv }}}(HandleError(Dart_GetNativeArgument(arguments, {{{ argi }}})), &{{{ name }}}));

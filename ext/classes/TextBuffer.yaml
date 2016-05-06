@@ -1,0 +1,8 @@
+cname: Fl_Text_Buffer
+dartname: TextBuffer
+wrapper: false
+
+constructors:
+- void ()
+
+methods: []

@@ -46,7 +46,7 @@ class Widget extends _Ptr {
   set labelfont(int f) => _setLabelfont(ptr, f);
 
   int get labelsize => _getLabelsize(ptr);
-  set labelsize(int pix) => _setLabelsize(ptr, pix);
+  set labelsize(int pixels) => _setLabelsize(ptr, pixels);
 
   Labeltype get labeltype => Labeltype.values[_getLabeltype(ptr)];
   set labeltype(Labeltype type) => _setLabeltype(ptr, type.index);
@@ -78,7 +78,7 @@ class Widget extends _Ptr {
       native 'fldart::Widget::void_labelfont';
 
   static int _getLabelsize(int ptr) native 'fldart::Widget::int_labelsize';
-  static void _setLabelsize(int ptr, int pix)
+  static void _setLabelsize(int ptr, int pixels)
       native 'fldart::Widget::void_labelsize';
 
   static int _getLabeltype(int ptr)

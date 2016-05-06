@@ -24,7 +24,7 @@ compile ext/src/main.cpp
 compile ext/src/common.cpp
 
 # Compile individual classes.
-for f in {$GEN_OUT/core/*.cpp,$GEN_OUT/wrappers/*.cpp,$GEN_OUT/widgets/*.cpp}
+for f in {$GEN_OUT/core/*.cpp,$GEN_OUT/wrappers/*.cpp,$GEN_OUT/classes/*.cpp}
 do
   compile $f
 done
@@ -35,8 +35,8 @@ done
 # - add -m32 flag on 32 bit systems.
 # - add -g to generate debug info.
 gcc -g -shared -Wl,-soname,libfltk.so -o lib/libfltk.so \
-    $GEN_OUT/core/*.o $GEN_OUT/wrappers/*.o $GEN_OUT/widgets/*.o ext/src/*.o \
+    $GEN_OUT/core/*.o $GEN_OUT/wrappers/*.o $GEN_OUT/classes/*.o ext/src/*.o \
     -lfltk -lXcursor -lXfixes -lXext -lXft -lfontconfig -lXinerama -lpthread -ldl -lm -lX11
 
 # Clean up.
-rm $GEN_OUT/{core,wrappers,widgets}/*.o ext/src/*.o
+rm $GEN_OUT/{core,wrappers,classes}/*.o ext/src/*.o

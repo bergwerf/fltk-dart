@@ -14,7 +14,7 @@ methods:
 - String label()
 - void labelfont(int f)
 - int labelfont()
-- void labelsize(int pix)
+- void labelsize(int pixels)
 - int labelsize()
 - void labeltype(Fl_Labeltype type)
 - Fl_Labeltype labeltype()
