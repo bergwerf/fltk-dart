@@ -11,8 +11,8 @@
 #include "dart_api.h"
 #include "common.hpp"
 
-#include "gen/core/fl.hpp"
-#include "gen/core/draw.hpp"
+#include "gen/funcs/fl.hpp"
+#include "gen/funcs/draw.hpp"
 
 #include "gen/classes/Widget.hpp"
 #include "gen/classes/Group.hpp"

@@ -2,6 +2,9 @@ install-hook:
 	# Create symlink for pre-commit hook.
 	ln -sf ../../tool/pre-commit.sh .git/hooks/pre-commit
 
+generate-bindings:
+	dart tool/codegen/generate.dart
+
 compile-fltk-1.3.3:
 	# 1. untar
 	mkdir -p compile

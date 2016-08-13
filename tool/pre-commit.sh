@@ -5,6 +5,6 @@
 # that can be found in the LICENSE file.
 
 mkdir -p ext/src/gen/{core,wrappers,classes}
-dart tool/codegen/generate.dart
+make generate-bindings
 molviewfmt -c 'Herman Bergwerf' -l 'MIT' -e '**.sh'
 make compile-fltk-ext

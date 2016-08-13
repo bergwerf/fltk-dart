@@ -17,6 +17,9 @@ final classFiles = new Glob("ext/classes/*.yaml");
 /// All functions input files.
 final funcsFiles = new Glob("ext/functions/*.yaml");
 
+/// Arguments placeholder for custom methods.
+const customMethod = '[custom]';
+
 final functionRegex = new RegExp(r'([A-z_0-9]*)\s([A-z_0-9:->]*)');
 final methodRegex = new RegExp(r'([A-z_0-9]*)\s([A-z_0-9]*)\((.*)\)');
 final argRegex = new RegExp(r'\s*([A-z_0-9*]+)\s+([A-z_0-9]*)');
@@ -83,7 +86,7 @@ int main(List<String> args) {
   // Process function files.
   for (var file in funcsFiles.listSync()) {
     processFuncsFile(
-        file, 'ext/src/gen/core', funcsHppTemplate, funcsCppTemplate);
+        file, 'ext/src/gen/funcs', funcsHppTemplate, funcsCppTemplate);
   }
 
   return 0;
@@ -94,7 +97,7 @@ void processClassFile(File file, String dir, String wrapperDir, Template hpp,
     Template cpp, Template wrapperHpp, Template wrapperCpp) {
   var content = loadYaml(file.readAsStringSync());
 
-  // Should we generate a wrapper to redirect core methods?
+  // Should we generate a wrapper to redirect base methods?
   var createWrapper = !(content['wrapper'] == false);
 
   // Parse constructors.
@@ -114,20 +117,42 @@ void processClassFile(File file, String dir, String wrapperDir, Template hpp,
     'header': 'FLDART_${content['dartname'].toUpperCase()}_H',
     'cname': content['cname'],
     'dartname': content['dartname'],
-    'addref': createWrapper ? [1] : [], // Resolve Dart_Handle _ref
-    'targetclass': // Class that is used for construction and method calling
+
+    // Resolve Dart_Handle _ref
+    'addref': createWrapper ? [1] : [],
+
+    // Class that is used for construction and method calling
+    'targetClass':
         createWrapper ? '${content['cname']}_Wrapper' : content['cname'],
-    'targetclassinclude': // #include string for the class header
-        createWrapper
+
+    // #include string for the class header
+    'targetClassInclude': createWrapper
         ? '"../wrappers/${content['cname']}_Wrapper.hpp"'
         : '<FL/${content['cname']}.H>',
+
     'constructors': constructors,
-    'methods': methods
+    'methods': methods,
+
+    // Use separate methodNames for FunctionMapping to support custom classes
+    // (custom methods are removed from the methods list when generating the
+    // class source).
+    'methodNames':
+        new List<String>.generate(methods.length, (int i) => methods[i]['name'])
   };
 
-  // Write output files.
+  // Write class header.
   new File('$dir/${content['dartname']}.hpp')
       .writeAsStringSync(hpp.renderString(mustacheData));
+
+  // Remove all custom methods.
+  for (var i = 0; i < mustacheData['methods'].length; i++) {
+    if (mustacheData['methods'][i].containsKey('custom')) {
+      mustacheData['methods'].removeAt(i);
+      i--;
+    }
+  }
+
+  // Write class source.
   new File('$dir/${content['dartname']}.cpp')
       .writeAsStringSync(cpp.renderString(mustacheData));
 
@@ -196,9 +221,9 @@ void processFuncsFile(File file, String dir, Template hpp, Template cpp) {
 Map<String, dynamic> parseFunction(YamlMap function) {
   // We need the following fields:
   //
-  // - name: method name
-  //   call: how the function is called
-  //   return: how the return value is generated
+  // - name:    function name
+  //   call:    how the function is called
+  //   return:  how the return value is generated
   //   args:
   //   - argi: argument index
   //     name: argument variable name
@@ -221,16 +246,17 @@ Map<String, dynamic> parseFunction(YamlMap function) {
 }
 
 /// Parse a single method.
-/// Generates code that targets a wrapper class if [withWrapper] is true.
+///
+/// Generates data that targets a wrapper class if [withWrapper] is true.
 Map<String, dynamic> parseMethod(String method, bool constructor,
     [bool withWrapper = false]) {
   // We need the following fields:
   //
-  // - name: method name
-  //   call: how the method is called (only used for pure methods)
-  //   argsdef: arguments from the input file (used to generate wrapper data)
-  //   argslist: list of method arguments (only used for constructors)
-  //   return: how the return value is generated
+  // - name:      method name
+  //   call:      how the method is called (used by real methods)
+  //   argsdef:   comma separated list of arguments and types (used by wrapper constructors)
+  //   argslist:  comma separated list of argument labels (used by constructors)
+  //   return:    how the return value is generated (used by real methods)
   //   args:
   //   - argi: argument index
   //     name: argument variable name
@@ -240,18 +266,31 @@ Map<String, dynamic> parseMethod(String method, bool constructor,
   var match = methodRegex.firstMatch(method);
 
   Map<String, dynamic> ret = {
-    'name':
-        constructor ? match.group(2) : '${match.group(1)}_${match.group(2)}',
-    'return': codeForNewDartHandle(primitiveCType(match.group(1)), '_tmp')
+    'name': constructor ? match.group(2) : '${match.group(1)}_${match.group(2)}'
   };
 
-  var args = parseArguments(match.group(3), 1);
-  var argslist = args.list.join(',');
-  ret['call'] = wrapReturn(
-      match.group(1), '_ref -> ${match.group(2)}($argslist)', '_tmp');
-  ret['argslist'] = constructor && withWrapper ? '_ref,$argslist' : argslist;
-  ret['argsdef'] = match.group(3);
-  ret['args'] = args.data;
+  // If this is a custom method, do not parse the arguments or generate the
+  // call/return code.
+  if (match.group(3) == customMethod) {
+    ret['custom'] = true;
+  } else {
+    // Generate return value generation code.
+    ret['return'] =
+        codeForNewDartHandle(primitiveCType(match.group(1)), '_tmp');
+
+    // Parse arguments.
+    var args = parseArguments(match.group(3), 1);
+    var argslist = args.list.join(',');
+
+    // Generate method call code.
+    ret['call'] = wrapReturn(
+        match.group(1), '_ref -> ${match.group(2)}($argslist)', '_tmp');
+
+    // Store arguments data.
+    ret['argslist'] = constructor && withWrapper ? '_ref,$argslist' : argslist;
+    ret['argsdef'] = match.group(3);
+    ret['args'] = args.data;
+  }
 
   return ret;
 }

@@ -21,3 +21,4 @@ methods:
 
 - void show()
 - void box(Fl_Boxtype type)
+- void image([custom])

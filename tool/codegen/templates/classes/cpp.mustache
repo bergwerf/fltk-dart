@@ -9,16 +9,16 @@ FunctionMapping {{{ dartname }}}::methods[] = {
   {{# constructors }}
   {"fldart::{{{ dartname }}}::create{{{ dartname }}}{{{ name }}}", {{{ dartname }}}::create{{{ dartname }}}{{{ name }}}},
   {{/ constructors }}
-  {{# methods }}
-  {"fldart::{{{ dartname }}}::{{{ name }}}", {{{ dartname }}}::{{{ name }}}},
-  {{/ methods }}
+  {{# methodNames }}
+  {"fldart::{{{ dartname }}}::{{{ . }}}", {{{ dartname }}}::{{{ . }}}},
+  {{/ methodNames }}
   {NULL, NULL}
 };
 {{# constructors }}
 
 void {{{ dartname }}}::create{{{ dartname }}}{{{ name }}}(Dart_NativeArguments arguments) {
   {{! Local variables }}
-  {{{ targetclass }}}* instance;
+  {{{ targetClass }}}* instance;
   {{# addref }}
   Dart_Handle _ref;
   {{/ addref }}
@@ -35,7 +35,7 @@ void {{{ dartname }}}::create{{{ dartname }}}{{{ name }}}(Dart_NativeArguments a
   HandleError({{{ conv }}}(HandleError(Dart_GetNativeArgument(arguments, {{{ argi }}})), &{{{ name }}}));
   {{/ args }}
   {{! Create instance }}
-  instance = new {{{ targetclass }}}({{{ argslist }}});
+  instance = new {{{ targetClass }}}({{{ argslist }}});
   {{! Return instance memory address }}
   Dart_Handle _ret = Dart_NewInteger((int64_t)instance);
   Dart_SetReturnValue(arguments, _ret);
@@ -47,7 +47,7 @@ void {{{ dartname }}}::create{{{ dartname }}}{{{ name }}}(Dart_NativeArguments a
 void {{{ dartname }}}::{{{ name }}}(Dart_NativeArguments arguments) {
   {{! Local variables }}
   int64_t ptr;
-  {{{ targetclass }}}* _ref;
+  {{{ targetClass }}}* _ref;
   {{# args }}
   {{{ type }}} {{{ name }}};
   {{/ args }}
@@ -55,7 +55,7 @@ void {{{ dartname }}}::{{{ name }}}(Dart_NativeArguments arguments) {
   Dart_EnterScope();
   {{! Resolve class instance reference from memory address }}
   HandleError(Dart_IntegerToInt64(HandleError(Dart_GetNativeArgument(arguments, 0)), &ptr));
-  _ref = ({{{ targetclass }}}*)ptr;
+  _ref = ({{{ targetClass }}}*)ptr;
   {{! Resolve other method arguments }}
   {{# args }}
   HandleError({{{ conv }}}(HandleError(Dart_GetNativeArgument(arguments, {{{ argi }}})), &{{{ name }}}));
