@@ -22,7 +22,7 @@ class XWidget extends fl.Widget {
 int main() {
   var win = new fl.DoubleWindow(200, 200, 'X');
   var x = new XWidget(0, 0, win.w, win.h);
-  win.resizable(x);
+  win.resizable = x;
   win.show();
   return fl.run();
 }

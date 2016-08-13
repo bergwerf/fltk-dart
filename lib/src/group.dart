@@ -17,7 +17,7 @@ class Group extends Widget {
   void end() => _end(ptr);
 
   /// Set resizable widget.
-  void resizable(Widget o) => _resizable(ptr, o.ptr);
+  set resizable(Widget o) => _resizable(ptr, o.ptr);
 
   //////////////////////////////////////////////////////////////////////////////
   // Bindings with native code

@@ -38,7 +38,7 @@ class Widget extends _Ptr {
   int get w => _w(ptr);
   int get h => _h(ptr);
 
-  // Getters and setters for label properties
+  // Getters and setters for style attributes
   String get label => _getLabel(ptr);
   set label(String text) => _setLabel(ptr, text);
 
@@ -51,8 +51,13 @@ class Widget extends _Ptr {
   Labeltype get labeltype => Labeltype.values[_getLabeltype(ptr)];
   set labeltype(Labeltype type) => _setLabeltype(ptr, type.index);
 
-  /// Set boxtype.
-  void box(Boxtype type) => _box(ptr, type.index);
+  int get labelcolor => _getLabelcolor(ptr);
+  set labelcolor(int color) => _setLabelcolor(ptr, color);
+
+  int get color => _getColor(ptr);
+  set color(int color) => _setColor(ptr, color);
+
+  set box(Boxtype type) => _box(ptr, type.index);
 
   /// Show widget.
   void show() => _show(ptr);
@@ -91,6 +96,14 @@ class Widget extends _Ptr {
       native 'fldart::Widget::Fl_Labeltype_labeltype';
   static void _setLabeltype(int ptr, int type)
       native 'fldart::Widget::void_labeltype';
+
+  static int _getLabelcolor(int ptr)
+      native 'fldart::Widget::uint32_t_labelcolor';
+  static void _setLabelcolor(int ptr, int color)
+      native 'fldart::Widget::void_labelcolor';
+
+  static int _getColor(int ptr) native 'fldart::Widget::uint32_t_color';
+  static void _setColor(int ptr, int color) native 'fldart::Widget::void_color';
 
   static void _box(int ptr, int type) native 'fldart::Widget::void_box';
   static void _show(int ptr) native 'fldart::Widget::void_show';

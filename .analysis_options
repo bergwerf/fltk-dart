@@ -1,4 +1,6 @@
 analyzer:
+  exclude:
+  - compile/**
   strong-mode: true
 linter:
   rules:

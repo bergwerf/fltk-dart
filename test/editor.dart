@@ -27,9 +27,9 @@ class TextEditor extends fl.DoubleWindow {
   TextEditor(int w, int h, String l) : super(w, h, l) {
     buffer = new fl.TextBuffer();
     editor = new fl.TextEditor(0, 0, w, h);
-    editor.box(fl.FLAT_BOX);
-    editor.buffer(buffer);
-    resizable(editor);
+    editor.box = fl.FLAT_BOX;
+    editor.buffer = buffer;
+    resizable = editor;
     end();
   }
 }

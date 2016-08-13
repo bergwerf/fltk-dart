@@ -14,7 +14,7 @@ class TextEditor extends Widget {
   TextEditor.empty() : super.empty();
 
   /// Set the [TextBuffer]
-  void buffer(TextBuffer buffer) => _buffer(ptr, buffer.ptr);
+  set buffer(TextBuffer buffer) => _buffer(ptr, buffer.ptr);
 
   //////////////////////////////////////////////////////////////////////////////
   // Bindings with native code
