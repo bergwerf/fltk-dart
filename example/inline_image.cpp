@@ -24,7 +24,7 @@ unsigned char gray_data[16 * 10 * 1] = {
 int main() {
   Fl_Window win(160, 100);
   Fl_Box box(0, 0, 160, 100);
-  Fl_RGB_Image gray(gray_data, 16, 10 , 1);
+  Fl_RGB_Image gray(gray_data, 16, 10, 1);
   box.image(gray);
   win.show();
   return Fl::run();

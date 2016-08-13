@@ -8,8 +8,14 @@ import 'package:glob/glob.dart';
 import 'package:yaml/yaml.dart';
 import 'package:mustache/mustache.dart';
 
-/// Path from the repository root to this folder
+/// Path from the repository root to this directory
 const root = 'tool/codegen';
+
+/// Relative path for custom method source files from the current directory.
+const customSources = 'ext/src/custom';
+
+/// Relative path for custom method source files from the gen directory.
+const customSourcesRelative = '../../custom';
 
 /// All class input files.
 final classFiles = new Glob("ext/classes/*.yaml");
@@ -96,6 +102,7 @@ int main(List<String> args) {
 void processClassFile(File file, String dir, String wrapperDir, Template hpp,
     Template cpp, Template wrapperHpp, Template wrapperCpp) {
   var content = loadYaml(file.readAsStringSync());
+  var dartname = content['dartname'];
 
   // Should we generate a wrapper to redirect base methods?
   var createWrapper = !(content['wrapper'] == false);
@@ -116,7 +123,7 @@ void processClassFile(File file, String dir, String wrapperDir, Template hpp,
   var mustacheData = {
     'header': 'FLDART_${content['dartname'].toUpperCase()}_H',
     'cname': content['cname'],
-    'dartname': content['dartname'],
+    'dartname': dartname,
 
     // Resolve Dart_Handle _ref
     'addref': createWrapper ? [1] : [],
@@ -139,6 +146,11 @@ void processClassFile(File file, String dir, String wrapperDir, Template hpp,
     'methodNames':
         new List<String>.generate(methods.length, (int i) => methods[i]['name'])
   };
+
+  // Add custom source include.
+  if (new File('$customSources/$dartname.cpp').existsSync()) {
+    mustacheData['sourceInclude'] = ['$customSourcesRelative/$dartname.cpp'];
+  }
 
   // Write class header.
   new File('$dir/${content['dartname']}.hpp')

@@ -6,6 +6,10 @@ library fltk;
 
 import 'dart-ext:fltk';
 
+import 'dart:typed_data';
+
+import 'package:image/image.dart';
+
 part 'src/enums/boxtype.dart';
 part 'src/enums/labeltype.dart';
 part 'src/enums/colors.dart';

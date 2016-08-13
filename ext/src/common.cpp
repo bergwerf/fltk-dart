@@ -13,7 +13,7 @@ Dart_Handle HandleError(Dart_Handle handle) {
   }
 }
 
-const char* newstr(const char* src) {
+const char* newstr(const char *src) {
   return strcpy(new char[strlen(src) + 1], src);
 }
 }

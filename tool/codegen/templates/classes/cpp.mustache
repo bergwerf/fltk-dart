@@ -3,6 +3,9 @@
 // that can be found in the LICENSE file.
 
 #include "{{{ dartname }}}.hpp"
+{{# sourceInclude }}
+#include "{{{ . }}}"
+{{/ sourceInclude }}
 
 namespace fldart {
 FunctionMapping {{{ dartname }}}::methods[] = {
@@ -18,7 +21,7 @@ FunctionMapping {{{ dartname }}}::methods[] = {
 
 void {{{ dartname }}}::create{{{ dartname }}}{{{ name }}}(Dart_NativeArguments arguments) {
   {{! Local variables }}
-  {{{ targetClass }}}* instance;
+  {{{ targetClass }}} *instance;
   {{# addref }}
   Dart_Handle _ref;
   {{/ addref }}
@@ -47,7 +50,7 @@ void {{{ dartname }}}::create{{{ dartname }}}{{{ name }}}(Dart_NativeArguments a
 void {{{ dartname }}}::{{{ name }}}(Dart_NativeArguments arguments) {
   {{! Local variables }}
   int64_t ptr;
-  {{{ targetClass }}}* _ref;
+  {{{ targetClass }}} *_ref;
   {{# args }}
   {{{ type }}} {{{ name }}};
   {{/ args }}

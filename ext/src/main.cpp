@@ -27,7 +27,7 @@
 Dart_NativeFunction ResolveName(
   Dart_Handle name,
   int argc,
-  bool* autoSetupScope);
+  bool *autoSetupScope);
 
 DART_EXPORT Dart_Handle fltk_Init(Dart_Handle parentLibrary) {
   if (Dart_IsError(parentLibrary)) {
@@ -64,14 +64,14 @@ std::vector<fldart::FunctionMapping*> allFunctions = {
   fldart::DoubleWindow::methods
 };
 
-Dart_NativeFunction ResolveName(Dart_Handle name, int argc, bool* autoSetupScope) {
+Dart_NativeFunction ResolveName(Dart_Handle name, int argc, bool *autoSetupScope) {
   if (!Dart_IsString(name)) {
     return NULL;
   }
 
   Dart_NativeFunction result = NULL;
   Dart_EnterScope();
-  const char* cname;
+  const char *cname;
   fldart::HandleError(Dart_StringToCString(name, &cname));
 
   for (int ii = 0; ii < allFunctions.size(); ++ii) {

@@ -8,14 +8,14 @@
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Button.H>
 
-void button_cb(Fl_Widget* obj, void*) {
+void button_cb(Fl_Widget *obj, void*) {
   obj -> label(strcmp("OFF", obj -> label()) ? "OFF" : "ON");
 }
 
-int main( int argc, char* argv[] ) {
+int main(int argc, char *argv[]) {
   Fl::scheme("gleam");
-  Fl_Window* win = new Fl_Window(300, 200, "Click the button...");
-  Fl_Button* but = new Fl_Button(0, 0, win -> w(), win -> h(), "ON");
+  Fl_Window *win = new Fl_Window(300, 200, "Click the button...");
+  Fl_Button *but = new Fl_Button(0, 0, win -> w(), win -> h(), "ON");
   but -> callback((Fl_Callback*)button_cb);
   win -> end();
   win -> show();

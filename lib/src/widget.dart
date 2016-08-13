@@ -57,6 +57,12 @@ class Widget extends _Ptr {
   /// Show widget.
   void show() => _show(ptr);
 
+  /// Change widget image.
+  set image(Image image) {
+    _image(ptr, image.width, image.height, 4,
+        new Uint8List.fromList(image.data.buffer.asUint8List()));
+  }
+
   //////////////////////////////////////////////////////////////////////////////
   // Bindings with native code
   //////////////////////////////////////////////////////////////////////////////
@@ -88,4 +94,6 @@ class Widget extends _Ptr {
 
   static void _box(int ptr, int type) native 'fldart::Widget::void_box';
   static void _show(int ptr) native 'fldart::Widget::void_show';
+  static void _image(int ptr, int width, int height, int depth, Uint8List data)
+      native 'fldart::Widget::void_image';
 }

@@ -16,7 +16,7 @@ struct FunctionMapping {
 
 Dart_Handle HandleError(Dart_Handle handle);
 
-const char* newstr(const char* src);
+const char* newstr(const char *src);
 }
 
 #endif
