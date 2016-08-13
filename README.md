@@ -2,8 +2,8 @@ Dart bindings for FLTK!
 =======================
 How awesome is that!
 
-Dependencies
+Integrations
 ------------
 - `image` (not yet implemented)
 - `color` (not yet implemented)
-- Dart bindings for OpenGL (not yet existent?)
+- `dartgl` (not yet implemented)
