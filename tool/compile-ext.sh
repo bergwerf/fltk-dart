@@ -4,8 +4,9 @@
 # Use of this source code is governed by a MIT-style license
 # that can be found in the LICENSE file.
 
-DART_SDK=$(which dart | sed 's/.\{9\}$//')
-echo "Found Dart SDK at ${DART_SDK}"
+#DART_SDK=$(which dart | sed 's/.\{9\}$//')
+#echo "Found Dart SDK at ${DART_SDK}"
+DART_SDK="/usr/lib/dart"
 GEN_OUT='ext/src/gen'
 
 # Compile object file.
