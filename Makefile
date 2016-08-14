@@ -5,23 +5,40 @@ install-hook:
 generate-bindings:
 	dart tool/codegen/generate.dart
 
-compile-fltk-1.3.3:
+fltk_version = "1.3.3"
+compile-fltk:
 	# 1. untar
 	mkdir -p compile
-	rm -rf compile/fltk-1.3.3
-	tar -C ./compile -xvf tar/fltk-1.3.3-source.tar.gz
+	rm -rf compile/fltk-${fltk_version}
+	tar -C ./compile -xvf tar/fltk-${fltk_version}-source.tar.gz
 
 	# 2. compile
-	cd compile/fltk-1.3.3; ./configure --enable-shared --enable-debug; make; sudo make install
+	cd compile/fltk-${fltk_version}; ./configure --enable-shared --enable-debug; make; sudo make install
 
 compile-fltk-ext:
 	./tool/compile-ext.sh
 
 run-fltk-example:
-	g++ example/${name}.cpp \
-		-I/usr/include/freetype2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_THREAD_SAFE -D_REENTRANT \
-		-lfltk -lXcursor -lXfixes -lXext -lXft -lfontconfig -lXinerama -lpthread -ldl -lm -lX11
-	# g++ example/${name}.cpp `fltk-config --cxxflags` `fltk-config --ldflags`
-	# /usr/local/bin/fltk-config --compile example//${name}.cpp
-	./a.out
-	rm a.out
+	#g++ example/${name}.cpp -std=c++11 `fltk-config --use-gl --cxxflags` `fltk-config --use-gl --ldflags`
+	g++ \
+		-std=c++11\
+		-I/usr/local/include\
+		-I/usr/local/include/FL/images\
+		-I/usr/include/freetype2\
+		-fvisibility-inlines-hidden\
+		-D_LARGEFILE_SOURCE\
+		-D_LARGEFILE64_SOURCE\
+		-D_THREAD_SAFE\
+		-D_REENTRANT\
+		-o 'binary' "example/${name}.cpp"\
+		/usr/local/lib/libfltk_gl.a\
+		-lGLU -lGL\
+		/usr/local/lib/libfltk.a\
+		-lXcursor -lXfixes -lXext -lXft -lfontconfig -lXinerama -lpthread -ldl -lm -lX11
+	./binary
+	rm binary
+
+	# Compiling using FLTK helper binary.
+	#fltk-config --use-gl --compile example/${name}.cpp
+	#./${name}
+	#rm ${name}

@@ -7,6 +7,7 @@ environment:
   sdk:        '>=1.8.0 <2.0.0'
 dependencies:
   image:      ^1.1.26
+  dartgl:     ^0.1.2
 dev_dependencies:
   glob:       ^1.1.2
   yaml:       ^2.1.8

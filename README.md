@@ -6,6 +6,7 @@ Integrations
 ------------
 - `image`
 - `dartgl` (not yet implemented)
+- `cairodart` (not yet implemented)
 
 Architecture
 ------------
