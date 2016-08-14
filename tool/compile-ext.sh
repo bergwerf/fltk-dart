@@ -16,8 +16,25 @@ GEN_OUT='ext/src/gen'
 # - add -g to generate debug info.
 function compile {
   g++ -g -std=c++11 -fPIC -I${DART_SDK}/include -DDART_SHARED_LIB -c $1 \
-      -I/usr/include/freetype2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_THREAD_SAFE -D_REENTRANT \
-      -lfltk -lXcursor -lXfixes -lXext -lXft -lfontconfig -lXinerama -lpthread -ldl -lm -lX11 \
+      -I/usr/local/include\
+      -I/usr/include/cairo\
+      -I/usr/include/glib-2.0\
+      -I/usr/include/pixman-1\
+      -I/usr/include/freetype2\
+      -I/usr/include/libpng12\
+      -I/usr/local/include/FL/images\
+      -I/usr/include/freetype2\
+      -fvisibility-inlines-hidden\
+      -D_LARGEFILE_SOURCE\
+      -D_LARGEFILE64_SOURCE\
+      -D_THREAD_SAFE\
+      -D_REENTRANT\
+      -lfltk_cairo\
+  		-lcairo -lpixman-1\
+  		-lfltk_gl\
+  		-lGLU -lGL\
+  		-lfltk\
+  		-lXcursor -lXfixes -lXext -lXft -lfontconfig -lXinerama -lpthread -ldl -lm -lX11\
       -o $1.o
 }
 
@@ -35,9 +52,14 @@ done
 # Notes:
 # - add -m32 flag on 32 bit systems.
 # - add -g to generate debug info.
-gcc -g -shared -Wl,-soname,libfltk.so -o lib/libfltk.so \
+gcc -g -shared -Wl,-soname,libfldart.so -o lib/libfldart.so \
     $GEN_OUT/funcs/*.o $GEN_OUT/wrappers/*.o $GEN_OUT/classes/*.o ext/src/*.o \
-    -lfltk -lXcursor -lXfixes -lXext -lXft -lfontconfig -lXinerama -lpthread -ldl -lm -lX11
+    -lfltk_cairo\
+    -lcairo -lpixman-1\
+    -lfltk_gl\
+    -lGLU -lGL\
+    -lfltk\
+    -lXcursor -lXfixes -lXext -lXft -lfontconfig -lXinerama -lpthread -ldl -lm -lX11
 
 # Clean up.
 rm $GEN_OUT/{funcs,wrappers,classes}/*.o ext/src/*.o

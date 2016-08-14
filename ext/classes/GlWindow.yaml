@@ -1,0 +1,10 @@
+cname: Fl_Gl_Window
+dartname: GlWindow
+
+constructors:
+- void (int x, int y, int w, int h, String l)
+
+methods:
+- Fl_Mode mode()
+- void mode(Fl_Mode mode)
+- bool valid()

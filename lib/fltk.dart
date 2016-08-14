@@ -4,7 +4,7 @@
 
 library fltk;
 
-import 'dart-ext:fltk';
+import 'dart-ext:fldart';
 
 import 'dart:typed_data';
 
@@ -28,3 +28,4 @@ part 'src/text_editor.dart';
 part 'src/text_buffer.dart';
 part 'src/window.dart';
 part 'src/double_window.dart';
+part 'src/gl_window.dart';

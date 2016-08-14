@@ -20,9 +20,9 @@ class {{{ class }}}_Wrapper : public {{{ class }}} {
   {{{ class }}}_Wrapper(Dart_Handle ref, {{{ argsdef }}});
   {{/ constructors }}
 
-  {{# Fl_Widget }}
+  {{# drawcb }}
   void draw();
-  {{/ Fl_Widget }}
+  {{/ drawcb }}
   static void callback_wrapper(Fl_Widget*, void*);
 };
 }

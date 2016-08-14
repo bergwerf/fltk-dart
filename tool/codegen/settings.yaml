@@ -1,6 +1,11 @@
 static_cast_int64_t:
 - Fl_Boxtype
 - Fl_Labeltype
+- Fl_Mode
 
 implicit_cast_int64_t:
 - Fl_Color
+
+drawcb:
+- Fl_Widget
+- Fl_Gl_Window

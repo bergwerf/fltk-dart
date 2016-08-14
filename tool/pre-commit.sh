@@ -5,6 +5,5 @@
 # that can be found in the LICENSE file.
 
 mkdir -p ext/src/gen/{core,wrappers,classes}
-make generate-bindings
 molviewfmt -c 'Herman Bergwerf' -l 'MIT' -e '**.sh' -e 'compile/**'
-make compile-fltk-ext
+make generate-bindings compile-ext

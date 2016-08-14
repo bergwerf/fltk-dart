@@ -1,5 +1,5 @@
 compile
-libfltk.so
+libfldart.so
 ext/src/gen
 
 #################

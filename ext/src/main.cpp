@@ -23,13 +23,14 @@
 #include "gen/classes/TextBuffer.hpp"
 #include "gen/classes/Window.hpp"
 #include "gen/classes/DoubleWindow.hpp"
+#include "gen/classes/GlWindow.hpp"
 
 Dart_NativeFunction ResolveName(
   Dart_Handle name,
   int argc,
   bool *autoSetupScope);
 
-DART_EXPORT Dart_Handle fltk_Init(Dart_Handle parentLibrary) {
+DART_EXPORT Dart_Handle fldart_Init(Dart_Handle parentLibrary) {
   if (Dart_IsError(parentLibrary)) {
     return parentLibrary;
   }
@@ -61,7 +62,8 @@ std::vector<fldart::FunctionMapping*> allFunctions = {
   fldart::TextEditor::methods,
   fldart::TextBuffer::methods,
   fldart::Window::methods,
-  fldart::DoubleWindow::methods
+  fldart::DoubleWindow::methods,
+  fldart::GlWindow::methods
 };
 
 Dart_NativeFunction ResolveName(Dart_Handle name, int argc, bool *autoSetupScope) {

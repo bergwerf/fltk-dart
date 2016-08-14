@@ -55,7 +55,10 @@ const Map<String, String> dartToCType = const {
   'String': 'const char*'
 };
 
-/// TODO: use implicit cast with fltktypes.yaml
+/// Load settings.
+final settings = loadYaml(new File('$root/settings.yaml').readAsStringSync());
+
+/// TODO: use implicit cast with settings.yaml
 int main(List<String> args) {
   // Load templates.
   var classHppTemplate = new Template(
@@ -193,7 +196,7 @@ void processClassFile(File file, String dir, String wrapperDir, Template hpp,
       'header': 'FLDART_${content['cname'].toUpperCase()}_WRAPPER_H',
       'class': content['cname'],
       'constructors': wrapperconstructors,
-      'Fl_Widget': content['cname'] == 'Fl_Widget' ? [1] : []
+      'drawcb': settings['drawcb'].contains(content['cname']) ? [1] : []
     };
 
     // Write wrapper files.

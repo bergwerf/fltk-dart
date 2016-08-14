@@ -3,6 +3,8 @@ install-hook:
 	ln -sf ../../tool/pre-commit.sh .git/hooks/pre-commit
 
 generate-bindings:
+	rm -rf ext/src/gen
+	mkdir -p ext/src/gen/classes ext/src/gen/funcs ext/src/gen/wrappers
 	dart tool/codegen/generate.dart
 
 fltk_version = "1.3.3"
@@ -18,7 +20,7 @@ compile-fltk:
 	# 3. reconfigure dynamic linker run-time bindings
 	sudo ldconfig
 
-compile-fltk-ext:
+compile-ext:
 	./tool/compile-ext.sh
 
 compile-example:
@@ -39,11 +41,11 @@ compile-example:
 		-D_THREAD_SAFE\
 		-D_REENTRANT\
 		-o 'binary' "example/${name}.cpp"\
-		-lfltk_cairo\
+		/usr/local/lib/libfltk_cairo.a\
 		-lcairo -lpixman-1\
-		-lfltk_gl\
+		/usr/local/lib/libfltk_gl.a\
 		-lGLU -lGL\
-		-lfltk\
+		/usr/local/lib/libfltk.a\
 		-lXcursor -lXfixes -lXext -lXft -lfontconfig -lXinerama -lpthread -ldl -lm -lX11
 	./binary
 	rm binary
