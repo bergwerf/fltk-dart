@@ -36,6 +36,9 @@ class MyGlWindow extends fl.GlWindow {
     if (!valid()) {
       // Compile shaders.
       if (!init) {
+        // Print version info once.
+        print('OpenGL version: ${glGetString(GL_VERSION)}');
+
         compileShaders();
         createBuffers();
         init = true;
