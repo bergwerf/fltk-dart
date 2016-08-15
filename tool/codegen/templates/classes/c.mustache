@@ -14,25 +14,22 @@ namespace {{{ dartname }}} {
 void constructor_{{{ dartname }}}{{{ name }}}(Dart_NativeArguments arguments) {
   {{! Local variables }}
   {{{ targetClass }}} *instance;
-  {{# addref }}
   Dart_Handle _ref;
-  {{/ addref }}
   {{# args }}
   {{{ type }}} {{{ name }}};
   {{/ args }}
   {{! Enter new Dart scope }}
   Dart_EnterScope();
   {{! Resolve variables }}
-  {{# addref }}
   _ref = HandleError(Dart_GetNativeArgument(arguments, 0));
-  {{/ addref }}
   {{# args }}
   HandleError({{{ conv }}}(HandleError(Dart_GetNativeArgument(arguments, {{{ argi }}})), &{{{ name }}}));
   {{/ args }}
   {{! Create instance }}
   instance = new {{{ targetClass }}}({{{ argslist }}});
+  Dart_SetNativeInstanceField(_ref, 0, (intptr_t)instance);
   {{! Return instance memory address }}
-  Dart_Handle _ret = Dart_NewInteger((int64_t)instance);
+  Dart_Handle _ret = Dart_Null();
   Dart_SetReturnValue(arguments, _ret);
   Dart_ExitScope();
 }
@@ -41,7 +38,7 @@ void constructor_{{{ dartname }}}{{{ name }}}(Dart_NativeArguments arguments) {
 
 void {{{ name }}}(Dart_NativeArguments arguments) {
   {{! Local variables }}
-  int64_t ptr;
+  intptr_t ptr;
   {{{ targetClass }}} *_ref;
   {{# args }}
   {{{ type }}} {{{ name }}};
@@ -49,11 +46,11 @@ void {{{ name }}}(Dart_NativeArguments arguments) {
   {{! Enter new Dart scope }}
   Dart_EnterScope();
   {{! Resolve class instance reference from memory address }}
-  HandleError(Dart_IntegerToInt64(HandleError(Dart_GetNativeArgument(arguments, 0)), &ptr));
+  HandleError(Dart_GetNativeInstanceField(HandleError(Dart_GetNativeArgument(arguments, 0)), 0, &ptr));
   _ref = ({{{ targetClass }}}*)ptr;
   {{! Resolve other method arguments }}
   {{# args }}
-  HandleError({{{ conv }}}(HandleError(Dart_GetNativeArgument(arguments, {{{ argi }}})), &{{{ name }}}));
+  HandleError({{{ conv }}}(HandleError(Dart_GetNativeArgument(arguments, {{{ argi }}})), {{{ convargs }}}));
   {{/ args }}
   {{! Run method call }}
   {{{ call }}};

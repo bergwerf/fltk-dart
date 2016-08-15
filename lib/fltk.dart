@@ -6,6 +6,7 @@ library fltk;
 
 import 'dart-ext:fldart';
 
+import 'dart:nativewrappers';
 import 'dart:typed_data';
 
 import 'package:image/image.dart';
@@ -18,7 +19,6 @@ part 'src/enums/font.dart';
 part 'src/fl.dart';
 part 'src/draw.dart';
 
-part 'src/ptr.dart';
 part 'src/widget.dart';
 part 'src/group.dart';
 part 'src/box.dart';

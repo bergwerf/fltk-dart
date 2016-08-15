@@ -8,20 +8,15 @@ part of fltk;
 class TextEditor extends Widget {
   /// Public constuctor
   TextEditor(int x, int y, int w, int h, [String l = '']) : super.empty() {
-    ptr = _create(this, x, y, w, h, l);
+    _createTextEditor(x, y, w, h, l);
   }
 
   TextEditor.empty() : super.empty();
 
-  /// Set the [TextBuffer]
-  set buffer(TextBuffer buffer) => _buffer(ptr, buffer.ptr);
-
-  //////////////////////////////////////////////////////////////////////////////
-  // Bindings with native code
-  //////////////////////////////////////////////////////////////////////////////
-
-  static int _create(TextEditor me, int x, int y, int w, int h, String l)
+  /// Native constructor
+  void _createTextEditor(int x, int y, int w, int h, String l)
       native 'fldart::TextEditor::constructor_TextEditor';
-  static void _buffer(int ptr, int buffer)
-      native 'fldart::TextEditor::void_buffer';
+
+  /// Set the [TextBuffer]
+  set buffer(TextBuffer buffer) native 'fldart::TextEditor::void_buffer';
 }

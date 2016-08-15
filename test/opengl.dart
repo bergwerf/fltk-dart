@@ -89,7 +89,7 @@ class MyGlWindow extends fl.GlWindow {
 
   static void checkProgram(int program) {
     var isLinked = new Int32List(1);
-    glGetProgramiv(program, GL_COMPILE_STATUS, isLinked);
+    glGetProgramiv(program, GL_LINK_STATUS, isLinked);
     if (isLinked[0] == GL_FALSE) {
       var infoLogLength = new Int32List(1);
       glGetProgramiv(program, GL_INFO_LOG_LENGTH, infoLogLength);

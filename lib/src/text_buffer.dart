@@ -5,15 +5,12 @@
 part of fltk;
 
 /// Fl_Text_Buffer
-class TextBuffer extends _Ptr {
+class TextBuffer extends NativeFieldWrapperClass2 {
   /// Public constuctor
   TextBuffer() {
-    ptr = _create();
+    _createTextBuffer();
   }
 
-  //////////////////////////////////////////////////////////////////////////////
-  // Bindings with native code
-  //////////////////////////////////////////////////////////////////////////////
-
-  static int _create() native 'fldart::TextBuffer::constructor_TextBuffer';
+  /// Native constructor
+  void _createTextBuffer() native 'fldart::TextBuffer::constructor_TextBuffer';
 }

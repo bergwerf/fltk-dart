@@ -8,15 +8,12 @@ part of fltk;
 class Input extends Widget {
   /// Public constuctor
   Input(int x, int y, int w, int h, [String l = '']) : super.empty() {
-    ptr = _create(this, x, y, w, h, l);
+    _createInput(x, y, w, h, l);
   }
 
   Input.empty() : super.empty();
 
-  //////////////////////////////////////////////////////////////////////////////
-  // Bindings with native code
-  //////////////////////////////////////////////////////////////////////////////
-
-  static int _create(Input me, int x, int y, int w, int h, String l)
+  /// Native constructor
+  void _createInput(int x, int y, int w, int h, String l)
       native 'fldart::Input::constructor_Input';
 }

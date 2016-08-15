@@ -48,7 +48,8 @@ const Map<String, String> dartToCTypeConv = const {
   'int64_t': 'Dart_IntegerToInt64',
   'double': 'Dart_DoubleValue',
   'bool': 'Dart_BooleanValue',
-  'const char*': 'Dart_StringToCString'
+  'const char*': 'Dart_StringToCString',
+  'intptr_t': 'Dart_GetNativeInstanceField'
 };
 
 const Map<String, String> dartToCType = const {
@@ -137,9 +138,6 @@ void processClassFile(
     'header': 'FLDART_${content['dartname'].toUpperCase()}_H',
     'cname': content['cname'],
     'dartname': dartname,
-
-    // Resolve Dart_Handle _ref
-    'addref': createWrapper ? [1] : [],
 
     // Class that is used for construction and method calling
     'targetClass':
@@ -336,11 +334,13 @@ Args parseArguments(String argstr, [int argiOffset = 0]) {
     for (var i = 0; i < list.length; i++) {
       var match = argRegex.firstMatch(list[i]);
       var primitiveType = primitiveCType(match.group(1));
+      var argname = match.group(2);
       args.data.add({
         'argi': i + argiOffset,
-        'name': match.group(2),
+        'name': argname,
         'type': primitiveType,
-        'conv': dartToCTypeConv[primitiveType]
+        'conv': dartToCTypeConv[primitiveType],
+        'convargs': primitiveType == 'intptr_t' ? '0, &$argname' : '&$argname'
       });
 
       args.list.add(castToType(match.group(1), match.group(2), true, false));
@@ -355,8 +355,8 @@ String primitiveCType(String type) {
   if (dartToCType.containsKey(type)) {
     return dartToCType[type];
   } else if (type.endsWith('*')) {
-    // This is a pointer: store as int64_t
-    return 'int64_t';
+    // This is a pointer: store as intptr_t
+    return 'intptr_t';
   } else {
     // Assume this is an enumeration: store as int64_t
     return 'int64_t';

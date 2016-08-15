@@ -8,13 +8,17 @@ part of fltk;
 class Window extends Group {
   /// Public constuctor
   Window(int w, int h, [String l = '']) : super.empty() {
-    ptr = _create(this, w, h, l);
+    _createWindow(w, h, l);
   }
 
   Window.empty() : super.empty();
 
+  /// Native constructor
+  void _createWindow(int w, int h, String l)
+      native 'fldart::Window::constructor_WindowShort';
+
   /// Close the window.
-  void hide() => _hide(ptr);
+  void hide() native 'fldart::Window::void_hide';
 
   void doCallback() {
     if (callback != null) {
@@ -24,12 +28,4 @@ class Window extends Group {
       hide();
     }
   }
-
-  //////////////////////////////////////////////////////////////////////////////
-  // Bindings with native code
-  //////////////////////////////////////////////////////////////////////////////
-
-  static int _create(Window me, int w, int h, String l)
-      native 'fldart::Window::constructor_WindowShort';
-  static void _hide(int ptr) native 'fldart::Window::void_hide';
 }

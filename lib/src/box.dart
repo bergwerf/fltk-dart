@@ -8,15 +8,12 @@ part of fltk;
 class Box extends Widget {
   /// Public constuctor
   Box(int x, int y, int w, int h, [String l = '']) : super.empty() {
-    ptr = _create(this, x, y, w, h, l);
+    _createBox(x, y, w, h, l);
   }
 
   Box.empty() : super.empty();
 
-  //////////////////////////////////////////////////////////////////////////////
-  // Bindings with native code
-  //////////////////////////////////////////////////////////////////////////////
-
-  static int _create(Box me, int x, int y, int w, int h, String l)
+  /// Native constructor
+  void _createBox(int x, int y, int w, int h, String l)
       native 'fldart::Box::constructor_Box';
 }

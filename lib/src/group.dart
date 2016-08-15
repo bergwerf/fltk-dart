@@ -8,23 +8,18 @@ part of fltk;
 class Group extends Widget {
   /// Public constuctor
   Group(int x, int y, int w, int h, [String l = '']) : super.empty() {
-    ptr = _create(this, x, y, w, h, l);
+    _createGroup(x, y, w, h, l);
   }
 
   Group.empty() : super.empty();
 
+  /// Native constructor
+  void _createGroup(int x, int y, int w, int h, String l)
+      native 'fldart::Group::constructor_Group';
+
   /// End group.
-  void end() => _end(ptr);
+  void end() native 'fldart::Group::void_end';
 
   /// Set resizable widget.
-  set resizable(Widget o) => _resizable(ptr, o.ptr);
-
-  //////////////////////////////////////////////////////////////////////////////
-  // Bindings with native code
-  //////////////////////////////////////////////////////////////////////////////
-
-  static int _create(Group me, int x, int y, int w, int h, String l)
-      native 'fldart::Group::constructor_Group';
-  static void _end(int ptr) native 'fldart::Group::void_end';
-  static void _resizable(int ptr, int o) native 'fldart::Group::void_resizable';
+  set resizable(Widget o) native 'fldart::Group::void_resizable';
 }

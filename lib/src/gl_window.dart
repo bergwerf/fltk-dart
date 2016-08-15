@@ -8,21 +8,15 @@ part of fltk;
 class GlWindow extends Window {
   /// Public constuctor
   GlWindow(int x, int y, int w, int h, [String l = '']) : super.empty() {
-    ptr = _create(this, x, y, w, h, l);
+    _createGlWindow(x, y, w, h, l);
   }
 
   GlWindow.empty() : super.empty();
 
-  bool valid() => _getValid(ptr);
-  //void valid(bool v) => _setValid(ptr, v);
-
-  //////////////////////////////////////////////////////////////////////////////
-  // Bindings with native code
-  //////////////////////////////////////////////////////////////////////////////
-
-  static int _create(GlWindow me, int x, int y, int w, int h, String l)
+  /// Native constructor
+  void _createGlWindow(int x, int y, int w, int h, String l)
       native 'fldart::GlWindow::constructor_GlWindow';
 
-  static bool _getValid(int ptr) native 'fldart::GlWindow::bool_valid';
-  //static bool _setValid(int ptr, bool v) native 'fldart::GlWindow::void_valid';
+  /// False if the window has been resized or if this is a new GL context.
+  bool valid() native 'fldart::GlWindow::bool_valid';
 }
