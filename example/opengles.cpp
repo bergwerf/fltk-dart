@@ -34,6 +34,9 @@ class MyGlWindow : public Fl_Gl_Window {
     if (!valid()) {
       // Compile shaders.
       if (!init) {
+        // Print version info once.
+        printf("OpenGL version: %s\n", glGetString(GL_VERSION));
+
         compileShaders();
         createBuffers();
         init = true;
