@@ -22,10 +22,7 @@ class MyGlWindow extends fl.GlWindow {
   ]);
 
   /// Shader attributes/uniforms
-  ///
-  /// Using the ratios is a hack because passing matrices to the shader is not
-  /// currently working.
-  int aVertexPosition, uWRatio, uHRatio;
+  int aVertexPosition, uPMatrix;
 
   /// Scene init status
   bool init = false;
@@ -61,9 +58,7 @@ class MyGlWindow extends fl.GlWindow {
     glClear(GL_COLOR_BUFFER_BIT);
 
     // Set matrix uniform.
-    //glUniformMatrix4fv(uPMatrix, 1, false, matrix);
-    glUniform1f(uWRatio, matrix[0]);
-    glUniform1f(uHRatio, matrix[5]);
+    glUniformMatrix4fv(uPMatrix, 1, false, matrix);
 
     // Link vertex buffer.
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
@@ -104,20 +99,16 @@ class MyGlWindow extends fl.GlWindow {
   }
 
   void compileShaders() {
-    // Vertex shader source.
+    /*// Vertex shader source.
     var vsSrc = '''
 #version 100
 
 attribute vec2 aVertexPosition;
-uniform float uWRatio, uHRatio;
+uniform mat4 uPMatrix;
 varying vec2 color;
 
 void main() {
-  gl_Position = mat4(
-    uWRatio, 0,       0, 0,
-    0,       uHRatio, 0, 0,
-    0,       0,       1, 0,
-    0,       0,       0, 1) * vec4(aVertexPosition * 150.0, 0.0, 1.0);
+  gl_Position = uPMatrix * vec4(aVertexPosition * 150.0, 0.0, 1.0);
   color = aVertexPosition;
 }''';
 
@@ -129,6 +120,24 @@ varying mediump vec2 color;
 
 void main() {
   gl_FragColor = vec4(color, 0.5, 1.0);
+}''';*/
+
+    // Vertex shader source.
+    var vsSrc = '''
+attribute vec2 aVertexPosition;
+uniform mat4 uPMatrix;
+varying vec2 color;
+void main(void) {
+gl_Position = uPMatrix * vec4(aVertexPosition * 150.0, 0.0, 1.0);
+color = aVertexPosition;
+}''';
+
+    // Fragment shader source.
+    var fsSrc = '''
+precision mediump float;
+varying vec2 color;
+void main() {
+gl_FragColor = vec4(color, 0.5, 1.0);
 }''';
 
     // Compile vertex shader.
@@ -156,8 +165,7 @@ void main() {
     // Resolve attributes and uniforms.
     aVertexPosition = glGetAttribLocation(program, 'aVertexPosition');
     glEnableVertexAttribArray(aVertexPosition);
-    uWRatio = glGetUniformLocation(program, 'uWRatio');
-    uHRatio = glGetUniformLocation(program, 'uHRatio');
+    uPMatrix = glGetUniformLocation(program, 'uPMatrix');
   }
 
   void createBuffers() {
