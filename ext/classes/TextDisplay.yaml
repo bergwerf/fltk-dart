@@ -1,0 +1,17 @@
+cname: Fl_Text_Display
+dartname: TextDisplay
+
+constructors:
+- void (int x, int y, int w, int h, String l)
+
+methods:
+- void buffer(Fl_Text_Buffer* buffer)
+- void cursor_color(Fl_Color bg)
+- Fl_Color cursor_color()
+- void cursor_style(int style)
+- Fl_Color textcolor()
+- void textcolor(Fl_Color color)
+- Fl_Font textfont()
+- void textfont(Fl_Font s)
+- Fl_Fontsize textsize()
+- void textsize(Fl_Fontsize s)

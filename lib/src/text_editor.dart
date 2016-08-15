@@ -5,7 +5,7 @@
 part of fltk;
 
 /// Fl_Text_Editor
-class TextEditor extends Widget {
+class TextEditor extends TextDisplay {
   /// Public constuctor
   TextEditor(int x, int y, int w, int h, [String l = '']) : super.empty() {
     _createTextEditor(x, y, w, h, l);
@@ -16,7 +16,4 @@ class TextEditor extends Widget {
   /// Native constructor
   void _createTextEditor(int x, int y, int w, int h, String l)
       native 'fldart::TextEditor::constructor_TextEditor';
-
-  /// Set the [TextBuffer]
-  set buffer(TextBuffer buffer) native 'fldart::TextEditor::void_buffer';
 }

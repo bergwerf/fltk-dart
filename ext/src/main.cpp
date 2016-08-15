@@ -19,8 +19,9 @@
 #include "gen/classes/Box.hpp"
 #include "gen/classes/Button.hpp"
 #include "gen/classes/Input.hpp"
-#include "gen/classes/TextEditor.hpp"
 #include "gen/classes/TextBuffer.hpp"
+#include "gen/classes/TextDisplay.hpp"
+#include "gen/classes/TextEditor.hpp"
 #include "gen/classes/Window.hpp"
 #include "gen/classes/DoubleWindow.hpp"
 #include "gen/classes/GlWindow.hpp"
@@ -58,8 +59,9 @@ std::vector<fldart::FunctionMapping*> allFunctions = {
   fldart::Box::functionMapping,
   fldart::Button::functionMapping,
   fldart::Input::functionMapping,
-  fldart::TextEditor::functionMapping,
   fldart::TextBuffer::functionMapping,
+  fldart::TextDisplay::functionMapping,
+  fldart::TextEditor::functionMapping,
   fldart::Window::functionMapping,
   fldart::DoubleWindow::functionMapping,
   fldart::GlWindow::functionMapping

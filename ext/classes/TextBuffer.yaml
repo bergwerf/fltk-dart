@@ -5,4 +5,6 @@ wrapper: false
 constructors:
 - void ()
 
-methods: []
+methods:
+- String text()
+- void text(String text)

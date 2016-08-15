@@ -1,10 +1,13 @@
-static_cast_int64_t:
+enums:
 - Fl_Boxtype
 - Fl_Labeltype
 - Fl_Mode
 
-implicit_cast_int64_t:
-- Fl_Color
+typedefs:
+  Fl_Color: int64_t     # Actually int but Dart uses int64_t
+  FL_Align: int64_t     # Actually int but Dart uses int64_t
+  Fl_Fontsize: int64_t  # Actually uint32_t but Dart uses int64_t
+  Fl_Font: int64_t      # Actually uint32_t but Dart uses int64_t
 
 drawcb:
 - Fl_Widget

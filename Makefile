@@ -3,7 +3,7 @@ install-hook:
 	ln -sf ../../tool/pre-commit.sh .git/hooks/pre-commit
 
 generate-bindings:
-	rm -rf ext/src/gen
+	rm -f ext/src/gen/{classes,funcs,wrappers}/*
 	mkdir -p ext/src/gen/classes ext/src/gen/funcs ext/src/gen/wrappers
 	dart tool/codegen/generate.dart
 

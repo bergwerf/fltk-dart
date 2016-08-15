@@ -4,5 +4,4 @@ dartname: TextEditor
 constructors:
 - void (int x, int y, int w, int h, String l)
 
-methods:
-- void buffer(Fl_Text_Buffer* buffer)
+methods: []

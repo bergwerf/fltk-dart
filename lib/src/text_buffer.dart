@@ -13,4 +13,10 @@ class TextBuffer extends NativeFieldWrapperClass2 {
 
   /// Native constructor
   void _createTextBuffer() native 'fldart::TextBuffer::constructor_TextBuffer';
+
+  /// Get buffer text.
+  String get text native 'fldart::TextBuffer::String_text';
+
+  /// Set buffer text.
+  set text(String text) native 'fldart::TextBuffer::void_text';
 }

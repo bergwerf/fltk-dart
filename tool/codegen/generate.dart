@@ -8,9 +8,12 @@ import 'package:glob/glob.dart';
 import 'package:yaml/yaml.dart';
 import 'package:mustache/mustache.dart';
 
-// TODO:
-// - Use Dart_GetNativeInstanceField instead of passing integers around.
-// - Use intptr_t instead of int64_t for pointers.
+/// Important notes:
+///
+/// - In the input files no Dart types nor C types are used. Instead there is
+///   a mixed approach where some types are described using their Dart name
+///   (like String) and some using their C++/FLTK type (like Fl_Font).
+///   Don't ask why, it's a mess, but it works.
 
 /// Path from the repository root to this directory
 const root = 'tool/codegen';
@@ -37,13 +40,15 @@ final argRegex = new RegExp(r'\s*([A-z_0-9*]+)\s+([A-z_0-9]*)');
 /// Types that do not have to be casted.
 const List<String> noCastTypes = const ['int', 'double', 'bool'];
 
-const Map<String, String> newDartHandle = const {
+/// Dart API functions for converting the given C types to a Dart_Handle.
+const Map<String, String> toDartHandle = const {
   'int64_t': 'Dart_NewInteger',
   'double': 'Dart_NewDouble',
   'bool': 'Dart_NewBoolean',
   'const char*': 'Dart_NewStringFromCString'
 };
 
+/// Dart API functions to generate the given C values from a Dart_Handle.
 const Map<String, String> dartToCTypeConv = const {
   'int64_t': 'Dart_IntegerToInt64',
   'double': 'Dart_DoubleValue',
@@ -52,7 +57,8 @@ const Map<String, String> dartToCTypeConv = const {
   'intptr_t': 'Dart_GetNativeInstanceField'
 };
 
-const Map<String, String> dartToCType = const {
+/// Type name C equivalents
+const Map<String, String> typeToCType = const {
   'void': 'void',
   'int': 'int64_t',
   'double': 'double',
@@ -262,7 +268,7 @@ Map<String, dynamic> parseFunction(YamlMap function) {
   };
 
   var args = parseArguments(function['args']);
-  ret['call'] = wrapReturn(
+  ret['call'] = wrapCall(
       match.group(1), '${match.group(2)}(${args.list.join(',')})', '_tmp');
   ret['args'] = args.data;
 
@@ -307,7 +313,7 @@ Map<String, dynamic> parseMethod(String method, bool constructor,
     var argslist = args.list.join(',');
 
     // Generate method call code.
-    ret['call'] = wrapReturn(
+    ret['call'] = wrapCall(
         match.group(1), '_ref -> ${match.group(2)}($argslist)', '_tmp');
 
     // Store arguments data.
@@ -339,7 +345,10 @@ Args parseArguments(String argstr, [int argiOffset = 0]) {
         'argi': i + argiOffset,
         'name': argname,
         'type': primitiveType,
+
+        // Convert from Dart_Handle to C type.
         'conv': dartToCTypeConv[primitiveType],
+
         'convargs': primitiveType == 'intptr_t' ? '0, &$argname' : '&$argname'
       });
 
@@ -352,20 +361,25 @@ Args parseArguments(String argstr, [int argiOffset = 0]) {
 
 /// Convert type name to pure C type.
 String primitiveCType(String type) {
-  if (dartToCType.containsKey(type)) {
-    return dartToCType[type];
+  if (typeToCType.containsKey(type)) {
+    return typeToCType[type];
+  } else if (settings['enums'].contains(type)) {
+    // Enumerations are stored as int64_t (Dart only uses int64_t)
+    return 'int64_t';
+  } else if (settings['typedefs'].keys.contains(type)) {
+    // Return defined type.
+    return settings['typedefs'][type];
   } else if (type.endsWith('*')) {
     // This is a pointer: store as intptr_t
     return 'intptr_t';
   } else {
-    // Assume this is an enumeration: store as int64_t
-    return 'int64_t';
+    throw new ArgumentError('Type $type was not recognized.');
   }
 }
 
 /// Wrap function call [call] so that the return value of type [type] is casted
 /// and stored in [dstvar].
-String wrapReturn(String type, String call, String dstvar) {
+String wrapCall(String type, String call, String dstvar) {
   if (type == 'void') {
     return call;
   } else {
@@ -373,29 +387,36 @@ String wrapReturn(String type, String call, String dstvar) {
   }
 }
 
-/// Cast the output of [call] to [type] (return value of the call is derived
-/// from [type]). If [realloc] is set it will reallocate const char* types.
-/// If [reverse] is set it will cast enums and pointers to `int64_t`.
+/// Cast the output of [call] from the primitive C type of [type] to the
+/// temporary type of [type] used for FLTK calls (or the other way around if
+/// [reverse] is set). If [realloc] is set it will add reallocation code for
+/// const char* to prevent issues.
 String castToType(String type, String call, bool realloc, bool reverse) {
   if (noCastTypes.contains(type)) {
     return call;
   } else if (type == 'String') {
     // Copy into new string if we need a realloc.
     return realloc ? 'newstr($call)' : call;
+  } else if (settings['enums'].contains(type)) {
+    // Enumerations are static casted
+    return 'static_cast<${reverse ? 'int64_t' : type}>($call)';
+  } else if (settings['typedefs'].keys.contains(type)) {
+    // Implicit cast to defined type.
+    return '(${reverse ? settings['typedefs'][type] : type})$call';
   } else if (type.endsWith('*')) {
-    // This is a pointer: implicit cast
-    return '(${reverse ? 'int64_t' : type})$call';
+    // Pointers are implicitly casted
+    return '(${reverse ? 'intptr_t' : type})$call';
   } else {
     // Assume this is an enumeration: do static_cast<>
     return 'static_cast<${reverse ? 'int64_t' : type}>($call)';
   }
 }
 
-// Generate code for creating a new Dart_Handle from the given C type and source
-// variable name.
+/// Generate code for creating a new Dart_Handle from the given C [type] with
+/// the [srcvar] as input variable.
 String codeForNewDartHandle(String type, String srcvar) {
-  if (newDartHandle.containsKey(type)) {
-    return '${newDartHandle[type]}($srcvar)';
+  if (toDartHandle.containsKey(type)) {
+    return '${toDartHandle[type]}($srcvar)';
   } else {
     return 'Dart_Null()';
   }
