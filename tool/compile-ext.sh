@@ -39,10 +39,10 @@ function compile {
 }
 
 compile ext/src/main.cpp
-compile ext/src/common.cpp
+compile ext/src/common.c
 
 # Compile individual classes.
-for f in {$GEN_OUT/funcs/*.cpp,$GEN_OUT/wrappers/*.cpp,$GEN_OUT/classes/*.cpp}
+for f in {$GEN_OUT/funcs/*.c,$GEN_OUT/wrappers/*.cpp,$GEN_OUT/classes/*.c}
 do
   compile $f
 done

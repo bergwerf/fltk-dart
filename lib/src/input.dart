@@ -18,5 +18,5 @@ class Input extends Widget {
   //////////////////////////////////////////////////////////////////////////////
 
   static int _create(Input me, int x, int y, int w, int h, String l)
-      native 'fldart::Input::createInput';
+      native 'fldart::Input::constructor_Input';
 }

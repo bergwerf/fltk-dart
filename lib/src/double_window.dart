@@ -18,5 +18,5 @@ class DoubleWindow extends Window {
   //////////////////////////////////////////////////////////////////////////////
 
   static int _create(DoubleWindow me, int w, int h, String l)
-      native 'fldart::DoubleWindow::createDoubleWindowShort';
+      native 'fldart::DoubleWindow::constructor_DoubleWindowShort';
 }

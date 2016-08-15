@@ -21,7 +21,7 @@ class TextEditor extends Widget {
   //////////////////////////////////////////////////////////////////////////////
 
   static int _create(TextEditor me, int x, int y, int w, int h, String l)
-      native 'fldart::TextEditor::createTextEditor';
+      native 'fldart::TextEditor::constructor_TextEditor';
   static void _buffer(int ptr, int buffer)
       native 'fldart::TextEditor::void_buffer';
 }

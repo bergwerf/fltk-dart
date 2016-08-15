@@ -8,6 +8,10 @@ import 'package:glob/glob.dart';
 import 'package:yaml/yaml.dart';
 import 'package:mustache/mustache.dart';
 
+// TODO:
+// - Use Dart_GetNativeInstanceField instead of passing integers around.
+// - Use intptr_t instead of int64_t for pointers.
+
 /// Path from the repository root to this directory
 const root = 'tool/codegen';
 
@@ -61,23 +65,23 @@ final settings = loadYaml(new File('$root/settings.yaml').readAsStringSync());
 /// TODO: use implicit cast with settings.yaml
 int main(List<String> args) {
   // Load templates.
-  var classHppTemplate = new Template(
-      new File('$root/templates/classes/hpp.mustache').readAsStringSync(),
+  var classHeaderTemplate = new Template(
+      new File('$root/templates/classes/h.mustache').readAsStringSync(),
       lenient: true);
-  var classCppTemplate = new Template(
-      new File('$root/templates/classes/cpp.mustache').readAsStringSync(),
+  var classSourceTemplate = new Template(
+      new File('$root/templates/classes/c.mustache').readAsStringSync(),
       lenient: true);
-  var wrapperHppTemplate = new Template(
+  var wrapperHeaderTemplate = new Template(
       new File('$root/templates/wrappers/hpp.mustache').readAsStringSync(),
       lenient: true);
-  var wrapperCppTemplate = new Template(
+  var wrapperSourceTemplate = new Template(
       new File('$root/templates/wrappers/cpp.mustache').readAsStringSync(),
       lenient: true);
-  var funcsHppTemplate = new Template(
-      new File('$root/templates/functions/hpp.mustache').readAsStringSync(),
+  var funcsHeaderTemplate = new Template(
+      new File('$root/templates/functions/h.mustache').readAsStringSync(),
       lenient: true);
-  var funcsCppTemplate = new Template(
-      new File('$root/templates/functions/cpp.mustache').readAsStringSync(),
+  var funcsSourceTemplate = new Template(
+      new File('$root/templates/functions/c.mustache').readAsStringSync(),
       lenient: true);
 
   // Process class files.
@@ -86,24 +90,30 @@ int main(List<String> args) {
         file,
         'ext/src/gen/classes',
         'ext/src/gen/wrappers',
-        classHppTemplate,
-        classCppTemplate,
-        wrapperHppTemplate,
-        wrapperCppTemplate);
+        classHeaderTemplate,
+        classSourceTemplate,
+        wrapperHeaderTemplate,
+        wrapperSourceTemplate);
   }
 
   // Process function files.
   for (var file in funcsFiles.listSync()) {
     processFuncsFile(
-        file, 'ext/src/gen/funcs', funcsHppTemplate, funcsCppTemplate);
+        file, 'ext/src/gen/funcs', funcsHeaderTemplate, funcsSourceTemplate);
   }
 
   return 0;
 }
 
 /// Process a YAML file with a class definition.
-void processClassFile(File file, String dir, String wrapperDir, Template hpp,
-    Template cpp, Template wrapperHpp, Template wrapperCpp) {
+void processClassFile(
+    File file,
+    String dir,
+    String wrapperDir,
+    Template headerTemplate,
+    Template sourceTemplate,
+    Template wrapperHeaderTemplate,
+    Template wrapperSourceTemplate) {
   var content = loadYaml(file.readAsStringSync());
   var dartname = content['dartname'];
 
@@ -151,13 +161,13 @@ void processClassFile(File file, String dir, String wrapperDir, Template hpp,
   };
 
   // Add custom source include.
-  if (new File('$customSources/$dartname.cpp').existsSync()) {
-    mustacheData['sourceInclude'] = ['$customSourcesRelative/$dartname.cpp'];
+  if (new File('$customSources/$dartname.c').existsSync()) {
+    mustacheData['sourceInclude'] = ['$customSourcesRelative/$dartname.c'];
   }
 
-  // Write class header.
-  new File('$dir/${content['dartname']}.hpp')
-      .writeAsStringSync(hpp.renderString(mustacheData));
+  // Write header.
+  new File('$dir/${content['dartname']}.h')
+      .writeAsStringSync(headerTemplate.renderString(mustacheData));
 
   // Remove all custom methods.
   for (var i = 0; i < mustacheData['methods'].length; i++) {
@@ -167,9 +177,9 @@ void processClassFile(File file, String dir, String wrapperDir, Template hpp,
     }
   }
 
-  // Write class source.
-  new File('$dir/${content['dartname']}.cpp')
-      .writeAsStringSync(cpp.renderString(mustacheData));
+  // Write source.
+  new File('$dir/${content['dartname']}.c')
+      .writeAsStringSync(sourceTemplate.renderString(mustacheData));
 
   if (createWrapper) {
     // Generate data for wrapper class
@@ -201,14 +211,15 @@ void processClassFile(File file, String dir, String wrapperDir, Template hpp,
 
     // Write wrapper files.
     new File('$wrapperDir/${content['cname']}_Wrapper.hpp')
-        .writeAsStringSync(wrapperHpp.renderString(wrapperData));
+        .writeAsStringSync(wrapperHeaderTemplate.renderString(wrapperData));
     new File('$wrapperDir/${content['cname']}_Wrapper.cpp')
-        .writeAsStringSync(wrapperCpp.renderString(wrapperData));
+        .writeAsStringSync(wrapperSourceTemplate.renderString(wrapperData));
   }
 }
 
 /// Process a YAML file with function definitions.
-void processFuncsFile(File file, String dir, Template hpp, Template cpp) {
+void processFuncsFile(
+    File file, String dir, Template headerTemplate, Template sourceTemplate) {
   var content = loadYaml(file.readAsStringSync());
 
   // Parse functions.
@@ -226,10 +237,10 @@ void processFuncsFile(File file, String dir, Template hpp, Template cpp) {
   };
 
   // Write output files.
-  new File('$dir/${content['name']}.hpp')
-      .writeAsStringSync(hpp.renderString(mustacheData));
-  new File('$dir/${content['name']}.cpp')
-      .writeAsStringSync(cpp.renderString(mustacheData));
+  new File('$dir/${content['name']}.h')
+      .writeAsStringSync(headerTemplate.renderString(mustacheData));
+  new File('$dir/${content['name']}.c')
+      .writeAsStringSync(sourceTemplate.renderString(mustacheData));
 }
 
 /// Parse a single function.

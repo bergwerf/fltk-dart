@@ -18,5 +18,5 @@ class Button extends Widget {
   //////////////////////////////////////////////////////////////////////////////
 
   static int _create(Button me, int x, int y, int w, int h, String l)
-      native 'fldart::Button::createButton';
+      native 'fldart::Button::constructor_Button';
 }

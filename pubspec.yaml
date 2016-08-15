@@ -8,6 +8,7 @@ environment:
 dependencies:
   image:      ^1.1.26
   dartgl:     ^0.1.2
+  cairodart:  ^0.1.0
 dev_dependencies:
   glob:       ^1.1.2
   yaml:       ^2.1.8

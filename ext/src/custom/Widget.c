@@ -4,7 +4,7 @@
 
 #include <FL/Fl_RGB_Image.H>
 
-#include "../gen/classes/Widget.hpp"
+#include "../gen/classes/Widget.h"
 
 namespace fldart {
 void Widget::void_image(Dart_NativeArguments arguments) {

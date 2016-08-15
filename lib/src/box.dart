@@ -18,5 +18,5 @@ class Box extends Widget {
   //////////////////////////////////////////////////////////////////////////////
 
   static int _create(Box me, int x, int y, int w, int h, String l)
-      native 'fldart::Box::createBox';
+      native 'fldart::Box::constructor_Box';
 }

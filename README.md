@@ -5,7 +5,7 @@ How awesome is that!
 Integrations
 ------------
 - `image`
-- `dartgl` (not yet implemented)
+- `dartgl` (unstable)
 - `cairodart` (not yet implemented)
 
 Architecture

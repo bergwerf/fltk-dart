@@ -15,5 +15,5 @@ class TextBuffer extends _Ptr {
   // Bindings with native code
   //////////////////////////////////////////////////////////////////////////////
 
-  static int _create() native 'fldart::TextBuffer::createTextBuffer';
+  static int _create() native 'fldart::TextBuffer::constructor_TextBuffer';
 }

@@ -2,24 +2,16 @@
 // Use of this source code is governed by a MIT-style license
 // that can be found in the LICENSE file.
 
-#include "{{{ dartname }}}.hpp"
+#include "{{{ dartname }}}.h"
 {{# sourceInclude }}
 #include "{{{ . }}}"
 {{/ sourceInclude }}
 
 namespace fldart {
-FunctionMapping {{{ dartname }}}::methods[] = {
-  {{# constructors }}
-  {"fldart::{{{ dartname }}}::create{{{ dartname }}}{{{ name }}}", {{{ dartname }}}::create{{{ dartname }}}{{{ name }}}},
-  {{/ constructors }}
-  {{# methodNames }}
-  {"fldart::{{{ dartname }}}::{{{ . }}}", {{{ dartname }}}::{{{ . }}}},
-  {{/ methodNames }}
-  {NULL, NULL}
-};
+namespace {{{ dartname }}} {
 {{# constructors }}
 
-void {{{ dartname }}}::create{{{ dartname }}}{{{ name }}}(Dart_NativeArguments arguments) {
+void constructor_{{{ dartname }}}{{{ name }}}(Dart_NativeArguments arguments) {
   {{! Local variables }}
   {{{ targetClass }}} *instance;
   {{# addref }}
@@ -47,7 +39,7 @@ void {{{ dartname }}}::create{{{ dartname }}}{{{ name }}}(Dart_NativeArguments a
 {{/ constructors }}
 {{# methods }}
 
-void {{{ dartname }}}::{{{ name }}}(Dart_NativeArguments arguments) {
+void {{{ name }}}(Dart_NativeArguments arguments) {
   {{! Local variables }}
   int64_t ptr;
   {{{ targetClass }}} *_ref;
@@ -71,4 +63,5 @@ void {{{ dartname }}}::{{{ name }}}(Dart_NativeArguments arguments) {
   Dart_ExitScope();
 }
 {{/ methods }}
+}
 }

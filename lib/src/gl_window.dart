@@ -21,7 +21,7 @@ class GlWindow extends Window {
   //////////////////////////////////////////////////////////////////////////////
 
   static int _create(GlWindow me, int x, int y, int w, int h, String l)
-      native 'fldart::GlWindow::createGlWindow';
+      native 'fldart::GlWindow::constructor_GlWindow';
 
   static bool _getValid(int ptr) native 'fldart::GlWindow::bool_valid';
   //static bool _setValid(int ptr, bool v) native 'fldart::GlWindow::void_valid';

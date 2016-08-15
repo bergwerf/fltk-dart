@@ -9,21 +9,21 @@
 #include <FL/Fl_Window.H>
 
 #include "dart_api.h"
-#include "common.hpp"
+#include "common.h"
 
-#include "gen/funcs/fl.hpp"
-#include "gen/funcs/draw.hpp"
+#include "gen/funcs/fl.h"
+#include "gen/funcs/draw.h"
 
-#include "gen/classes/Widget.hpp"
-#include "gen/classes/Group.hpp"
-#include "gen/classes/Box.hpp"
-#include "gen/classes/Button.hpp"
-#include "gen/classes/Input.hpp"
-#include "gen/classes/TextEditor.hpp"
-#include "gen/classes/TextBuffer.hpp"
-#include "gen/classes/Window.hpp"
-#include "gen/classes/DoubleWindow.hpp"
-#include "gen/classes/GlWindow.hpp"
+#include "gen/classes/Widget.h"
+#include "gen/classes/Group.h"
+#include "gen/classes/Box.h"
+#include "gen/classes/Button.h"
+#include "gen/classes/Input.h"
+#include "gen/classes/TextEditor.h"
+#include "gen/classes/TextBuffer.h"
+#include "gen/classes/Window.h"
+#include "gen/classes/DoubleWindow.h"
+#include "gen/classes/GlWindow.h"
 
 Dart_NativeFunction ResolveName(
   Dart_Handle name,
@@ -51,19 +51,18 @@ DART_EXPORT Dart_Handle fldart_Init(Dart_Handle parentLibrary) {
 }
 
 std::vector<fldart::FunctionMapping*> allFunctions = {
-  fldart::_fl::methods,
-  fldart::_draw::methods,
-
-  fldart::Widget::methods,
-  fldart::Group::methods,
-  fldart::Box::methods,
-  fldart::Button::methods,
-  fldart::Input::methods,
-  fldart::TextEditor::methods,
-  fldart::TextBuffer::methods,
-  fldart::Window::methods,
-  fldart::DoubleWindow::methods,
-  fldart::GlWindow::methods
+  fldart::fl::functionMapping,
+  fldart::draw::functionMapping,
+  fldart::Widget::functionMapping,
+  fldart::Group::functionMapping,
+  fldart::Box::functionMapping,
+  fldart::Button::functionMapping,
+  fldart::Input::functionMapping,
+  fldart::TextEditor::functionMapping,
+  fldart::TextBuffer::functionMapping,
+  fldart::Window::functionMapping,
+  fldart::DoubleWindow::functionMapping,
+  fldart::GlWindow::functionMapping
 };
 
 Dart_NativeFunction ResolveName(Dart_Handle name, int argc, bool *autoSetupScope) {

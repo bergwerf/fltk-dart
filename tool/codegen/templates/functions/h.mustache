@@ -10,17 +10,21 @@
 {{/ include }}
 
 #include "dart_api.h"
-#include "../../common.hpp"
+#include "../../common.h"
 
 namespace fldart {
+namespace {{{ name }}} {
 {{# functions }}
 void {{{ name }}}(Dart_NativeArguments arguments);
 {{/ functions }}
 
-class _{{{ name }}} {
- public:
-  static FunctionMapping methods[];
+static FunctionMapping functionMapping[] = {
+  {{# functions }}
+  {"fldart::{{{ name }}}", {{{ name }}}},
+  {{/ functions }}
+  {NULL, NULL}
 };
+}
 }
 
 #endif

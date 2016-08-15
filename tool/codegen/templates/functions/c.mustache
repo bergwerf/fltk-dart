@@ -2,15 +2,10 @@
 // Use of this source code is governed by a MIT-style license
 // that can be found in the LICENSE file.
 
-#include "{{{ name }}}.hpp"
+#include "{{{ name }}}.h"
 
 namespace fldart {
-FunctionMapping _{{{ name }}}::methods[] = {
-  {{# functions }}
-  {"fldart::{{{ name }}}", {{{ name }}}},
-  {{/ functions }}
-  {NULL, NULL}
-};
+namespace {{{ name }}} {
 {{# functions }}
 
 void {{{ name }}}(Dart_NativeArguments arguments) {
@@ -32,4 +27,5 @@ void {{{ name }}}(Dart_NativeArguments arguments) {
   Dart_ExitScope();
 }
 {{/ functions }}
+}
 }

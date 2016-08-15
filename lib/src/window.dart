@@ -30,6 +30,6 @@ class Window extends Group {
   //////////////////////////////////////////////////////////////////////////////
 
   static int _create(Window me, int w, int h, String l)
-      native 'fldart::Window::createWindowShort';
+      native 'fldart::Window::constructor_WindowShort';
   static void _hide(int ptr) native 'fldart::Window::void_hide';
 }

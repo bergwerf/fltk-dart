@@ -73,7 +73,7 @@ class Widget extends _Ptr {
   //////////////////////////////////////////////////////////////////////////////
 
   static int _create(Widget me, int x, int y, int w, int h, String l)
-      native 'fldart::Widget::createWidget';
+      native 'fldart::Widget::constructor_Widget';
 
   static int _x(int ptr) native 'fldart::Widget::int_x';
   static int _y(int ptr) native 'fldart::Widget::int_y';

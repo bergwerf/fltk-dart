@@ -24,7 +24,7 @@ class Group extends Widget {
   //////////////////////////////////////////////////////////////////////////////
 
   static int _create(Group me, int x, int y, int w, int h, String l)
-      native 'fldart::Group::createGroup';
+      native 'fldart::Group::constructor_Group';
   static void _end(int ptr) native 'fldart::Group::void_end';
   static void _resizable(int ptr, int o) native 'fldart::Group::void_resizable';
 }
