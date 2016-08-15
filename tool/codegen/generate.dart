@@ -67,22 +67,22 @@ final settings = loadYaml(new File('$root/settings.yaml').readAsStringSync());
 int main(List<String> args) {
   // Load templates.
   var classHeaderTemplate = new Template(
-      new File('$root/templates/classes/h.mustache').readAsStringSync(),
+      new File('$root/templates/classes/header.mustache').readAsStringSync(),
       lenient: true);
   var classSourceTemplate = new Template(
-      new File('$root/templates/classes/c.mustache').readAsStringSync(),
+      new File('$root/templates/classes/source.mustache').readAsStringSync(),
       lenient: true);
   var wrapperHeaderTemplate = new Template(
-      new File('$root/templates/wrappers/hpp.mustache').readAsStringSync(),
+      new File('$root/templates/wrappers/header.mustache').readAsStringSync(),
       lenient: true);
   var wrapperSourceTemplate = new Template(
-      new File('$root/templates/wrappers/cpp.mustache').readAsStringSync(),
+      new File('$root/templates/wrappers/source.mustache').readAsStringSync(),
       lenient: true);
   var funcsHeaderTemplate = new Template(
-      new File('$root/templates/functions/h.mustache').readAsStringSync(),
+      new File('$root/templates/functions/header.mustache').readAsStringSync(),
       lenient: true);
   var funcsSourceTemplate = new Template(
-      new File('$root/templates/functions/c.mustache').readAsStringSync(),
+      new File('$root/templates/functions/source.mustache').readAsStringSync(),
       lenient: true);
 
   // Process class files.
@@ -159,12 +159,12 @@ void processClassFile(
   };
 
   // Add custom source include.
-  if (new File('$customSources/$dartname.c').existsSync()) {
-    mustacheData['sourceInclude'] = ['$customSourcesRelative/$dartname.c'];
+  if (new File('$customSources/$dartname.cpp').existsSync()) {
+    mustacheData['sourceInclude'] = ['$customSourcesRelative/$dartname.cpp'];
   }
 
   // Write header.
-  new File('$dir/${content['dartname']}.h')
+  new File('$dir/${content['dartname']}.hpp')
       .writeAsStringSync(headerTemplate.renderString(mustacheData));
 
   // Remove all custom methods.
@@ -176,7 +176,7 @@ void processClassFile(
   }
 
   // Write source.
-  new File('$dir/${content['dartname']}.c')
+  new File('$dir/${content['dartname']}.cpp')
       .writeAsStringSync(sourceTemplate.renderString(mustacheData));
 
   if (createWrapper) {
@@ -235,9 +235,9 @@ void processFuncsFile(
   };
 
   // Write output files.
-  new File('$dir/${content['name']}.h')
+  new File('$dir/${content['name']}.hpp')
       .writeAsStringSync(headerTemplate.renderString(mustacheData));
-  new File('$dir/${content['name']}.c')
+  new File('$dir/${content['name']}.cpp')
       .writeAsStringSync(sourceTemplate.renderString(mustacheData));
 }
 

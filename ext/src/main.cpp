@@ -11,19 +11,19 @@
 #include "dart_api.h"
 #include "common.h"
 
-#include "gen/funcs/fl.h"
-#include "gen/funcs/draw.h"
+#include "gen/funcs/fl.hpp"
+#include "gen/funcs/draw.hpp"
 
-#include "gen/classes/Widget.h"
-#include "gen/classes/Group.h"
-#include "gen/classes/Box.h"
-#include "gen/classes/Button.h"
-#include "gen/classes/Input.h"
-#include "gen/classes/TextEditor.h"
-#include "gen/classes/TextBuffer.h"
-#include "gen/classes/Window.h"
-#include "gen/classes/DoubleWindow.h"
-#include "gen/classes/GlWindow.h"
+#include "gen/classes/Widget.hpp"
+#include "gen/classes/Group.hpp"
+#include "gen/classes/Box.hpp"
+#include "gen/classes/Button.hpp"
+#include "gen/classes/Input.hpp"
+#include "gen/classes/TextEditor.hpp"
+#include "gen/classes/TextBuffer.hpp"
+#include "gen/classes/Window.hpp"
+#include "gen/classes/DoubleWindow.hpp"
+#include "gen/classes/GlWindow.hpp"
 
 Dart_NativeFunction ResolveName(
   Dart_Handle name,
