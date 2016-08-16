@@ -10,6 +10,53 @@ import 'dart:typed_data';
 import 'package:dartgl/dartgl.dart';
 import 'package:fltk/fltk.dart' as fl;
 
+/// Mandelbrot fragment shader program.
+const mandelbrotFragmentShader = '''
+precision mediump float;
+
+varying vec2 position;
+uniform float viewportWidth, viewportHeight;
+
+vec3 hsv2rgb(vec3 c) {
+vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+
+void main() {
+int iter;
+float tempreal, tempimag, Creal, Cimag;
+float r2;
+
+vec2 viewport = vec2(viewportHeight, viewportHeight);
+vec2 pos = fract((position + viewport) /
+(2.0 * vec2(viewportHeight, viewportHeight)));
+float real = (pos.s * 3.0) - 2.0;
+float imag = (pos.t * 3.0) - 1.5;
+Creal = real;
+Cimag = imag;
+
+for (iter = 0; iter < 100; iter++) {
+// z = z^2 + c
+tempreal = real;
+tempimag = imag;
+real = (tempreal * tempreal) - (tempimag * tempimag);
+imag = 2 * tempreal * tempimag;
+real += Creal;
+imag += Cimag;
+r2 = (real * real) + (imag * imag);
+if (r2 >= 4)
+  break;
+}
+
+// Base the color on the number of iterations
+float value = fract(iter / 100.0);
+vec4 color = vec4(hsv2rgb(vec3(value, 0.8, 0.8)), 1.0);
+
+gl_FragColor = color;
+}
+''';
+
 /// More generic 2D GL canvas based on opengl.dart
 class Gl2DCanvas extends fl.GlWindow {
   /// Orthograpic projection matrix
@@ -134,29 +181,6 @@ class Gl2DCanvas extends fl.GlWindow {
   }
 
   void compileShaders() {
-    /*// Vertex shader source.
-    var vsSrc = '''
-#version 100
-
-attribute vec2 aVertexPosition;
-uniform mat4 uPMatrix;
-varying vec2 color;
-
-void main() {
-  gl_Position = uPMatrix * vec4(aVertexPosition * 150.0, 0.0, 1.0);
-  color = aVertexPosition;
-}''';
-
-    // Fragment shader source.
-    var fsSrc = '''
-#version 100
-
-varying mediump vec2 color;
-
-void main() {
-  gl_FragColor = vec4(color, 0.5, 1.0);
-}''';*/
-
     // Compile vertex shader.
     int vshader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vshader, 1, [vertexShader], null);
@@ -258,52 +282,7 @@ void main(void) {
 
     // Bind text buffer to editor and load cool mandelbrot shader.
     editor.buffer = buffer;
-    buffer.text = '''
-precision mediump float;
-
-varying vec2 position;
-uniform float viewportWidth, viewportHeight;
-
-vec3 hsv2rgb(vec3 c) {
-  vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
-  vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
-  return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
-}
-
-void main()
-{
-  int iter;
-  float tempreal, tempimag, Creal, Cimag;
-  float r2;
-
-  vec2 viewport = vec2(viewportHeight, viewportHeight);
-  vec2 pos = fract((position + viewport) /
-    (2.0 * vec2(viewportHeight, viewportHeight)));
-  float real = (pos.s * 3.0) - 2.0;
-  float imag = (pos.t * 3.0) - 1.5;
-  Creal = real;
-  Cimag = imag;
-
-  for (iter = 0; iter < 100; iter++) {
-    // z = z^2 + c
-    tempreal = real;
-    tempimag = imag;
-    real = (tempreal * tempreal) - (tempimag * tempimag);
-    imag = 2 * tempreal * tempimag;
-    real += Creal;
-    imag += Cimag;
-    r2 = (real * real) + (imag * imag);
-    if (r2 >= 4)
-      break;
-  }
-
-  // Base the color on the number of iterations
-  float value = fract(iter / 100.0);
-  vec4 color = vec4(hsv2rgb(vec3(value, 0.8, 0.8)), 1.0);
-
-  gl_FragColor = color;
-}
-''';
+    buffer.text = mandelbrotFragmentShader;
 
     /*canvas.updateShaders(defaultVertexShader, buffer.text);
     canvas.updateVertexData([
