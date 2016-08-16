@@ -5,6 +5,7 @@
 part of fltk;
 
 int run() native 'fldart::run';
+int wait() native 'fldart::wait';
 int scheme(String name) native 'fldart::scheme';
 
 // Color utility function

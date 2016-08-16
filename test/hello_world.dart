@@ -16,5 +16,11 @@ int main() {
   box.color = fl.rgbColor(255, 0, 0);
   window.end();
   window.show();
-  return fl.run();
+
+  // Basically the same as fl.run()
+  int state = 1;
+  while (state > 0) {
+    state = fl.wait();
+  }
+  return state;
 }
