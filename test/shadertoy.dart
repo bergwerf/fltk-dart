@@ -227,8 +227,8 @@ void main(void) {
     // Create button.
     button = new fl.Button(half, 0, width - half, 40, 'Recompile!');
     button.box = fl.FLAT_BOX;
+    button.color = fl.WHITE;
     button.labelsize = 20;
-    button.color = fl.DARK2;
     button.callback = (w, _) {
       update();
     };
@@ -253,8 +253,7 @@ void main(void) {
       if ((data.nInserted > 0 || data.nDeleted > 0) &&
           button.label == 'Recompile') {
         button.labelfont = fl.COURIER_BOLD_ITALIC;
-        button.labeltype = fl.SHADOW_LABEL;
-        button.labelcolor = fl.GREEN;
+        button.labelcolor = fl.DARK_GREEN;
         button.label = 'Recompile!';
         button.redraw();
       }
@@ -273,7 +272,6 @@ void main(void) {
 
   void update() {
     button.labelfont = fl.COURIER;
-    button.labeltype = fl.NORMAL_LABEL;
     button.labelcolor = fl.BLACK;
     button.label = 'Recompile';
     button.redraw();
@@ -304,7 +302,7 @@ vec3 hsv2rgb(vec3 c) {
 }
 
 void main() {
-  int iter;
+  int iter, iterations = 20;
   float tempreal, tempimag, Creal, Cimag, r2;
 
   vec2 viewport = vec2(viewportHeight, viewportHeight);
@@ -316,7 +314,7 @@ void main() {
   Creal = real;
   Cimag = imag;
 
-  for (iter = 0; iter < 100; iter++) {
+  for (iter = 0; iter < iterations; iter++) {
     // z = z^2 + c
     tempreal = real;
     tempimag = imag;
@@ -326,13 +324,13 @@ void main() {
     imag += Cimag;
     r2 = (real * real) + (imag * imag);
 
-    if (r2 >= 4) {
+    if (r2 >= 4.0) {
       break;
     }
   }
 
   // Base the color on the number of iterations
-  float value = fract(iter / 100.0);
+  float value = fract(iter / (float)iterations);
   vec4 color = vec4(hsv2rgb(vec3(value, 0.8, 0.8)), 1.0);
 
   gl_FragColor = color;
