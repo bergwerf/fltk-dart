@@ -64,4 +64,63 @@ class TextDisplay extends Group {
 
   /// Set default text size.
   set textSize(int size) native 'fldart::TextDisplay::void_textsize';
+
+  /// Get line number alignment.
+  int get linenumberAlign
+      native 'fldart::TextDisplay::Fl_Align_linenumber_align';
+
+  /// Set line number text alignment.
+  ///
+  /// Valid values:
+  /// - [ALIGN_LEFT]
+  /// - [ALIGN_CENTER]
+  /// - [ALIGN_RIGHT]
+  set linenumberAlign(int val)
+      native 'fldart::TextDisplay::void_linenumber_align';
+
+  /// Get line number background color.
+  int get linenumberBgColor
+      native 'fldart::TextDisplay::Fl_Color_linenumber_bgcolor';
+
+  /// Set line number background color.
+  set linenumberBgColor(int val)
+      native 'fldart::TextDisplay::void_linenumber_bgcolor';
+
+  /// Get line number foreground color.
+  int get linenumberFgColor
+      native 'fldart::TextDisplay::Fl_Color_linenumber_fgcolor';
+
+  /// Set line number foreground color.
+  set linenumberFgColor(int val)
+      native 'fldart::TextDisplay::void_linenumber_fgcolor';
+
+  /// Get line number font.
+  int get linenumberFont native 'fldart::TextDisplay::Fl_Font_linenumber_font';
+
+  /// Set line number font.
+  set linenumberFont(int val)
+      native 'fldart::TextDisplay::void_linenumber_font';
+
+  /// Get line number print format.
+  String get linenumberFormat
+      native 'fldart::TextDisplay::String_linenumber_format';
+
+  /// Set line number print format.
+  set linenumberFormat(String val)
+      native 'fldart::TextDisplay::void_linenumber_format';
+
+  /// Get line number font size.
+  int get linenumberSize
+      native 'fldart::TextDisplay::Fl_Fontsize_linenumber_size';
+
+  /// Set line number font size.
+  set linenumberSize(int val)
+      native 'fldart::TextDisplay::void_linenumber_size';
+
+  /// Get line number pixel width.
+  int get linenumberWidth native 'fldart::TextDisplay::int_linenumber_width';
+
+  /// Set line number pixel width.
+  set linenumberWidth(int width)
+      native 'fldart::TextDisplay::void_linenumber_width';
 }

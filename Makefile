@@ -15,10 +15,13 @@ compile-fltk:
 	rm -rf compile/fltk-${fltk_version}
 	tar -C ./compile -xvf tar/fltk-${fltk_version}-source.tar.gz
 
-	# 2. compile
+	# 2. Enable ABI version 103030
+	sed -i 's/\/\/#define FLTK_ABI_VERSION 10303/#define FLTK_ABI_VERSION 10303/g' compile/fltk-1.3.3/FL/Enumerations.H
+
+	# 3. compile
 	cd compile/fltk-${fltk_version}; ./configure --enable-cairo --enable-shared --enable-debug; make; sudo make install
 
-	# 3. reconfigure dynamic linker run-time bindings
+	# 4. reconfigure dynamic linker run-time bindings
 	sudo ldconfig
 
 compile-ext:

@@ -12,9 +12,10 @@ import 'dart:async';
 
 import 'package:image/image.dart';
 
-part 'src/enums/boxtype.dart';
 part 'src/enums/labeltype.dart';
+part 'src/enums/boxtype.dart';
 part 'src/enums/colors.dart';
+part 'src/enums/align.dart';
 part 'src/enums/font.dart';
 
 part 'src/fl.dart';

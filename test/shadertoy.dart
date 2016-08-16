@@ -220,7 +220,6 @@ void main(void) {
     final width = _w;
     final height = _h;
     final half = (_w / 2).round();
-    final pad = 10;
 
     // Create canvas.
     canvas = new Gl2DCanvas(0, 0, half, height);
@@ -235,14 +234,18 @@ void main(void) {
     };
 
     // Create editor.
-    editor = new fl.TextEditor(half + pad, button.h + pad, width - half - pad,
-        height - button.h - pad);
+    editor = new fl.TextEditor(half, button.h, width - half, height - button.h);
     editor.box = fl.FLAT_BOX;
     editor.cursorStyle = fl.TextDisplay.SIMPLE_CURSOR;
     editor.cursorColor = fl.rgbColor(64);
     editor.textColor = fl.rgbColor(32);
     editor.textFont = fl.COURIER;
     editor.textSize = 18;
+    editor.linenumberWidth = 60;
+    editor.linenumberSize = 18;
+    editor.linenumberFormat = '%d ';
+    editor.linenumberFont = fl.COURIER_BOLD;
+    editor.linenumberBgColor = fl.WHITE;
 
     // Setup buffer.
     buffer = new fl.TextBuffer();
@@ -259,7 +262,7 @@ void main(void) {
 
     // Bind text buffer to editor and load cool mandelbrot shader.
     editor.buffer = buffer;
-    buffer.text = mandelbrotFragmentShader;
+    buffer.text = mandelbrotShader;
 
     resizable = new fl.Widget(0, button.h, width, height - button.h);
     end();
@@ -281,14 +284,14 @@ void main(void) {
 }
 
 int main() {
-  fl.scheme('gleam');
-  var editor = new ShaderEditor(720, 480, 'Text editor');
+  fl.scheme('gtk+');
+  var editor = new ShaderEditor(720, 480, 'Shadertoy');
   editor.show();
   return fl.run();
 }
 
 /// Mandelbrot fragment shader program.
-const mandelbrotFragmentShader = '''
+const mandelbrotShader = '''
 precision mediump float;
 
 varying vec2 position;
@@ -336,8 +339,8 @@ void main() {
 }
 ''';
 
-/// Cool HSV color gradient fragment shader.
-const hsvGradientFragmentShader = '''
+/// HSV color gradient fragment shader.
+const hsvGradientShader = '''
 precision mediump float;
 
 varying vec2 position;
@@ -355,5 +358,42 @@ void main() {
     (2.0 * vec2(viewportWidth, viewportHeight)));
 
   gl_FragColor = vec4(hsv2rgb(vec3(pos.t, pos.s, 1.0)), 1.0);
+}
+''';
+
+/// HSV twisted radial gradient fragment shader
+const hsvRadialGradientShader = '''
+varying vec2 position;
+uniform float viewportWidth, viewportHeight;
+
+vec3 hsv2rgb(vec3 c) {
+  vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+  vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+  return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+
+vec3 skew(float a, vec3 vec) {
+  return mat3(
+    1.0, tan(a)p, 0.0,
+    0.0, 1.0, 0.0,
+    0.0, 0.0, 1.0) * vec;
+}
+
+void main() {
+  vec2 viewport = vec2(viewportWidth, viewportHeight);
+  vec2 pos = fract((position + viewport) /
+    (2.0 * vec2(viewportWidth, viewportHeight)));
+
+  gl_FragColor = vec4(
+    hsv2rgb(vec3(
+      5.0 * length(
+        skew(
+          1.0,
+          vec3(
+            vec2(0.5, 1.0) *
+            vec2(pos - vec2(0.5, 0.5)),
+            0.0))),
+      1.0, 0.8)),
+    1.0);
 }
 ''';
