@@ -17,6 +17,7 @@ class {{{ class }}}_Wrapper : public {{{ class }}} {
 
  public:
   {{# constructors }}
+  {{! Fails if argsdef is empty, but just go with it for now. }}
   {{{ class }}}_Wrapper(Dart_Handle ref, {{{ argsdef }}});
   {{/ constructors }}
 

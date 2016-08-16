@@ -124,13 +124,16 @@ void processClassFile(
   var content = loadYaml(file.readAsStringSync());
   var dartname = content['dartname'];
 
-  // Should we generate a wrapper to redirect base methods?
-  var createWrapper = !(content['wrapper'] == false);
+  // Use wrapper class?
+  var useWrapper = !(content['wrapper'] == false);
+
+  // Generate default wrapper?
+  var generateWrapper = (useWrapper && !(content['customWrapper'] == true));
 
   // Parse constructors.
   var constructors = [];
   content['constructors'].forEach((String constructor) {
-    constructors.add(parseMethod(constructor, true, createWrapper));
+    constructors.add(parseMethod(constructor, true, useWrapper));
   });
 
   // Parse methods.
@@ -147,11 +150,13 @@ void processClassFile(
 
     // Class that is used for construction and method calling
     'targetClass':
-        createWrapper ? '${content['cname']}_Wrapper' : content['cname'],
+        useWrapper ? '${content['cname']}_Wrapper' : content['cname'],
 
     // #include string for the class header
-    'targetClassInclude': createWrapper
-        ? '"../wrappers/${content['cname']}_Wrapper.hpp"'
+    'targetClassInclude': useWrapper
+        ? (generateWrapper
+            ? '"../wrappers/${content['cname']}_Wrapper.hpp"'
+            : '"../../wrappers/${content['cname']}_Wrapper.hpp"')
         : '<FL/${content['cname']}.H>',
 
     'constructors': constructors,
@@ -185,15 +190,17 @@ void processClassFile(
   new File('$dir/${content['dartname']}.cpp')
       .writeAsStringSync(sourceTemplate.renderString(mustacheData));
 
-  if (createWrapper) {
+  if (generateWrapper) {
     // Generate data for wrapper class
     //
     // Datastructure:
-    // header: HPP #define header
-    // class: C++ class name
+
+    // header: #ifdef name
+    // class:  C++ class name
     // constructors:
     // - argslist: comma separated list of arguments
-    //   argsdef: comma separated list of arguments with types
+    //   argsdef:  comma separated list of arguments with types
+
     var wrapperconstructors = [];
     constructors.forEach((Map<String, dynamic> data) {
       var args = [];
@@ -201,7 +208,7 @@ void processClassFile(
         args.add(arg['name']);
       });
       wrapperconstructors.add({
-        'argslist': args.join(','),
+        'argslist': args.join(', '),
         'argsdef': data['argsdef'].replaceAll('String', 'const char*')
       });
     });
@@ -269,7 +276,7 @@ Map<String, dynamic> parseFunction(YamlMap function) {
 
   var args = parseArguments(function['args']);
   ret['call'] = wrapCall(
-      match.group(1), '${match.group(2)}(${args.list.join(',')})', '_tmp');
+      match.group(1), '${match.group(2)}(${args.list.join(', ')})', '_tmp');
   ret['args'] = args.data;
 
   return ret;
@@ -310,14 +317,16 @@ Map<String, dynamic> parseMethod(String method, bool constructor,
 
     // Parse arguments.
     var args = parseArguments(match.group(3), 1);
-    var argslist = args.list.join(',');
+    var argslist = args.list.join(', ');
 
     // Generate method call code.
     ret['call'] = wrapCall(
         match.group(1), '_ref -> ${match.group(2)}($argslist)', '_tmp');
 
     // Store arguments data.
-    ret['argslist'] = constructor && withWrapper ? '_ref,$argslist' : argslist;
+    ret['argslist'] = constructor && withWrapper
+        ? (argslist.isEmpty ? '_ref' : '_ref, $argslist')
+        : argslist;
     ret['argsdef'] = match.group(3);
     ret['args'] = args.data;
   }

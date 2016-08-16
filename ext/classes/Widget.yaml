@@ -23,6 +23,9 @@ methods:
 - Fl_Color color()
 - void color(Fl_Color bg)
 
+- int when()
+- void when(int mode)
+
 - void show()
 - void redraw()
 - void box(Fl_Boxtype type)

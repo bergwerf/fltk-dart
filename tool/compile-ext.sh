@@ -7,7 +7,7 @@
 #DART_SDK=$(which dart | sed 's/.\{9\}$//')
 #echo "Found Dart SDK at ${DART_SDK}"
 DART_SDK="/usr/lib/dart"
-GEN_OUT='ext/src/gen'
+EXT_SRC='ext/src'
 
 # Compile object file.
 #
@@ -38,11 +38,11 @@ function compile {
       -o $1.o
 }
 
-compile ext/src/main.cpp
-compile ext/src/common.c
+compile $EXT_SRC/main.cpp
+compile $EXT_SRC/common.c
 
 # Compile individual classes.
-for f in {$GEN_OUT/funcs/*.cpp,$GEN_OUT/wrappers/*.cpp,$GEN_OUT/classes/*.cpp}
+for f in {$EXT_SRC/gen/funcs/*.cpp,$EXT_SRC/gen/wrappers/*.cpp,$EXT_SRC/gen/classes/*.cpp,$EXT_SRC/wrappers/*.cpp}
 do
   compile $f
 done
@@ -53,7 +53,7 @@ done
 # - add -m32 flag on 32 bit systems.
 # - add -g to generate debug info.
 gcc -g -shared -Wl,-soname,libfldart.so -o lib/libfldart.so \
-    $GEN_OUT/funcs/*.o $GEN_OUT/wrappers/*.o $GEN_OUT/classes/*.o ext/src/*.o \
+    $EXT_SRC/gen/funcs/*.o $EXT_SRC/gen/wrappers/*.o $EXT_SRC/gen/classes/*.o $EXT_SRC/wrappers/*.o $EXT_SRC/*.o \
     -lfltk_cairo\
     -lcairo -lpixman-1\
     -lfltk_gl\
@@ -62,4 +62,4 @@ gcc -g -shared -Wl,-soname,libfldart.so -o lib/libfldart.so \
     -lXcursor -lXfixes -lXext -lXft -lfontconfig -lXinerama -lpthread -ldl -lm -lX11
 
 # Clean up.
-rm $GEN_OUT/{funcs,wrappers,classes}/*.o ext/src/*.o
+rm $EXT_SRC/gen/{funcs,wrappers,classes}/*.o $EXT_SRC/wrappers/*.o $EXT_SRC/*.o

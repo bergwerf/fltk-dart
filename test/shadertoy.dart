@@ -25,7 +25,7 @@ class Gl2DCanvas extends fl.GlWindow {
   ]);
 
   /// Shader attributes/uniforms
-  int aVertexPosition, uPMatrix;
+  int aVertexPosition, uPMatrix, uViewportWidth, uViewportHeight;
 
   /// Scene init status
   bool init = false;
@@ -86,6 +86,10 @@ class Gl2DCanvas extends fl.GlWindow {
       // Set matrix uniform.
       glUniformMatrix4fv(uPMatrix, 1, false, matrix);
 
+      // Set viewport uniforms.
+      glUniform1f(uViewportWidth, w.toDouble());
+      glUniform1f(uViewportHeight, h.toDouble());
+
       // Link vertex buffer.
       glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
       glVertexAttribPointer(aVertexPosition, 2, GL_FLOAT, false, 0, 0);
@@ -93,7 +97,7 @@ class Gl2DCanvas extends fl.GlWindow {
     }
   }
 
-  static void checkShader(int shader) {
+  static bool checkShader(int shader) {
     var isCompiled = new Int32List(1);
     glGetShaderiv(shader, GL_COMPILE_STATUS, isCompiled);
     if (isCompiled[0] == GL_FALSE) {
@@ -104,12 +108,14 @@ class Gl2DCanvas extends fl.GlWindow {
 
       // Print info log to stdout.
       print(new String.fromCharCodes(infoLog));
+      return false;
     } else {
       print("Shader compilation successful!");
+      return true;
     }
   }
 
-  static void checkProgram(int program) {
+  static bool checkProgram(int program) {
     var isLinked = new Int32List(1);
     glGetProgramiv(program, GL_LINK_STATUS, isLinked);
     if (isLinked[0] == GL_FALSE) {
@@ -120,8 +126,10 @@ class Gl2DCanvas extends fl.GlWindow {
 
       // Print info log to stdout.
       print(new String.fromCharCodes(infoLog));
+      return false;
     } else {
       print("Program linking successful!");
+      return true;
     }
   }
 
@@ -167,14 +175,14 @@ void main() {
     glUseProgram(program);
 
     // Error checking.
-    checkShader(vshader);
-    checkShader(fshader);
-    checkProgram(program);
-
-    // Resolve attributes and uniforms.
-    aVertexPosition = glGetAttribLocation(program, 'aVertexPosition');
-    glEnableVertexAttribArray(aVertexPosition);
-    uPMatrix = glGetUniformLocation(program, 'uPMatrix');
+    if (checkShader(vshader) && checkShader(fshader) && checkProgram(program)) {
+      // Resolve attributes and uniforms.
+      aVertexPosition = glGetAttribLocation(program, 'aVertexPosition');
+      glEnableVertexAttribArray(aVertexPosition);
+      uPMatrix = glGetUniformLocation(program, 'uPMatrix');
+      uViewportWidth = glGetUniformLocation(program, 'viewportWidth');
+      uViewportHeight = glGetUniformLocation(program, 'viewportHeight');
+    }
   }
 
   void updateBuffer(List<num> data) {
@@ -215,11 +223,11 @@ void main(void) {
   Gl2DCanvas canvas;
 
   /// Constructor
-  ShaderEditor(int w, int h, String l) : super(w, h, l) {
+  ShaderEditor(int _w, int _h, String l) : super(_w, _h, l) {
     color = fl.WHITE;
-    var height = h;
-    var half = (w / 2).round();
-    var pad = 10;
+    final height = _h;
+    final half = (_w / 2).round();
+    final pad = 10;
 
     canvas = new Gl2DCanvas(0, 0, half, height);
 
@@ -231,31 +239,80 @@ void main(void) {
     editor.textFont = fl.COURIER;
     editor.textSize = 18;
 
-    // Bind text buffer.
+    // Setup buffer.
     buffer = new fl.TextBuffer();
+    buffer.onModify.listen((data) {
+      final height = h;
+      final half = (w / 2).ceil();
+
+      canvas.updateShaders(defaultVertexShader, buffer.text);
+      canvas.updateVertexData([
+        // Top-left triangle
+        -half, -height, -half, height, half, height,
+
+        // Bottom-right triangle
+        half, -height, -half, -height, half, height
+      ]);
+      canvas.redraw();
+    });
+
+    // Bind text buffer to editor and load cool mandelbrot shader.
     editor.buffer = buffer;
     buffer.text = '''
 precision mediump float;
 
 varying vec2 position;
+uniform float viewportWidth, viewportHeight;
 
-void main() {
-  gl_FragColor = vec4(
-    length(position) / 200.0,
-    0.5,
-    0.6,
-    1.0);
+vec3 hsv2rgb(vec3 c) {
+  vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+  vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+  return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+
+void main()
+{
+  int iter;
+  float tempreal, tempimag, Creal, Cimag;
+  float r2;
+
+  vec2 viewport = vec2(viewportHeight, viewportHeight);
+  vec2 pos = fract((position + viewport) /
+    (2.0 * vec2(viewportHeight, viewportHeight)));
+  float real = (pos.s * 3.0) - 2.0;
+  float imag = (pos.t * 3.0) - 1.5;
+  Creal = real;
+  Cimag = imag;
+
+  for (iter = 0; iter < 100; iter++) {
+    // z = z^2 + c
+    tempreal = real;
+    tempimag = imag;
+    real = (tempreal * tempreal) - (tempimag * tempimag);
+    imag = 2 * tempreal * tempimag;
+    real += Creal;
+    imag += Cimag;
+    r2 = (real * real) + (imag * imag);
+    if (r2 >= 4)
+      break;
+  }
+
+  // Base the color on the number of iterations
+  float value = fract(iter / 100.0);
+  vec4 color = vec4(hsv2rgb(vec3(value, 0.8, 0.8)), 1.0);
+
+  gl_FragColor = color;
 }
 ''';
 
-    canvas.updateShaders(defaultVertexShader, buffer.text);
+    /*canvas.updateShaders(defaultVertexShader, buffer.text);
     canvas.updateVertexData([
       // Top-left triangle
       -half, -height, -half, height, half, height,
 
       // Bottom-right triangle
       half, -height, -half, -height, half, height
-    ]);
+    ]);*/
 
     resizable = this;
     end();

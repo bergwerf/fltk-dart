@@ -3,7 +3,8 @@ install-hook:
 	ln -sf ../../tool/pre-commit.sh .git/hooks/pre-commit
 
 generate-bindings:
-	rm -f ext/src/gen/{classes,funcs,wrappers}/*
+	# Don't use a directory regex or ZSH will start asking confirmations.
+	rm -f ext/src/gen/classes/* ext/src/gen/funcs/* ext/src/gen/wrappers/*
 	mkdir -p ext/src/gen/classes ext/src/gen/funcs ext/src/gen/wrappers
 	dart tool/codegen/generate.dart
 

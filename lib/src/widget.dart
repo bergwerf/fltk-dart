@@ -55,13 +55,13 @@ class Widget extends NativeFieldWrapperClass2 {
   set label(String text) native 'fldart::Widget::void_label';
 
   /// Get label font.
-  int get labelfont native 'fldart::Widget::int_labelfont';
+  int get labelfont native 'fldart::Widget::Fl_Font_labelfont';
 
   /// Set label font.
   set labelfont(int font) native 'fldart::Widget::void_labelfont';
 
   /// Get label size.
-  int get labelsize native 'fldart::Widget::int_labelsize';
+  int get labelsize native 'fldart::Widget::Fl_Fontsize_labelsize';
 
   /// Set label size.
   set labelsize(int pixels) native 'fldart::Widget::void_labelsize';
@@ -77,16 +77,22 @@ class Widget extends NativeFieldWrapperClass2 {
   set labeltype(Labeltype type) => _labeltypeSet(type.index);
 
   /// Get label color.
-  int get labelcolor native 'fldart::Widget::uint32_t_labelcolor';
+  int get labelcolor native 'fldart::Widget::Fl_Color_labelcolor';
 
   /// Set label color
   set labelcolor(int color) native 'fldart::Widget::void_labelcolor';
 
   /// Get background color.
-  int get color native 'fldart::Widget::uint32_t_color';
+  int get color native 'fldart::Widget::Fl_Color_color';
 
   /// Set background color.
   set color(int color) native 'fldart::Widget::void_color';
+
+  /// Get callback flags.
+  int get when native 'fldart::Widget::int_when';
+
+  /// Set callback flags.
+  set when(int mode) native 'fldart::Widget::void_when';
 
   void _boxSet(int type) native 'fldart::Widget::void_box';
 

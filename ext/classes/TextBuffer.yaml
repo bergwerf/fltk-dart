@@ -1,6 +1,6 @@
 cname: Fl_Text_Buffer
 dartname: TextBuffer
-wrapper: false
+customWrapper: true 
 
 constructors:
 - void ()
@@ -8,3 +8,16 @@ constructors:
 methods:
 - String text()
 - void text(String text)
+
+wrapperHeaderCustom: |
+  static void buffer_modified_cb(int pos, int nInserted, int nDeleted, int nRestyled, const char *deletedText, void *ptr);
+
+wrapperConstructorCustom: |
+  add_modify_callback(buffer_modified_cb, &ref);
+
+wrapperSourceCustom: |
+  void Fl_Text_Buffer_Wrapper::buffer_modified_cb(
+      int pos, int nInserted, int nDeleted, int nRestyled, const char *deletedText, void *ptr) {
+    Dart_PersistentHandle *ref = (Dart_PersistentHandle*)ptr;
+    Dart_Invoke(ref, Dart_NewStringFromCString("bufferModified"), 0, {});
+  }

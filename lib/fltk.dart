@@ -8,6 +8,7 @@ import 'dart-ext:fldart';
 
 import 'dart:nativewrappers';
 import 'dart:typed_data';
+import 'dart:async';
 
 import 'package:image/image.dart';
 
