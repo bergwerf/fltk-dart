@@ -8,7 +8,6 @@ part of fltk;
 class TextBufferModifyData {
   final int pos, nInserted, nDeleted, nRestyled;
   final String deletedText;
-
   TextBufferModifyData(this.pos, this.nInserted, this.nDeleted, this.nRestyled,
       this.deletedText);
 }
@@ -20,7 +19,7 @@ class TextBuffer extends NativeFieldWrapperClass2 {
 
   /// Buffer modified event stream controller
   final _onModifyController =
-      new StreamController<TextBufferModifyData>.broadcast(sync: true);
+      new StreamController<TextBufferModifyData>.broadcast();
 
   /// Public constuctor
   TextBuffer() {

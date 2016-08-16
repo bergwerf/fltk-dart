@@ -5,6 +5,7 @@
 /// A simple text editor using FLTK and Dart, inspired by the 'Designing a
 /// Simple Text Editor' tutorial from FLTK.
 
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:dartgl/dartgl.dart';
@@ -229,9 +230,7 @@ void main(void) {
     button.box = fl.FLAT_BOX;
     button.color = fl.WHITE;
     button.labelsize = 20;
-    button.callback = (w, _) {
-      update();
-    };
+    button.onCallback.listen((_) => update());
 
     // Create editor.
     editor = new fl.TextEditor(half, button.h, width - half, height - button.h);
@@ -281,11 +280,11 @@ void main(void) {
   }
 }
 
-int main() {
+Future main() {
   fl.scheme('gtk+');
   var editor = new ShaderEditor(720, 480, 'Shadertoy');
   editor.show();
-  return fl.run();
+  return fl.runAsync();
 }
 
 /// Mandelbrot fragment shader program.
@@ -372,7 +371,7 @@ vec3 hsv2rgb(vec3 c) {
 
 vec3 skew(float a, vec3 vec) {
   return mat3(
-    1.0, tan(a)p, 0.0,
+    1.0, tan(a), 0.0,
     0.0, 1.0, 0.0,
     0.0, 0.0, 1.0) * vec;
 }

@@ -7,20 +7,38 @@ part of fltk;
 /// Widget callback function
 typedef void Callback(Widget target, dynamic userData);
 
+/// [Widget.onCallback] data
+class WidgetCallbackData {
+  final Widget target;
+  final userData;
+  WidgetCallbackData(this.target, this.userData);
+}
+
 /// Fl_Widget
 class Widget extends NativeFieldWrapperClass2 {
   /// User data
   dynamic userData;
 
-  /// Action callback
+  /// Callback function (classic style)
   Callback callback;
+
+  /// Callback stream (Dart style)
+  Stream<WidgetCallbackData> onCallback;
+
+  /// Callback stream controller
+  final _onCallbackController =
+      new StreamController<WidgetCallbackData>.broadcast();
 
   /// Create Fl_Widget (uses a wrapper class under the hood).
   Widget(int x, int y, int w, int h, [String l = '']) {
     _createWidget(x, y, w, h, l);
   }
 
-  Widget.empty();
+  Widget.empty() {
+    // Setup onCallback stream. Note that you must do this in the empty
+    // constructor so all subclasses also connect the stream.
+    onCallback = _onCallbackController.stream;
+  }
 
   /// Native constructor
   void _createWidget(int x, int y, int w, int h, String l)
@@ -31,6 +49,7 @@ class Widget extends NativeFieldWrapperClass2 {
 
   /// Do a callback
   void doCallback() {
+    _onCallbackController.add(new WidgetCallbackData(this, userData));
     if (callback != null) {
       callback(this, userData);
     }

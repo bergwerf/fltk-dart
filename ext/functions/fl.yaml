@@ -7,6 +7,8 @@ functions:
   code: int Fl::run
 - name: wait
   code: int Fl::wait
+- name: check
+  code: int Fl::check
 - name: scheme
   code: void Fl::scheme
   args: String scheme
