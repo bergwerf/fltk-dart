@@ -8,14 +8,14 @@ import 'package:image/image.dart';
 import 'package:fltk/fltk.dart' as fl;
 
 int main() {
-  fl.scheme('gleam');
-
   // Using a single buffered window gives issues with image alpha rendering.
-  var window = new fl.DoubleWindow(160, 100);
-
-  var box = new fl.Box(0, 0, 160, 100);
-  box.image = decodeImage(new File('test/image.png').readAsBytesSync());
+  var window = new fl.DoubleWindow(160, 160);
+  var btn = new fl.Button(20, 20, 120, 120);
+  btn.image = decodeImage(new File('test/image.png').readAsBytesSync());
   window.end();
+  window.resizable = btn;
   window.show();
+
+  fl.scheme('gleam');
   return fl.run();
 }
