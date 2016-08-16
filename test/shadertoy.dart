@@ -203,6 +203,9 @@ void main(void) {
 }
 ''';
 
+  /// Last compiled shader.
+  String lastShader = '';
+
   /// Fragment shader editor
   fl.TextEditor editor;
 
@@ -249,11 +252,17 @@ void main(void) {
     // Setup buffer.
     buffer = new fl.TextBuffer();
     buffer.onModify.listen((data) {
-      if ((data.nInserted > 0 || data.nDeleted > 0) &&
-          button.label == 'Recompile') {
-        button.labelfont = fl.COURIER_BOLD_ITALIC;
-        button.labelcolor = fl.DARK_GREEN;
-        button.label = 'Recompile!';
+      if (data.nInserted > 0 || data.nDeleted > 0) {
+        if (buffer.text == lastShader) {
+          button.labelfont = fl.COURIER;
+          button.labelcolor = fl.BLACK;
+          button.label = 'Recompile';
+        } else {
+          button.labelfont = fl.COURIER_BOLD_ITALIC;
+          button.labelcolor = fl.DARK_GREEN;
+          button.label = 'Recompile!';
+        }
+
         button.redraw();
       }
     });
@@ -275,7 +284,8 @@ void main(void) {
     button.label = 'Recompile';
     button.redraw();
 
-    canvas.updateShaders(defaultVertexShader, buffer.text);
+    lastShader = buffer.text;
+    canvas.updateShaders(defaultVertexShader, lastShader);
     canvas.redraw();
   }
 }
@@ -287,7 +297,7 @@ Future main() {
   return fl.runAsync();
 }
 
-/// Mandelbrot fragment shader program.
+/// Mandelbrot shader
 const mandelbrotShader = '''
 precision mediump float;
 
@@ -336,7 +346,7 @@ void main() {
 }
 ''';
 
-/// HSV color gradient fragment shader.
+/// HSV color gradient shader.
 const hsvGradientShader = '''
 precision mediump float;
 
@@ -358,7 +368,7 @@ void main() {
 }
 ''';
 
-/// HSV twisted radial gradient fragment shader
+/// Deformed HSV radial gradient shader
 const hsvRadialGradientShader = '''
 varying vec2 position;
 uniform float viewportWidth, viewportHeight;
@@ -385,7 +395,7 @@ void main() {
     hsv2rgb(vec3(
       5.0 * length(
         skew(
-          1.0,
+          sin(pos.t * 10.0),
           vec3(
             vec2(0.5, 1.0) *
             vec2(pos - vec2(0.5, 0.5)),

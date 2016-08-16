@@ -10,10 +10,10 @@ int run() native 'fldart::run';
 /// Runs FLTK asynchronously (using some black magic).
 /// TODO: try to implement this using isolates and sendports for callbacks?
 Future runAsync() {
-  var completer = new Completer();
+  final completer = new Completer();
   Function cycle;
   cycle = () {
-    int state = check();
+    final state = check();
     if (state == 0) {
       completer.complete();
     } else {
