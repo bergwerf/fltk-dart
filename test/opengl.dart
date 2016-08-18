@@ -102,29 +102,6 @@ class MyGlWindow extends fl.GlWindow {
   }
 
   void compileShaders() {
-    /*// Vertex shader source.
-    var vsSrc = '''
-#version 100
-
-attribute vec2 aVertexPosition;
-uniform mat4 uPMatrix;
-varying vec2 color;
-
-void main() {
-  gl_Position = uPMatrix * vec4(aVertexPosition * 150.0, 0.0, 1.0);
-  color = aVertexPosition;
-}''';
-
-    // Fragment shader source.
-    var fsSrc = '''
-#version 100
-
-varying mediump vec2 color;
-
-void main() {
-  gl_FragColor = vec4(color, 0.5, 1.0);
-}''';*/
-
     // Vertex shader source.
     var vsSrc = '''
 attribute vec2 aVertexPosition;
@@ -137,6 +114,7 @@ color = aVertexPosition;
 
     // Fragment shader source.
     var fsSrc = '''
+#version 130
 precision mediump float;
 varying vec2 color;
 void main() {

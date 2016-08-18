@@ -111,7 +111,8 @@ class MyGlWindow : public Fl_Gl_Window {
       "}\n";
 
     // Fragment shader source.
-    string fs_src =
+    string fs_src=
+      "#version 130\n"
       "precision mediump float;\n"
       "varying vec2 color;\n"
       "void main() {\n"

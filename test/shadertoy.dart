@@ -299,6 +299,8 @@ Future main() {
 
 /// Mandelbrot shader
 const mandelbrotShader = '''
+#version 130
+
 precision mediump float;
 
 varying vec2 position;
@@ -339,7 +341,7 @@ void main() {
   }
 
   // Base the color on the number of iterations
-  float value = fract(iter / (float)iterations);
+  float value = fract(iter / float(iterations));
   vec4 color = vec4(hsv2rgb(vec3(value, 0.8, 0.8)), 1.0);
 
   gl_FragColor = color;
@@ -348,6 +350,8 @@ void main() {
 
 /// HSV color gradient shader.
 const hsvGradientShader = '''
+#version 130
+
 precision mediump float;
 
 varying vec2 position;
@@ -369,7 +373,11 @@ void main() {
 ''';
 
 /// Deformed HSV radial gradient shader
-const hsvRadialGradientShader = '''
+const hsvDeformedGradientShader = '''
+#version 130
+
+precision mediump float;
+
 varying vec2 position;
 uniform float viewportWidth, viewportHeight;
 
