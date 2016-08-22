@@ -5,6 +5,7 @@
 /// A simple text editor using FLTK and Dart, inspired by the 'Designing a
 /// Simple Text Editor' tutorial from FLTK.
 
+import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -26,7 +27,7 @@ class Gl2DCanvas extends fl.GlWindow {
   ]);
 
   /// Shader attributes/uniforms
-  int aVertexPosition, uPMatrix, uViewportWidth, uViewportHeight;
+  int aVertexPosition, uPMatrix, uViewport;
 
   /// Scene init status
   bool init = false;
@@ -100,8 +101,7 @@ class Gl2DCanvas extends fl.GlWindow {
       glUniformMatrix4fv(uPMatrix, 1, false, matrix);
 
       // Set viewport uniforms.
-      glUniform1f(uViewportWidth, w.toDouble());
-      glUniform1f(uViewportHeight, h.toDouble());
+      glUniform2f(uViewport, w.toDouble(), h.toDouble());
 
       // Link vertex buffer.
       glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
@@ -170,8 +170,7 @@ class Gl2DCanvas extends fl.GlWindow {
       aVertexPosition = glGetAttribLocation(program, 'aVertexPosition');
       glEnableVertexAttribArray(aVertexPosition);
       uPMatrix = glGetUniformLocation(program, 'uPMatrix');
-      uViewportWidth = glGetUniformLocation(program, 'viewportWidth');
-      uViewportHeight = glGetUniformLocation(program, 'viewportHeight');
+      uViewport = glGetUniformLocation(program, 'viewport');
     }
   }
 
@@ -209,7 +208,7 @@ void main(void) {
   /// Fragment shader editor
   fl.TextEditor editor;
 
-  /// Recompile button.
+  /// Recompile button
   fl.Button button;
 
   /// Text buffer for the editor
@@ -219,24 +218,26 @@ void main(void) {
   Gl2DCanvas canvas;
 
   /// Constructor
-  ShaderEditor(int _w, int _h, String l) : super(_w, _h, l) {
+  ShaderEditor(int _w, int _h, String l, [String defaultPath = null])
+      : super(_w, _h, l) {
     color = fl.WHITE;
     final width = _w;
     final height = _h;
-    final half = (_w / 2).round();
+    final half1 = (_w / 2).round();
+    final half2 = width - half1;
 
     // Create canvas.
-    canvas = new Gl2DCanvas(0, 0, half, height);
+    canvas = new Gl2DCanvas(0, 0, half1, height);
 
     // Create button.
-    button = new fl.Button(half, 0, width - half, 40, 'Recompile!');
+    button = new fl.Button(half1, 0, half2, 40, 'Recompile!');
     button.box = fl.FLAT_BOX;
     button.color = fl.WHITE;
     button.labelsize = 20;
-    button.onCallback.listen((_) => update());
+    button.onCallback.listen((_) => compile());
 
     // Create editor.
-    editor = new fl.TextEditor(half, button.h, width - half, height - button.h);
+    editor = new fl.TextEditor(half1, button.h, half2, height - button.h);
     editor.box = fl.FLAT_BOX;
     editor.cursorStyle = fl.TextDisplay.SIMPLE_CURSOR;
     editor.cursorColor = fl.rgbColor(64);
@@ -267,18 +268,29 @@ void main(void) {
       }
     });
 
-    // Bind text buffer to editor and load cool mandelbrot shader.
+    // Bind text buffer to editor.
     editor.buffer = buffer;
-    buffer.text = mandelbrotShader;
+
+    // Load shader.
+    if (defaultPath != null) {
+      buffer.text = new File(defaultPath).readAsStringSync();
+    } else {
+      /// Resolve script directory (remove leading slash).
+      final scriptPath = Platform.script.toFilePath();
+      final scriptDir = scriptPath.substring(0, scriptPath.lastIndexOf('/'));
+      buffer.text =
+          new File('$scriptDir/shaders/default.frag').readAsStringSync();
+    }
 
     resizable = new fl.Widget(0, button.h, width, height - button.h);
     end();
 
     // Update shaders.
-    update();
+    compile();
   }
 
-  void update() {
+  /// Compile shader.
+  void compile() {
     button.labelfont = fl.COURIER;
     button.labelcolor = fl.BLACK;
     button.label = 'Recompile';
@@ -290,125 +302,9 @@ void main(void) {
   }
 }
 
-Future main() {
-  fl.scheme('gtk+');
-  var editor = new ShaderEditor(720, 480, 'Shadertoy');
+Future main(List<String> args) {
+  fl.scheme('gleam');
+  var editor = new ShaderEditor(720, 480, 'Shadertoy', args[0]);
   editor.show();
   return fl.runAsync();
 }
-
-/// Mandelbrot shader
-const mandelbrotShader = '''
-#version 130
-
-precision mediump float;
-
-varying vec2 position;
-uniform float viewportWidth, viewportHeight;
-
-vec3 hsv2rgb(vec3 c) {
-  vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
-  vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
-  return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
-}
-
-void main() {
-  int iter, iterations = 20;
-  float tempreal, tempimag, Creal, Cimag, r2;
-
-  vec2 viewport = vec2(viewportHeight, viewportHeight);
-  vec2 pos = fract((position + viewport) /
-    (2.0 * vec2(viewportHeight, viewportHeight)));
-
-  float real = (pos.s * 3.0) - 2.0;
-  float imag = (pos.t * 3.0) - 1.5;
-  Creal = real;
-  Cimag = imag;
-
-  for (iter = 0; iter < iterations; iter++) {
-    // z = z^2 + c
-    tempreal = real;
-    tempimag = imag;
-    real = (tempreal * tempreal) - (tempimag * tempimag);
-    imag = 2 * tempreal * tempimag;
-    real += Creal;
-    imag += Cimag;
-    r2 = (real * real) + (imag * imag);
-
-    if (r2 >= 4.0) {
-      break;
-    }
-  }
-
-  // Base the color on the number of iterations
-  float value = fract(iter / float(iterations));
-  vec4 color = vec4(hsv2rgb(vec3(value, 0.8, 0.8)), 1.0);
-
-  gl_FragColor = color;
-}
-''';
-
-/// HSV color gradient shader.
-const hsvGradientShader = '''
-#version 130
-
-precision mediump float;
-
-varying vec2 position;
-uniform float viewportWidth, viewportHeight;
-
-vec3 hsv2rgb(vec3 c) {
-  vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
-  vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
-  return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
-}
-
-void main() {
-  vec2 viewport = vec2(viewportWidth, viewportHeight);
-  vec2 pos = fract((position + viewport) /
-    (2.0 * vec2(viewportWidth, viewportHeight)));
-
-  gl_FragColor = vec4(hsv2rgb(vec3(pos.t, pos.s, 1.0)), 1.0);
-}
-''';
-
-/// Deformed HSV radial gradient shader
-const hsvDeformedGradientShader = '''
-#version 130
-
-precision mediump float;
-
-varying vec2 position;
-uniform float viewportWidth, viewportHeight;
-
-vec3 hsv2rgb(vec3 c) {
-  vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
-  vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
-  return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
-}
-
-vec3 skew(float a, vec3 vec) {
-  return mat3(
-    1.0, tan(a), 0.0,
-    0.0, 1.0, 0.0,
-    0.0, 0.0, 1.0) * vec;
-}
-
-void main() {
-  vec2 viewport = vec2(viewportWidth, viewportHeight);
-  vec2 pos = fract((position + viewport) /
-    (2.0 * vec2(viewportWidth, viewportHeight)));
-
-  gl_FragColor = vec4(
-    hsv2rgb(vec3(
-      5.0 * length(
-        skew(
-          sin(pos.t * 10.0),
-          vec3(
-            vec2(0.5, 1.0) *
-            vec2(pos - vec2(0.5, 0.5)),
-            0.0))),
-      1.0, 0.8)),
-    1.0);
-}
-''';
