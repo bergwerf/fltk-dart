@@ -19,6 +19,8 @@
 #include "gen/classes/Box.hpp"
 #include "gen/classes/Button.hpp"
 #include "gen/classes/Input.hpp"
+#include "gen/classes/Menu.hpp"
+#include "gen/classes/Choice.hpp"
 #include "gen/classes/TextBuffer.hpp"
 #include "gen/classes/TextDisplay.hpp"
 #include "gen/classes/TextEditor.hpp"
@@ -59,6 +61,8 @@ std::vector<fldart::FunctionMapping*> allFunctions = {
   fldart::Box::functionMapping,
   fldart::Button::functionMapping,
   fldart::Input::functionMapping,
+  fldart::Menu::functionMapping,
+  fldart::Choice::functionMapping,
   fldart::TextBuffer::functionMapping,
   fldart::TextDisplay::functionMapping,
   fldart::TextEditor::functionMapping,

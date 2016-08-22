@@ -1,0 +1,8 @@
+cname: Fl_Menu_
+dartname: Menu
+wrapper: false
+
+constructors: []
+
+methods:
+- void add([custom])
