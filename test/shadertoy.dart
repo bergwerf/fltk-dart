@@ -304,7 +304,8 @@ void main(void) {
 
 Future main(List<String> args) {
   fl.scheme('gleam');
-  var editor = new ShaderEditor(720, 480, 'Shadertoy', args[0]);
+  var editor =
+      new ShaderEditor(720, 480, 'Shadertoy', args.isNotEmpty ? args[0] : null);
   editor.show();
   return fl.runAsync();
 }
