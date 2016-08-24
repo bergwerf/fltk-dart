@@ -7,7 +7,7 @@
 namespace fldart {
 void _menu_callback(Fl_Widget*, void *data) {
   Dart_PersistentHandle closure = (Dart_PersistentHandle)data;
-  Dart_InvokeClosure(closure, 0, {});
+  HandleError(Dart_InvokeClosure(closure, 0, {}));
 }
 
 void Menu::void_add(Dart_NativeArguments arguments) {

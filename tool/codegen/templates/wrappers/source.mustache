@@ -14,12 +14,12 @@ namespace fldart {
 {{/ constructors }}
 {{# drawcb }}
 void {{{ class }}}_Wrapper::draw() {
-  Dart_Invoke(_ref, Dart_NewStringFromCString("draw"), 0, {});
+  HandleError(Dart_Invoke(_ref, Dart_NewStringFromCString("draw"), 0, {}));
 }
 
 {{/ drawcb }}
 void {{{ class }}}_Wrapper::callback_wrapper(Fl_Widget*, void *ptr) {
   Dart_PersistentHandle *ref = (Dart_PersistentHandle*)ptr;
-  Dart_Invoke(*ref, Dart_NewStringFromCString("doCallback"), 0, {});
+  HandleError(Dart_Invoke(*ref, Dart_NewStringFromCString("doCallback"), 0, {}));
 }
 }

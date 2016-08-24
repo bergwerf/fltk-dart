@@ -2,6 +2,10 @@
 // Use of this source code is governed by a MIT-style license
 // that can be found in the LICENSE file.
 
+// Force enable Cairo
+#define USE_X11 1
+#define FLTK_HAVE_CAIRO 1
+
 #include <vector>
 
 #include <FL/Fl.H>
@@ -27,6 +31,7 @@
 #include "gen/classes/Window.hpp"
 #include "gen/classes/DoubleWindow.hpp"
 #include "gen/classes/GlWindow.hpp"
+#include "gen/classes/CairoWindow.hpp"
 
 Dart_NativeFunction ResolveName(
   Dart_Handle name,
@@ -68,7 +73,8 @@ std::vector<fldart::FunctionMapping*> allFunctions = {
   fldart::TextEditor::functionMapping,
   fldart::Window::functionMapping,
   fldart::DoubleWindow::functionMapping,
-  fldart::GlWindow::functionMapping
+  fldart::GlWindow::functionMapping,
+  fldart::CairoWindow::functionMapping
 };
 
 Dart_NativeFunction ResolveName(Dart_Handle name, int argc, bool *autoSetupScope) {

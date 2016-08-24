@@ -8,7 +8,6 @@ namespace fldart {
 Fl_Text_Buffer_Wrapper::Fl_Text_Buffer_Wrapper(Dart_Handle ref) : Fl_Text_Buffer() {
   _ref = Dart_NewPersistentHandle(ref);
   add_modify_callback(buffer_modified_cb, &_ref);
-
 }
 
 void Fl_Text_Buffer_Wrapper::buffer_modified_cb(
@@ -23,6 +22,6 @@ void Fl_Text_Buffer_Wrapper::buffer_modified_cb(
     Dart_NewInteger((int64_t)nRestyled),
     deletedText == NULL ? Dart_EmptyString() : Dart_NewStringFromCString(deletedText)
   };
-  Dart_Invoke(*ref, Dart_NewStringFromCString("bufferModified"), 5, args);
+  HandleError(Dart_Invoke(*ref, Dart_NewStringFromCString("bufferModified"), 5, args));
 }
 }

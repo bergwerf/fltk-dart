@@ -1,0 +1,8 @@
+cname: Fl_Cairo_Window
+dartname: CairoWindow
+customWrapper: true
+
+constructors:
+- void (int w, int h, String l)
+
+methods: []

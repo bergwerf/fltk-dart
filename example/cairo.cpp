@@ -7,7 +7,6 @@
 #define FLTK_HAVE_CAIRO 1
 
 #include <FL/Fl.H>
-#include <FL/Fl_Box.H>
 #include <FL/Fl_Cairo_Window.H>
 
 static void centered_text(cairo_t *cr, double x0, double y0, double w0, double h0, const char *my_text) {
@@ -111,7 +110,7 @@ int main(int argc, char** argv) {
   window.resizable(&window);
   window.color(FL_WHITE);
   window.set_draw_cb(my_cairo_draw_cb);
-  window.show(argc,argv);
+  window.show();
 
   return Fl::run();
 }
