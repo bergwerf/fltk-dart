@@ -22,7 +22,7 @@ void callback(Fl_Widget *widget, void *data) {
 int main(int argc, char* argv[]) {
   Fl::scheme("gtk+");
   Fl_Double_Window* win = new Fl_Double_Window(420, 80, "Annual budget");
-  Fl_Choice* choice = new Fl_Choice(150, 20, 250, 40, "Space agencies    ");
+  Fl_Choice* choice = new Fl_Choice(150, 20, 250, 40, "Space agency:   ");
   choice -> add(
     "NASA", FL_CTRL + 'n', callback, new SpaceAgency{19300, FL_YELLOW});
   choice -> add(

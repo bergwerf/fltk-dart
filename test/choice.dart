@@ -18,7 +18,7 @@ void callback(fl.Widget choice, SpaceAgency agency) {
 int main() {
   fl.scheme('gleam');
   final win = new fl.DoubleWindow(420, 80, 'Annual budget');
-  final choice = new fl.Choice(150, 20, 250, 40, 'Space agencies    ');
+  final choice = new fl.Choice(150, 20, 250, 40, 'Space agency:   ');
   choice.add('NASA',
       shortcut: fl.CTRL + 'n',
       callback: callback,
