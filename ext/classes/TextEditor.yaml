@@ -1,7 +1,10 @@
 cname: Fl_Text_Editor
 dartname: TextEditor
+customWrapper: true
 
 constructors:
 - void (int x, int y, int w, int h, String l)
 
-methods: []
+methods:
+- void set_scrollbar_color(Fl_Color color)
+- void set_scrollbar_box(Fl_Boxtype boxtype)

@@ -12,3 +12,12 @@ functions:
 - name: scheme
   code: void Fl::scheme
   args: String scheme
+- name: background
+  code: void Fl::background
+  args: int r, int g, int b
+- name: background2
+  code: void Fl::background2
+  args: int r, int g, int b
+- name: foreground
+  code: void Fl::foreground
+  args: int r, int g, int b

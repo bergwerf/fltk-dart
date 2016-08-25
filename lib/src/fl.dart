@@ -53,3 +53,15 @@ int rgbColor(int r, [int g = -1, int b = -1]) {
     return r << 24 & 0xff000000 | g << 16 & 0xff0000 | b << 8 & 0xff00;
   }
 }
+
+/// Alias for calling [rgbColor] with only one argument.
+int grayscale(int l) => rgbColor(l);
+
+/// Set application-wide background color.
+void background(int r, int g, int b) native 'fldart::background';
+
+/// Set application-wide alternative background color.
+void background2(int r, int g, int b) native 'fldart::background2';
+
+/// Set application-wide foreground color.
+void foreground(int r, int g, int b) native 'fldart::foreground';

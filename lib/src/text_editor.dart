@@ -16,4 +16,14 @@ class TextEditor extends TextDisplay {
   /// Native constructor
   void _createTextEditor(int x, int y, int w, int h, String l)
       native 'fldart::TextEditor::constructor_TextEditor';
+
+  /// Set boxtype of the horizontal and vertical scrollbar.
+  set scrollbarBox(Boxtype boxtype) => _scrollbarBox(boxtype.index);
+
+  void _scrollbarBox(int boxtype)
+      native 'fldart::TextEditor::void_set_scrollbar_box';
+
+  /// Set color of the horizontal and vertical scrollbar track.
+  set scrollbarTrackColor(int color)
+      native 'fldart::TextEditor::void_set_scrollbar_color';
 }
