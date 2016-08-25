@@ -13,22 +13,22 @@ struct SpaceAgency {
 };
 
 void callback(Fl_Widget *widget, void *data) {
-  Fl_Choice *choice = (Fl_Choice*)widget;
-  SpaceAgency *agency = (SpaceAgency*)data;
+  auto choice = (Fl_Choice*)widget;
+  auto agency = (SpaceAgency*)data;
   choice -> color(agency -> color);
   printf("%i USD\n", agency -> usdBudget);
 }
 
 int main(int argc, char* argv[]) {
   Fl::scheme("gtk+");
-  Fl_Double_Window* win = new Fl_Double_Window(420, 80, "Annual budget");
-  Fl_Choice* choice = new Fl_Choice(150, 20, 250, 40, "Space agency:   ");
+  auto window = new Fl_Double_Window(420, 80, "Annual budget");
+  auto choice = new Fl_Choice(150, 20, 250, 40, "Space agency:   ");
   choice -> add(
     "NASA", FL_CTRL + 'n', callback, new SpaceAgency{19300, FL_YELLOW});
   choice -> add(
     "Roscosmos", FL_CTRL + 'r', callback, new SpaceAgency{5600, FL_GREEN});
   choice -> add(
     "ESA", FL_CTRL + 'e', callback, new SpaceAgency{5510, FL_CYAN});
-  win -> show();
+  window -> show();
   return Fl::run();
 }

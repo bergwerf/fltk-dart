@@ -14,10 +14,10 @@ void button_cb(Fl_Widget *obj, void*) {
 
 int main(int argc, char *argv[]) {
   Fl::scheme("gleam");
-  Fl_Window *win = new Fl_Window(300, 200, "Click the button...");
-  Fl_Button *but = new Fl_Button(0, 0, win -> w(), win -> h(), "ON");
-  but -> callback((Fl_Callback*)button_cb);
-  win -> end();
-  win -> show();
+  auto window = new Fl_Window(300, 200, "Click the button...");
+  auto button = new Fl_Button(0, 0, window -> w(), window -> h(), "ON");
+  button -> callback((Fl_Callback*)button_cb);
+  window -> end();
+  window -> show();
   return Fl::run();
 }

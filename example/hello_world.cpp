@@ -8,8 +8,8 @@
 
 int main(int argc, char **argv) {
   Fl::scheme("gleam");
-  Fl_Window *window = new Fl_Window(350, 180, "FLTK");
-  Fl_Box *box = new Fl_Box(20, 40, 310, 100, "Hello, World!");
+  auto window = new Fl_Window(350, 180, "FLTK");
+  auto box = new Fl_Box(20, 40, 310, 100, "Hello, World!");
   box -> box(FL_UP_BOX);
   box -> labelsize(36);
   box -> labelfont(FL_BOLD + FL_ITALIC);

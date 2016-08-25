@@ -26,9 +26,9 @@ class XWidget : public Fl_Widget {
 };
 
 int main() {
-  Fl_Double_Window *win = new Fl_Double_Window(200, 200, "X");
-  XWidget *x = new XWidget(0, 0, win -> w(), win -> h());
-  win -> resizable(x);
-  win -> show();
+  auto window = new Fl_Double_Window(200, 200, "X");
+  auto x = new XWidget(0, 0, window -> w(), window -> h());
+  window -> resizable(x);
+  window -> show();
   return Fl::run();
 }

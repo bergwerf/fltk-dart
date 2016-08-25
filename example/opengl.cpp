@@ -46,10 +46,10 @@ class MyGlWindow : public Fl_Gl_Window {
 };
 
 int main() {
-  Fl_Double_Window win(200, 200, "OpenGL X");
-  MyGlWindow mygl(0, 0, win.w(), win.h());
-  win.end();
-  win.resizable(mygl);
-  win.show();
+  auto window = new Fl_Double_Window(200, 200, "OpenGL X");
+  auto mygl = new MyGlWindow(0, 0, window -> w(), window -> h());
+  window -> end();
+  window -> resizable(mygl);
+  window -> show();
   return Fl::run();
 }

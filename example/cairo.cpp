@@ -105,12 +105,12 @@ static void my_cairo_draw_cb(Fl_Cairo_Window *window, cairo_t *cr) {
 }
 
 int main(int argc, char** argv) {
-  Fl_Cairo_Window window(300, 300);
+  auto window = new Fl_Cairo_Window(300, 300);
 
-  window.resizable(&window);
-  window.color(FL_WHITE);
-  window.set_draw_cb(my_cairo_draw_cb);
-  window.show();
+  window -> resizable(window);
+  window -> color(FL_WHITE);
+  window -> set_draw_cb(my_cairo_draw_cb);
+  window -> show();
 
   return Fl::run();
 }
