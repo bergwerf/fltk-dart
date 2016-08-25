@@ -1,6 +1,7 @@
 enums:
-- Fl_Boxtype
+- Fl::Fl_Option
 - Fl_Labeltype
+- Fl_Boxtype
 - Fl_Mode
 
 typedefs:

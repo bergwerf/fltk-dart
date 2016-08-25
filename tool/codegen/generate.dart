@@ -39,7 +39,7 @@ const customMethod = '[custom]';
 
 final functionRegex = new RegExp(r'([A-z_0-9]*)\s([A-z_0-9:->]*)');
 final methodRegex = new RegExp(r'([A-z_0-9]*)\s([A-z_0-9]*)\((.*)\)');
-final argRegex = new RegExp(r'\s*([A-z_0-9*]+)\s+([A-z_0-9]*)');
+final argRegex = new RegExp(r'\s*([A-z:_0-9*]+)\s+([A-z_0-9]*)');
 
 /// Types that do not have to be casted.
 const List<String> noCastTypes = const ['int', 'double', 'bool', 'Uint8List'];

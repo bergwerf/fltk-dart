@@ -6,11 +6,25 @@ part of fltk;
 
 // Fl_Color constants
 
+/// The default foreground color for labels and text
+const FOREGROUND_COLOR = 0;
+
+/// The default background color
+const BACKGROUND_COLOR = 49;
+
+/// The default background color for text, list, and valuator widgets
+const BACKGROUND2_COLOR = 7;
+
+/// The inactive foreground color
+const INACTIVE_COLOR = 8;
+
+/// The default selection/highlight color
+const SELECTION_COLOR = 15;
+
 const GRAY0 = 32;
 const DARK3 = 39;
 const DARK2 = 45;
 const DARK1 = 47;
-const BACKGROUND_COLOR = 49;
 const LIGHT1 = 50;
 const LIGHT2 = 52;
 const LIGHT3 = 54;

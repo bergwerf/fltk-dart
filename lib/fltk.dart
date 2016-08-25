@@ -16,6 +16,7 @@ import 'package:cairodart/cairodart.dart' as cairo;
 part 'src/enums/labeltype.dart';
 part 'src/enums/shortcut.dart';
 part 'src/enums/boxtype.dart';
+part 'src/enums/option.dart';
 part 'src/enums/color.dart';
 part 'src/enums/align.dart';
 part 'src/enums/font.dart';

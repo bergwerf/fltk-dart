@@ -65,3 +65,11 @@ void background2(int r, int g, int b) native 'fldart::background2';
 
 /// Set application-wide foreground color.
 void foreground(int r, int g, int b) native 'fldart::foreground';
+
+/// Set color index color value.
+void setColor(int index, int r, int g, int b) native 'fldart::setColor';
+
+void _option(int option, bool value) native 'fldart::option';
+
+/// Set option value.
+void option(Option option, bool value) => _option(option.index, value);

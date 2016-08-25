@@ -20,8 +20,8 @@ class DartPad extends fl.DoubleWindow {
   /// Toolbar group
   fl.Group toolbar;
 
-  /// Run and format button
-  fl.Button runButton, formatButton;
+  /// Run button
+  fl.Button runButton;
 
   /// Console output
   fl.TextEditor console;
@@ -32,9 +32,13 @@ class DartPad extends fl.DoubleWindow {
   /// Constructor
   DartPad(int _w, int _h, String l, [String defaultPath = null])
       : super(_w, _h, l) {
+    // Global theme settings
     fl.scheme('gleam');
     fl.background(38, 38, 38);
     fl.foreground(51, 51, 51);
+    fl.option(fl.Option.VISIBLE_FOCUS, false);
+    fl.setColor(fl.SELECTION_COLOR, 64, 64, 64);
+
     final bg1 = fl.grayscale(51);
     final bg2 = fl.grayscale(32);
 
@@ -51,13 +55,6 @@ class DartPad extends fl.DoubleWindow {
     toolbar.box = fl.FLAT_BOX;
     toolbar.color = bg1;
 
-    // Create format button.
-    formatButton = new fl.Button(pad, pad, 120, bh, 'Format code');
-    formatButton.box = fl.FLAT_BOX;
-    formatButton.color = bg1;
-    formatButton.labelcolor = fl.grayscale(255);
-    formatButton.labelsize = 16;
-
     // Create run button.
     runButton = new fl.Button(half1 - 80 - pad, pad, 80, bh, '▶  Run');
     runButton.box = fl.FLAT_BOX;
@@ -65,8 +62,8 @@ class DartPad extends fl.DoubleWindow {
     runButton.labelcolor = fl.grayscale(255);
     runButton.labelsize = 16;
 
-    toolbar.resizable = new fl.Widget(pad + formatButton.w, 0,
-        toolbar.w - 2 * pad - formatButton.w - runButton.w, toolbar.h);
+    toolbar.resizable =
+        new fl.Widget(0, 0, toolbar.w - pad - runButton.w, toolbar.h);
     toolbar.end();
 
     // Fancy text editor setup
@@ -112,7 +109,7 @@ class DartPad extends fl.DoubleWindow {
     // Setup console buffer.
     consoleBuffer = new fl.TextBuffer();
     console.buffer = consoleBuffer;
-    consoleBuffer.text = 'Welcome to DartPad!';
+    consoleBuffer.text = '\nWelcome to DartPad!';
 
     resizable = new fl.Widget(0, toolbar.h, width, height - toolbar.h);
   }
