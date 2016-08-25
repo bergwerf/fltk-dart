@@ -9,11 +9,12 @@ import 'package:fltk/fltk.dart' as fl;
 /// Async version of callback.dart
 Future main() {
   fl.scheme('gleam');
-  var win = new fl.Window(300, 200, 'Click the button...');
-  var but = new fl.Button(0, 0, win.w, win.h, 'ON');
-  but.onCallback.listen((_) => but.label = but.label == 'ON' ? 'OFF' : 'ON');
-  win.end();
-  win.show();
+  var window = new fl.Window(300, 200, 'Click the button...');
+  var button = new fl.Button(0, 0, window.w, window.h, 'ON');
+  button.onCallback
+      .listen((_) => button.label = button.label == 'ON' ? 'OFF' : 'ON');
+  window.end();
+  window.show();
 
   return fl.runAsync();
 }

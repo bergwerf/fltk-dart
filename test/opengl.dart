@@ -171,9 +171,9 @@ gl_FragColor = vec4(color, 0.5, 1.0);
 }
 
 int main() {
-  var win = new fl.DoubleWindow(200, 200, "OpenGLES");
-  var glctx = new MyGlWindow(0, 0, win.w, win.h);
-  win.resizable = glctx;
-  win.show();
+  var window = new fl.DoubleWindow(200, 200, "OpenGLES");
+  var glctx = new MyGlWindow(0, 0, window.w, window.h);
+  window.resizable = glctx;
+  window.show();
   return fl.run();
 }

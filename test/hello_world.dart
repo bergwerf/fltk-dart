@@ -17,10 +17,5 @@ int main() {
   window.end();
   window.show();
 
-  // Basically the same as fl.run()
-  int state = 1;
-  while (state > 0) {
-    state = fl.wait();
-  }
-  return state;
+  return fl.run();
 }

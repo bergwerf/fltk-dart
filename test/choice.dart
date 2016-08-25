@@ -16,8 +16,8 @@ void callback(fl.Widget choice, SpaceAgency agency) {
 }
 
 int main() {
-  fl.scheme('gleam');
-  final win = new fl.DoubleWindow(420, 80, 'Annual budget');
+  fl.scheme('gtk+');
+  final window = new fl.DoubleWindow(420, 80, 'Annual budget');
   final choice = new fl.Choice(150, 20, 250, 40, 'Space agency:   ');
   choice.add('NASA',
       shortcut: fl.CTRL + 'n',
@@ -31,6 +31,6 @@ int main() {
       shortcut: fl.CTRL + 'e',
       callback: callback,
       userData: new SpaceAgency(5510, fl.CYAN));
-  win.show();
+  window.show();
   return fl.run();
 }

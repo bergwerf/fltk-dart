@@ -8,6 +8,8 @@ import 'package:image/image.dart';
 import 'package:fltk/fltk.dart' as fl;
 
 int main() {
+  fl.scheme('gleam');
+
   // Using a single buffered window gives issues with image alpha rendering.
   var window = new fl.DoubleWindow(160, 160);
   var btn = new fl.Button(20, 20, 120, 120);
@@ -16,6 +18,5 @@ int main() {
   window.resizable = btn;
   window.show();
 
-  fl.scheme('gleam');
   return fl.run();
 }

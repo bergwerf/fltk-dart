@@ -6,7 +6,6 @@ import 'package:fltk/fltk.dart' as fl;
 
 /// Widget that draws two diagonal lines
 class XWidget extends fl.Widget {
-  /// Constuctor
   XWidget(int x, int y, int w, int h) : super(x, y, w, h);
 
   /// Draws the lines
@@ -20,9 +19,9 @@ class XWidget extends fl.Widget {
 }
 
 int main() {
-  var win = new fl.DoubleWindow(200, 200, 'X');
-  var x = new XWidget(0, 0, win.w, win.h);
-  win.resizable = x;
-  win.show();
+  var window = new fl.DoubleWindow(200, 200, 'X');
+  var x = new XWidget(0, 0, window.w, window.h);
+  window.resizable = x;
+  window.show();
   return fl.run();
 }

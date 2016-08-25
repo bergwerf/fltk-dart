@@ -10,10 +10,10 @@ void buttonCb(fl.Widget obj, _) {
 
 int main() {
   fl.scheme('gleam');
-  var win = new fl.Window(300, 200, 'Click the button...');
-  var but = new fl.Button(0, 0, win.w, win.h, 'ON');
-  but.callback = buttonCb;
-  win.end();
-  win.show();
+  var window = new fl.Window(300, 200, 'Click the button...');
+  var button = new fl.Button(0, 0, window.w, window.h, 'ON');
+  button.callback = buttonCb;
+  window.end();
+  window.show();
   return fl.run();
 }
