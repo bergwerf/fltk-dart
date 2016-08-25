@@ -15,6 +15,10 @@ import 'package:mustache/mustache.dart';
 ///   (like String) and some using their C++/FLTK type (like Fl_Font).
 ///   Don't ask why, it's a mess, but it works.
 
+/// Convenience variables for interacting with the mustache template.
+const mustacheYes = const [1];
+const mustacheNo = const [];
+
 /// Path from the repository root to this directory
 const root = 'tool/codegen';
 
@@ -38,7 +42,7 @@ final methodRegex = new RegExp(r'([A-z_0-9]*)\s([A-z_0-9]*)\((.*)\)');
 final argRegex = new RegExp(r'\s*([A-z_0-9*]+)\s+([A-z_0-9]*)');
 
 /// Types that do not have to be casted.
-const List<String> noCastTypes = const ['int', 'double', 'bool'];
+const List<String> noCastTypes = const ['int', 'double', 'bool', 'Uint8List'];
 
 /// Dart API functions for converting the given C types to a Dart_Handle.
 const Map<String, String> toDartHandle = const {
@@ -63,7 +67,8 @@ const Map<String, String> typeToCType = const {
   'int': 'int64_t',
   'double': 'double',
   'bool': 'bool',
-  'String': 'const char*'
+  'String': 'const char*',
+  'Uint8List': 'uint8_t*'
 };
 
 /// Load settings.
@@ -217,7 +222,9 @@ void processClassFile(
       'header': 'FLDART_${content['cname'].toUpperCase()}_WRAPPER_H',
       'class': content['cname'],
       'constructors': wrapperconstructors,
-      'drawcb': settings['drawcb'].contains(content['cname']) ? [1] : []
+      'drawcb': settings['drawcb'].contains(content['cname'])
+          ? mustacheYes
+          : mustacheNo
     };
 
     // Write wrapper files.
@@ -347,9 +354,11 @@ Args parseArguments(String argstr, [int argiOffset = 0]) {
   if (argstr != null && argstr.isNotEmpty) {
     var list = argstr.split(',');
     for (var i = 0; i < list.length; i++) {
-      var match = argRegex.firstMatch(list[i]);
-      var primitiveType = primitiveCType(match.group(1));
-      var argname = match.group(2);
+      final match = argRegex.firstMatch(list[i]);
+      final inputType = match.group(1);
+      final primitiveType = primitiveCType(inputType);
+      final argname = match.group(2);
+
       args.data.add({
         'argi': i + argiOffset,
         'name': argname,
@@ -357,11 +366,14 @@ Args parseArguments(String argstr, [int argiOffset = 0]) {
 
         // Convert from Dart_Handle to C type.
         'conv': dartToCTypeConv[primitiveType],
+        'convargs': primitiveType == 'intptr_t' ? '0, &$argname' : '&$argname',
 
-        'convargs': primitiveType == 'intptr_t' ? '0, &$argname' : '&$argname'
+        // Special behaviour for Uint8List.
+        'simpleconv': inputType == 'Uint8List' ? mustacheNo : mustacheYes,
+        'uint8listconv': inputType == 'Uint8List' ? mustacheYes : mustacheNo
       });
 
-      args.list.add(castToType(match.group(1), match.group(2), true, false));
+      args.list.add(castToType(inputType, argname, true, false));
     }
   }
 

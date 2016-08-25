@@ -13,3 +13,6 @@ functions:
 - name: line2
   code: void fl_line
   args: int x, int y, int x1, int y1, int x2, int y2
+- name: drawImage
+  code: void fl_draw_image
+  args: Uint8List buffer, int x, int y, int w, int h, int d, int l

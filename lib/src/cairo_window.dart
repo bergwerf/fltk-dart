@@ -8,7 +8,7 @@ part of fltk;
 class CairoContext extends NativeFieldWrapperClass2 {}
 
 /// Cairo draw callback
-typedef void CairoDrawCb(CairoWindow window, cairodart.Context ctx);
+typedef void CairoDrawCb(CairoWindow window, cairo.Context ctx);
 
 /// Fl_Cairo_Window
 class CairoWindow extends DoubleWindow {
@@ -27,13 +27,13 @@ class CairoWindow extends DoubleWindow {
 
   /// Internal draw callback
   /// Do not override this method!
-  void runDrawCb(CairoContext cairo) {
-    var ctx = new cairodart.Context.fromNative(cairo);
+  void runDrawCb(CairoContext nativeWrapper) {
+    var ctx = new cairo.Context.fromNative(nativeWrapper);
     onDraw(ctx);
   }
 
   /// Draw callback.
-  void onDraw(cairodart.Context ctx) {
+  void onDraw(cairo.Context ctx) {
     if (_drawCallback != null) {
       _drawCallback(this, ctx);
     }

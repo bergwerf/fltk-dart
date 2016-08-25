@@ -8,8 +8,7 @@ environment:
 dependencies:
   image:      ^1.1.26
   dartgl:     ^0.1.3
-  cairodart:
-    path: /home/herman/repos/universe/cairodart
+  cairodart:  ^0.2.1
 dev_dependencies:
   glob:       ^1.1.2
   yaml:       ^2.1.8

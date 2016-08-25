@@ -17,7 +17,19 @@ void {{{ name }}}(Dart_NativeArguments arguments) {
   Dart_EnterScope();
   {{! Resolve input variables}}
   {{# args }}
-  HandleError({{{ conv }}}(HandleError(Dart_GetNativeArgument(arguments, {{{ argi }}})), &{{{ name }}}));
+  {{# simpleconv }}
+  HandleError({{{ conv }}}(HandleError(Dart_GetNativeArgument(arguments, {{{ argi }}})), {{{ convargs }}}));
+  {{/ simpleconv }}
+  {{# uint8listconv }}
+  void **_arg{{{ argi }}}_data;
+  Dart_TypedData_Type *_arg{{{ argi }}}_type = new Dart_TypedData_Type(Dart_TypedData_Type::Dart_TypedData_kUint8);
+  Dart_Handle _arg{{{ argi }}}_handle = HandleError(Dart_GetNativeArgument(arguments, {{{ argi }}}));
+  int64_t _arg{{{ argi }}}_length;
+  HandleError(Dart_ListLength(_arg{{{ argi }}}_handle, &_arg{{{ argi }}}_length));
+  HandleError(Dart_TypedDataAcquireData(_arg{{{ argi }}}_handle, _arg{{{ argi }}}_type, _arg{{{ argi }}}_data, &_arg{{{ argi }}}_length));
+  HandleError(Dart_TypedDataReleaseData(_arg{{{ argi }}}_handle));
+  {{{ name }}} = (uint8_t*)*_arg{{{ argi }}}_data;
+  {{/ uint8listconv }}
   {{/ args }}
   {{! Execute the function call }}
   {{{ call }}};

@@ -6,12 +6,17 @@ part of fltk;
 
 /// Bindings for fl_draw.H
 
+/// Set the drawing color.
 void color(int c) native 'fldart::color';
 
-// Line drawing
+/// Draw line from ([x], [y]) to ([x1], [y1]).
 void _line1(int x, int y, int x1, int y1) native 'fldart::line1';
+
+/// Draw line from ([x], [y]) to ([x1], [y1]) and then to ([x2], [y2]).
 void _line2(int x, int y, int x1, int y1, int x2, int y2)
     native 'fldart::line2';
+
+/// Draw line from ([x], [y]) to ([x1], [y1]) and optionally to ([x2], [y2]).
 void line(int x, int y, int x1, int y1, [int x2 = null, int y2 = null]) {
   if (x2 != null && y2 != null) {
     _line2(x, y, x1, y1, x2, y2);
@@ -19,3 +24,7 @@ void line(int x, int y, int x1, int y1, [int x2 = null, int y2 = null]) {
     _line1(x, y, x1, y1);
   }
 }
+
+/// Draw image data.
+void drawImage(Uint8List buffer, int x, int y, int w, int h,
+    [int d = 3, int l = 0]) native 'fldart::drawImage';

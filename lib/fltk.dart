@@ -11,7 +11,7 @@ import 'dart:typed_data';
 import 'dart:async';
 
 import 'package:image/image.dart';
-import 'package:cairodart/cairodart.dart' as cairodart;
+import 'package:cairodart/cairodart.dart' as cairo;
 
 part 'src/enums/labeltype.dart';
 part 'src/enums/shortcut.dart';
@@ -37,3 +37,4 @@ part 'src/window.dart';
 part 'src/double_window.dart';
 part 'src/gl_window.dart';
 part 'src/cairo_window.dart';
+part 'src/cairo_surface.dart';
