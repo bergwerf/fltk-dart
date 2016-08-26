@@ -42,7 +42,7 @@ compile $EXT_SRC/main.cpp
 compile $EXT_SRC/common.c
 
 # Compile individual classes.
-for f in {$EXT_SRC/gen/funcs/*.cpp,$EXT_SRC/gen/wrappers/*.cpp,$EXT_SRC/gen/classes/*.cpp,$EXT_SRC/wrappers/*.cpp}
+for f in {$EXT_SRC/gen/functions/*.cpp,$EXT_SRC/gen/wrappers/*.cpp,$EXT_SRC/gen/classes/*.cpp,$EXT_SRC/wrappers/*.cpp}
 do
   compile $f
 done
@@ -53,7 +53,7 @@ done
 # - add -m32 flag on 32 bit systems.
 # - add -g to generate debug info.
 gcc -g -shared -Wl,-soname,libfldart.so -o lib/libfldart.so \
-    $EXT_SRC/gen/funcs/*.o $EXT_SRC/gen/wrappers/*.o $EXT_SRC/gen/classes/*.o $EXT_SRC/wrappers/*.o $EXT_SRC/*.o \
+    $EXT_SRC/gen/functions/*.o $EXT_SRC/gen/wrappers/*.o $EXT_SRC/gen/classes/*.o $EXT_SRC/wrappers/*.o $EXT_SRC/*.o \
     -lfltk_cairo\
     -lcairo -lpixman-1\
     -lfltk_gl\
@@ -62,4 +62,4 @@ gcc -g -shared -Wl,-soname,libfldart.so -o lib/libfldart.so \
     -lXcursor -lXfixes -lXext -lXft -lfontconfig -lXinerama -lpthread -ldl -lm -lX11
 
 # Clean up.
-rm $EXT_SRC/gen/{funcs,wrappers,classes}/*.o $EXT_SRC/wrappers/*.o $EXT_SRC/*.o
+rm $EXT_SRC/gen/{functions,wrappers,classes}/*.o $EXT_SRC/wrappers/*.o $EXT_SRC/*.o

@@ -8,7 +8,9 @@ part of fltk;
 int run() native 'fldart::run';
 
 /// Runs FLTK asynchronously (using some black magic).
-/// TODO: try to implement this using isolates and sendports for callbacks?
+///
+/// It is important to use [Timer.run] instead of [scheduleMicrotask] so Timer
+/// events are not blocked.
 Future runAsync() {
   final completer = new Completer();
   Function cycle;
@@ -17,11 +19,11 @@ Future runAsync() {
     if (state == 0) {
       completer.complete();
     } else {
-      new Future.microtask(cycle);
+      Timer.run(cycle);
     }
   };
 
-  new Future.microtask(cycle);
+  Timer.run(cycle);
   return completer.future;
 }
 

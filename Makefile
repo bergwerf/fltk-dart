@@ -4,8 +4,8 @@ install-hook:
 
 generate-bindings:
 	# Don't use a directory regex or ZSH will start asking confirmations.
-	rm -f ext/src/gen/classes/* ext/src/gen/funcs/* ext/src/gen/wrappers/*
-	mkdir -p ext/src/gen/classes ext/src/gen/funcs ext/src/gen/wrappers
+	rm -f ext/src/gen/classes/* ext/src/gen/functions/* ext/src/gen/wrappers/*
+	mkdir -p ext/src/gen/classes ext/src/gen/functions ext/src/gen/wrappers
 	dart tool/codegen/generate.dart
 
 fltk_version = "1.3.3"

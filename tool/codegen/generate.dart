@@ -32,7 +32,7 @@ const customSourcesRelative = '../../custom';
 final classFiles = new Glob("ext/classes/*.yaml");
 
 /// All functions input files.
-final funcsFiles = new Glob("ext/functions/*.yaml");
+final functionsFiles = new Glob("ext/functions/*.yaml");
 
 /// Arguments placeholder for custom methods.
 const customMethod = '[custom]';
@@ -89,10 +89,10 @@ int main(List<String> args) {
   var wrapperSourceTemplate = new Template(
       new File('$root/templates/wrappers/source.mustache').readAsStringSync(),
       lenient: true);
-  var funcsHeaderTemplate = new Template(
+  var functionsHeaderTemplate = new Template(
       new File('$root/templates/functions/header.mustache').readAsStringSync(),
       lenient: true);
-  var funcsSourceTemplate = new Template(
+  var functionsSourceTemplate = new Template(
       new File('$root/templates/functions/source.mustache').readAsStringSync(),
       lenient: true);
 
@@ -109,9 +109,9 @@ int main(List<String> args) {
   }
 
   // Process function files.
-  for (var file in funcsFiles.listSync()) {
-    processFuncsFile(
-        file, 'ext/src/gen/funcs', funcsHeaderTemplate, funcsSourceTemplate);
+  for (var file in functionsFiles.listSync()) {
+    processfunctionsFile(file, 'ext/src/gen/functions', functionsHeaderTemplate,
+        functionsSourceTemplate);
   }
 
   return 0;
@@ -236,7 +236,7 @@ void processClassFile(
 }
 
 /// Process a YAML file with function definitions.
-void processFuncsFile(
+void processfunctionsFile(
     File file, String dir, Template headerTemplate, Template sourceTemplate) {
   var content = loadYaml(file.readAsStringSync());
 
