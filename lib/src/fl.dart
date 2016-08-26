@@ -4,6 +4,9 @@
 
 part of fltk;
 
+/// () => void function
+typedef void _VoidFn();
+
 /// Calls [wait] in a loop until the return value is 0.
 int run() native 'fldart::run';
 
@@ -13,7 +16,7 @@ int run() native 'fldart::run';
 /// events are not blocked.
 Future runAsync() {
   final completer = new Completer();
-  Function cycle;
+  _VoidFn cycle;
   cycle = () {
     final state = check();
     if (state == 0) {

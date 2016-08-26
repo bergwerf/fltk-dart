@@ -6,6 +6,7 @@
 /// Simple Text Editor' tutorial from FLTK.
 
 import 'dart:async';
+import 'dart:isolate';
 
 import 'package:fltk/fltk.dart' as fl;
 
@@ -93,6 +94,7 @@ class DartPad extends fl.DoubleWindow {
     // Setup code buffer.
     codeBuffer = new fl.TextBuffer();
     codeEditor.buffer = codeBuffer;
+    codeBuffer.text = "print('Hello World!');\n";
 
     // Create console.
     final cpad = 20; // Console padding
@@ -109,9 +111,76 @@ class DartPad extends fl.DoubleWindow {
     // Setup console buffer.
     consoleBuffer = new fl.TextBuffer();
     console.buffer = consoleBuffer;
-    consoleBuffer.text = '\nWelcome to DartPad!';
+    consoleBuffer.text = '\nWelcome to DartPad!\n';
 
     resizable = new fl.Widget(0, toolbar.h, width, height - toolbar.h);
+
+    // Setup run code event.
+    runButton.onCallback.listen((_) {
+      var code = codeBuffer.text;
+
+      // Prepend line ending for search porposes.
+      code = '\n$code';
+
+      // Split code into imports and code.
+      final regex = new RegExp(r'''\n\s*import ["'].*["'];''');
+      final matches = regex.allMatches(code);
+      final splixIndex = matches.isNotEmpty ? matches.last.end : 0;
+      print(splixIndex);
+      final imports = code.substring(0, splixIndex);
+      code = code.substring(splixIndex);
+
+      // Wrap code in a special wrapper that proves a special print function.
+      final wrappedCode = '''
+/// All imports
+$imports
+
+/// Main
+main(List<String> args, SendPort __printSendPort) {
+  // Define new print function.
+  final print = (String line) {
+    __printSendPort.send(line);
+  };
+
+  // Run actual code.
+  $code
+}
+''';
+
+      // Receive port for isolate errors
+      final onError = new ReceivePort();
+      onError.listen((e) {
+        print('An error has occured:\n$e');
+      });
+
+      // Receive port for isolate print messages
+      final onPrint = new ReceivePort();
+      onPrint.listen((msg) {
+        println(msg);
+      });
+
+      // Receive port for isolate exit event
+      final onExit = new ReceivePort();
+      onExit.listen((msg) {
+        println('Isolate exited.');
+        onError.close();
+        onPrint.close();
+        onExit.close();
+      });
+
+      // Start isolate.
+      println('Starting isolate...');
+      Isolate.spawnUri(
+          new Uri.dataFromString(wrappedCode), [], onPrint.sendPort,
+          onError: onError.sendPort,
+          onExit: onExit.sendPort,
+          errorsAreFatal: true);
+    });
+  }
+
+  /// Add line to console.
+  void println(String line) {
+    consoleBuffer.text += '$line\n';
   }
 }
 
