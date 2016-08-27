@@ -9,7 +9,6 @@
 namespace fldart {
 void Widget::void_image(Dart_NativeArguments arguments) {
   // Local variables
-  intptr_t ptr;
   Fl_Widget_Wrapper *_ref;
   int64_t width, height, depth;
   void **data;
@@ -17,13 +16,12 @@ void Widget::void_image(Dart_NativeArguments arguments) {
   Dart_EnterScope();
 
   // Create pointer to FLTK object.
-  HandleError(Dart_GetNativeInstanceField(HandleError(Dart_GetNativeArgument(arguments, 0)), 0, &ptr));
-  _ref = (Fl_Widget_Wrapper*)ptr;
+  _ref = (Fl_Widget_Wrapper*)getptr(arguments, 0);
 
   // Get image dimensions.
-  HandleError(Dart_IntegerToInt64(HandleError(Dart_GetNativeArgument(arguments, 1)), &width));
-  HandleError(Dart_IntegerToInt64(HandleError(Dart_GetNativeArgument(arguments, 2)), &height));
-  HandleError(Dart_IntegerToInt64(HandleError(Dart_GetNativeArgument(arguments, 3)), &depth));
+  HandleError(Dart_IntegerToInt64(getarg(arguments, 1), &width));
+  HandleError(Dart_IntegerToInt64(getarg(arguments, 2), &height));
+  HandleError(Dart_IntegerToInt64(getarg(arguments, 3), &depth));
 
   // Get image data.
   Dart_TypedData_Type *type = new Dart_TypedData_Type(Dart_TypedData_Type::Dart_TypedData_kUint8);

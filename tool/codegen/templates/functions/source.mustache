@@ -18,7 +18,7 @@ void {{{ name }}}(Dart_NativeArguments arguments) {
   {{! Resolve input variables}}
   {{# args }}
   {{# simpleconv }}
-  HandleError({{{ conv }}}(HandleError(Dart_GetNativeArgument(arguments, {{{ argi }}})), {{{ convargs }}}));
+  HandleError({{{ conv }}}(getarg(arguments, {{{ argi }}}), {{{ convargs }}}));
   {{/ simpleconv }}
   {{# uint8listconv }}
   void **_arg{{{ argi }}}_data;

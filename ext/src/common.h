@@ -14,9 +14,16 @@ struct FunctionMapping {
   Dart_NativeFunction function;
 };
 
+/// Catch exceptions in a Dart_Handle
 Dart_Handle HandleError(Dart_Handle handle);
 
+/// Create a copy of the given string.
 const char* newstr(const char *src);
+
+/// Dart API helpers.
+Dart_Handle getarg(Dart_NativeArguments arguments, int n);
+Dart_Handle getfield(Dart_Handle container, const char *name);
+intptr_t getptr(Dart_NativeArguments arguments, int argn);
 }
 
 #endif

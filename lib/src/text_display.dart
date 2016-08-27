@@ -4,6 +4,16 @@
 
 part of fltk;
 
+/// Style_Table_Entry
+class StyleEntry {
+  final int color;
+  final int font;
+  final int size;
+
+  /// Default contructor
+  StyleEntry({this.color: BLACK, this.font: HELVETICA, this.size: 14});
+}
+
 /// Fl_Text_Display
 class TextDisplay extends Group {
   /// Cursor shape: I-beam
@@ -126,4 +136,8 @@ class TextDisplay extends Group {
 
   /// Scroll to the given row and collumn.
   void scroll(int row, int collumn) native 'fldart::TextDisplay::void_scroll';
+
+  /// Set the text highlighting data.
+  void highlightData(TextBuffer buffer, List<StyleEntry> styletable)
+      native 'fldart::TextDisplay::void_highlight_data';
 }

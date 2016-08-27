@@ -32,3 +32,4 @@ methods:
 - int linenumber_width()
 
 - void scroll(int row, int collumn)
+- void highlight_data([custom])

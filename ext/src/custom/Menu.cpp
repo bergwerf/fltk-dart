@@ -12,7 +12,6 @@ void _menu_callback(Fl_Widget*, void *data) {
 
 void Menu::void_add(Dart_NativeArguments arguments) {
   // Local variables
-  intptr_t ptr;
   Fl_Menu_ *_ref;
   const char *label;
   int64_t shortcut = 0;
@@ -21,14 +20,13 @@ void Menu::void_add(Dart_NativeArguments arguments) {
   Dart_EnterScope();
 
   // Create pointer to FLTK object.
-  HandleError(Dart_GetNativeInstanceField(HandleError(Dart_GetNativeArgument(arguments, 0)), 0, &ptr));
-  _ref = (Fl_Menu_*)ptr;
+  _ref = (Fl_Menu_*)getptr(arguments, 0);
 
   // Get arguments.
-  Dart_Handle _label = HandleError(Dart_GetNativeArgument(arguments, 1));
-  Dart_Handle _shortcut = HandleError(Dart_GetNativeArgument(arguments, 2));
-  Dart_Handle _callback = HandleError(Dart_GetNativeArgument(arguments, 3));
-  Dart_Handle _flags = HandleError(Dart_GetNativeArgument(arguments, 4));
+  Dart_Handle _label = getarg(arguments, 1);
+  Dart_Handle _shortcut = getarg(arguments, 2);
+  Dart_Handle _callback = getarg(arguments, 3);
+  Dart_Handle _flags = getarg(arguments, 4);
 
   HandleError(Dart_StringToCString(_label, &label));
   HandleError(Dart_IntegerToInt64(_shortcut, &shortcut));

@@ -38,7 +38,6 @@ void constructor_{{{ dartname }}}{{{ name }}}(Dart_NativeArguments arguments) {
 
 void {{{ name }}}(Dart_NativeArguments arguments) {
   {{! Local variables }}
-  intptr_t ptr;
   {{{ targetClass }}} *_ref;
   {{# args }}
   {{{ type }}} {{{ name }}};
@@ -46,12 +45,11 @@ void {{{ name }}}(Dart_NativeArguments arguments) {
   {{! Enter new Dart scope }}
   Dart_EnterScope();
   {{! Resolve class instance reference from memory address }}
-  HandleError(Dart_GetNativeInstanceField(HandleError(Dart_GetNativeArgument(arguments, 0)), 0, &ptr));
-  _ref = ({{{ targetClass }}}*)ptr;
+  _ref = ({{{ targetClass }}}*)getptr(arguments, 0);
   {{! Resolve other method arguments }}
   {{# args }}
   {{# simpleconv }}
-  HandleError({{{ conv }}}(HandleError(Dart_GetNativeArgument(arguments, {{{ argi }}})), {{{ convargs }}}));
+  HandleError({{{ conv }}}(getarg(arguments, {{{ argi }}}), {{{ convargs }}}));
   {{/ simpleconv }}
   {{# uint8listconv }}
   void **_arg{{{ argi }}}_data;
