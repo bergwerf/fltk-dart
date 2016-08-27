@@ -6,6 +6,9 @@ part of fltk;
 
 /// Special implementation of Cairo using an [ImageSurface] from `cairodart` and
 /// the `fl_draw_image` function from FLTK.
+///
+/// Note: this class is not currenly working because of issues with
+/// [ImageSurface.data] in `cairodart`.
 class CairoSurface extends Widget {
   /// Target [ImageSurface] (drawing canvas)
   cairo.ImageSurface _surface;
