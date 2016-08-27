@@ -23,13 +23,39 @@ String escapeAll(String src) {
   return dst;
 }
 
+/// Class to manage a single text display or editor.
+class StyledText<T extends fl.TextDisplay> {
+  T d;
+
+  /// Text buffer and style buffer
+  fl.TextBuffer textBuffer, styleBuffer;
+
+  StyledText() {
+    textBuffer = new fl.TextBuffer();
+    styleBuffer = new fl.TextBuffer();
+  }
+
+  /// Initialize
+  void init(List<fl.StyleEntry> styletable) {
+    d.highlightData(styleBuffer, styletable);
+    d.buffer = textBuffer;
+    d.box = fl.FLAT_BOX;
+    d.cursorStyle = fl.TextDisplay.SIMPLE_CURSOR;
+    d.textFont = fl.COURIER;
+    d.textSize = 18;
+    d.linenumberFont = fl.COURIER_BOLD;
+    d.scrollbarBox = fl.FLAT_BOX;
+    d.scrollbarTrackColor = fl.grayscale(51);
+  }
+}
+
 /// DartPad in Dart!
 class DartPad extends fl.DoubleWindow {
   /// Code editor
-  fl.TextEditor codeEditor;
+  final editor = new StyledText<fl.TextEditor>();
 
-  /// Code buffer
-  fl.TextBuffer codeBuffer;
+  /// Console output
+  final console = new StyledText<fl.TextDisplay>();
 
   /// Toolbar group
   fl.Group toolbar;
@@ -37,15 +63,59 @@ class DartPad extends fl.DoubleWindow {
   /// Run button
   fl.Button runButton;
 
-  /// Console output
-  fl.TextDisplay console;
+  /// Dart keywords
+  static const dartKeywords = const [
+    // Types
+    'num', 'int', 'double', 'String', 'List', 'Map',
 
-  /// Console buffer and stylebuffer
-  fl.TextBuffer consoleBuffer, consoleStyleBuffer;
+    // Keywords
+    'abstract', 'continue', 'false', 'new', 'this',
+    //
+    'as', 'default', 'final', 'null', 'throw',
+    //
+    'assert', 'deferred', 'finally', 'operator', 'true',
+    //
+    'async', 'do', 'for', 'part', 'try',
+    //
+    'async*', 'dynamic', 'get', 'rethrow', 'typedef',
+    //
+    'await', 'else', 'if', 'return', 'var',
+    //
+    'break', 'enum', 'implements', 'set', 'void',
+    //
+    'case', 'export', 'import', 'static', 'while',
+    //
+    'catch', 'external', 'in', 'super', 'with',
+    //
+    'class', 'extends', 'is', 'switch', 'yield',
+    //
+    'const', 'factory', 'library', 'sync*', 'yield*'
+  ];
 
-  /// Console styletable
-  final consoleStyleTable = [
+  /// Editor style table
+  final editorStyleTable = [
+    // A - Normal text
     new fl.StyleEntry(color: fl.grayscale(223), font: fl.COURIER, size: 18),
+
+    // B - Comments
+    new fl.StyleEntry(
+        color: fl.grayscale(151), font: fl.COURIER_BOLD_ITALIC, size: 18),
+
+    // C - Keywords
+    new fl.StyleEntry(
+        color: fl.rgbColor(255, 160, 255), font: fl.COURIER_BOLD, size: 18),
+
+    // D - Strings
+    new fl.StyleEntry(
+        color: fl.rgbColor(80, 223, 80), font: fl.COURIER, size: 18)
+  ];
+
+  /// Console style table
+  final consoleStyleTable = [
+    // A - Normal text
+    new fl.StyleEntry(color: fl.grayscale(223), font: fl.COURIER, size: 18),
+
+    // B - Errors
     new fl.StyleEntry(
         color: fl.rgbColor(255, 80, 80), font: fl.COURIER, size: 18)
   ];
@@ -56,7 +126,7 @@ class DartPad extends fl.DoubleWindow {
     // Global theme settings
     fl.scheme('gleam');
     fl.background(38, 38, 38);
-    fl.foreground(255, 255, 255);
+    fl.foreground(128, 128, 128);
     fl.option(fl.Option.VISIBLE_FOCUS, false);
     fl.setColor(fl.SELECTION_COLOR, 64, 64, 64);
 
@@ -87,154 +157,191 @@ class DartPad extends fl.DoubleWindow {
         new fl.Widget(0, 0, toolbar.w - pad - runButton.w, toolbar.h);
     toolbar.end();
 
-    // Fancy text display setup
-    final textDisplaySetup = (fl.TextDisplay editor) {
-      editor.box = fl.FLAT_BOX;
-      editor.cursorStyle = fl.TextDisplay.SIMPLE_CURSOR;
-      editor.textFont = fl.COURIER;
-      editor.textSize = 18;
-      editor.linenumberFont = fl.COURIER_BOLD;
-      editor.scrollbarBox = fl.FLAT_BOX;
-      editor.scrollbarTrackColor = bg1;
-    };
-
     // Create code editor.
-    codeEditor = new fl.TextEditor(0, toolbar.h, half1, height - toolbar.h);
-    textDisplaySetup(codeEditor);
-    codeEditor.color = bg1;
-    codeEditor.linenumberWidth = 60;
-    codeEditor.linenumberBgColor = bg1;
-    codeEditor.linenumberFgColor = fl.grayscale(128);
-    codeEditor.linenumberFormat = '%d ';
-    codeEditor.linenumberSize = 18;
-    codeEditor.cursorColor = fl.grayscale(223);
-    codeEditor.textColor = fl.grayscale(223);
+    editor.d = new fl.TextEditor(0, toolbar.h, half1, height - toolbar.h);
+    editor.init(editorStyleTable);
+    editor.d.color = bg1;
+    editor.d.linenumberWidth = 60;
+    editor.d.linenumberBgColor = bg1;
+    editor.d.linenumberFgColor = fl.grayscale(128);
+    editor.d.linenumberFormat = '%d ';
+    editor.d.linenumberSize = 18;
+    editor.d.cursorColor = fl.grayscale(223);
+    editor.d.textColor = fl.grayscale(223);
 
-    // Setup code buffer.
-    codeBuffer = new fl.TextBuffer();
-    codeEditor.buffer = codeBuffer;
-    codeBuffer.text = "print('Hello World!');\n";
+    // Setup editor syntax highlighting.
+    editor.textBuffer.onModify.listen((data) {
+      if (data.nInserted != 0 || data.nDeleted != 0) {
+        updateEditorSyntax();
+      }
+    });
+    editor.textBuffer.text = defaultDartCode;
 
     // Create console.
     final cpad = 20; // Console padding
-    console = new fl.TextDisplay(half1, 0, half2, height);
-    textDisplaySetup(console);
-    console.color = bg2;
-    console.linenumberWidth = cpad;
-    console.linenumberBgColor = bg2;
-    console.linenumberFormat = '';
-    console.linenumberSize = 10;
-
-    // Setup console buffer.
-    consoleBuffer = new fl.TextBuffer();
-    console.buffer = consoleBuffer;
-    consoleBuffer.text = '\nWelcome to DartPad!\n';
-
-    // Setup console highlighting.
-    consoleStyleBuffer = new fl.TextBuffer();
-    consoleStyleBuffer.text = strSeq('A', consoleBuffer.text.length);
-    console.highlightData(consoleStyleBuffer, consoleStyleTable);
+    console.d = new fl.TextDisplay(half1, 0, half2, height);
+    console.init(consoleStyleTable);
+    console.d.color = bg2;
+    console.d.linenumberWidth = cpad;
+    console.d.linenumberBgColor = bg2;
+    console.d.linenumberFormat = '';
+    console.d.linenumberSize = 10;
+    console.textBuffer.text = '\nWelcome to DartPad!\n';
+    console.styleBuffer.text = strSeq('A', console.textBuffer.text.length);
 
     // Make window resizable.
     resizable = new fl.Widget(0, toolbar.h, width, height - toolbar.h);
 
     // Setup run code event.
     runButton.onCallback.listen((_) {
-      var code = codeBuffer.text;
+      runCode();
+    });
+  }
 
-      // Prepend line ending for search porposes.
-      code = '\n$code';
+  /// Update editor syntax highlighting.
+  void updateEditorSyntax() {
+    final text = editor.textBuffer.text;
+    var style = '';
+    var current = 'A';
+    var next = 'A';
 
-      // Split code into imports and code.
-      final regex = new RegExp(r'''\n\s*import ["'].*["'];''');
-      final matches = regex.allMatches(code);
-      final splixIndex = matches.isNotEmpty ? matches.last.end : 0;
-      final imports = code.substring(0, splixIndex);
-      code = code.substring(splixIndex);
+    // String parsing
+    var strOpen = [0];
+    final handleStringDelimiter = (int n) {
+      if (strOpen[0] == 0) {
+        strOpen[0] = n;
+        current = 'D';
+        next = 'D';
+      } else if (strOpen[0] == n) {
+        strOpen[0] = 0;
 
-      // Wrap code in a special wrapper that proves a special print function.
-      final wrappedCode = '''
-/// All imports
-$imports
+        if (strOpen.length == 1) {
+          next = 'A';
+        }
+      }
+    };
 
-/// Main
-main(List<String> args, SendPort __printSendPort) {
-  // Define new print function.
-  final print = (String line) {
-    __printSendPort.send(line);
-  };
+    // Go through each character.
+    for (var i = 0; i < text.length; i++) {
+      current = next;
 
-  // Run actual code.
-  $code
-}
-''';
+      if (text.startsWith('//', i)) {
+        current = 'B';
+        next = 'B';
+      } else if (text.startsWith('\n', i)) {
+        current = 'A';
+        next = 'A';
+      } else if (current != 'B') {
+        if (text.startsWith("'", i)) {
+          handleStringDelimiter(1);
+        } else if (text.startsWith('"', i)) {
+          handleStringDelimiter(2);
+        } else if (strOpen[0] > 0 && text.startsWith('{', i)) {
+          strOpen.insert(0, 0);
+        } else if (strOpen.length > 1 && text.startsWith('}', i)) {
+          strOpen.removeAt(0);
+        } else {
+          for (final keyword in dartKeywords) {
+            if (text.startsWith('$keyword ', i)) {
+              style += strSeq('C', keyword.length);
+              i += keyword.length;
+              current = 'A';
+              continue;
+            }
+          }
+        }
+      }
 
-      // Code data URI.
-      final uri = new Uri.dataFromString(wrappedCode);
+      style += current;
+    }
 
-      // Receive port for isolate errors
-      final onError = new ReceivePort();
-      onError.listen((e) {
-        // Replace URI references in stack trace.
-        var msg = e.toString();
-        final regex = r'\(' + escapeAll(uri.toString()) + r':[0-9]*:[0-9]*\)';
-        msg = msg.replaceAll(new RegExp(regex), '(DartPad)');
+    editor.styleBuffer.text = style;
+    editor.d.redraw();
+  }
 
-        // Prettify a little more.
-        msg = msg.replaceFirst("'$uri': ", '');
-        msg = msg.replaceFirst(', #0', ',\n#0');
-        msg = msg.substring(1, msg.length - 2);
+  /// Execute editor code.
+  void runCode() {
+    var code = editor.textBuffer.text;
 
-        println('An error has occured:\n$msg', error: true);
-      });
+    // Prepend line ending for search porposes.
+    code = '\n$code';
 
-      // Receive port for isolate print messages
-      final onPrint = new ReceivePort();
-      onPrint.listen((msg) {
-        println(msg);
-      });
+    // Split code into imports and code.
+    final regex = new RegExp(r'''\n\s*import ["'].*["'];''');
+    final matches = regex.allMatches(code);
+    final splixIndex = matches.isNotEmpty ? matches.last.end : 0;
+    final imports = code.substring(0, splixIndex);
+    code = code.substring(splixIndex);
 
-      // Receive port for isolate exit event
-      final onExit = new ReceivePort();
-      onExit.listen((msg) {
-        println('Isolate exited.');
-        onError.close();
-        onPrint.close();
-        onExit.close();
-      });
+    // Wrap code in a special wrapper that proves a special print function.
+    final wrappedCode = createWrappedCode(imports, code);
 
-      // Start isolate.
-      println('\nSpawning isolate...');
-      runZoned(() {
-        Isolate.spawnUri(uri, [], onPrint.sendPort,
-            onError: onError.sendPort,
-            onExit: onExit.sendPort,
-            errorsAreFatal: true);
-      }, onError: (e) {
-        // Remove URI reference from error message.
-        var msg = e.toString();
-        msg = msg.replaceFirst(" '$uri': ", '\n');
+    // Code data URI.
+    final uri = new Uri.dataFromString(wrappedCode);
 
-        println(msg, error: true);
+    // Receive port for isolate errors
+    final onError = new ReceivePort();
+    onError.listen((e) {
+      // Replace URI references in stack trace.
+      var msg = e[0].toString();
+      final regex = r'\(' + escapeAll(uri.toString()) + r':[0-9]*:[0-9]*\)';
+      msg = msg.replaceAll(new RegExp(regex), '(DartPad)');
 
-        // Close send ports.
-        onError.close();
-        onPrint.close();
-        onExit.close();
-      });
+      // Prettify a little more.
+      msg = msg.replaceAll("'$uri': ", '');
+      msg = msg.replaceFirst(', #0', ',\n#0');
+      msg = msg.trimRight();
+
+      println('An error has occured:\n$msg', error: true);
+    });
+
+    // Receive port for isolate print messages
+    final onPrint = new ReceivePort();
+    onPrint.listen((msg) {
+      println(msg);
+    });
+
+    // Receive port for isolate exit event
+    final onExit = new ReceivePort();
+    onExit.listen((msg) {
+      println('Isolate exited.');
+      onError.close();
+      onPrint.close();
+      onExit.close();
+    });
+
+    // Start isolate.
+    println('\nSpawning isolate...');
+    runZoned(() {
+      Isolate.spawnUri(uri, [], onPrint.sendPort,
+          onError: onError.sendPort,
+          onExit: onExit.sendPort,
+          errorsAreFatal: true);
+    }, onError: (e) {
+      // Remove URI reference from error message.
+      var msg = e.toString();
+      msg = msg.replaceFirst(" '$uri': ", '\n');
+      msg = msg.replaceAll("'$uri': ", '');
+
+      println(msg, error: true);
+
+      // Close send ports.
+      onError.close();
+      onPrint.close();
+      onExit.close();
     });
   }
 
   /// Add line to console.
   void println(String line, {bool error: false}) {
     line = '$line\n';
-    consoleBuffer.text += line;
+    console.textBuffer.text += line;
 
     // Add to style buffer.
-    consoleStyleBuffer.text += strSeq(error ? 'B' : 'A', line.length);
+    console.styleBuffer.text += strSeq(error ? 'B' : 'A', line.length);
 
     // Scroll all the way down.
-    console.scroll(consoleBuffer.text.split('\n').length, 0);
+    console.d.scroll(console.textBuffer.text.split('\n').length, 0);
   }
 }
 
@@ -243,3 +350,51 @@ Future main(List<String> args) {
   pad.show();
   return fl.runAsync();
 }
+
+String createWrappedCode(String imports, String code) {
+  return '''
+/// All imports
+$imports
+
+/// Main
+main(List<String> args, SendPort __printSendPort) {
+// Define new print function.
+final print = (String line) {
+  __printSendPort.send(line);
+};
+
+// Run actual code.
+$code
+}
+''';
+}
+
+const defaultDartCode = r'''
+/// Recursive
+int fib(int n) {
+  if (n <= 1) {
+    return n;
+  }
+
+  return fib(n - 1) + fib(n - 2);
+}
+
+/// Loop
+int fastFib(int n) {
+  int a = 1, b = 0, temp;
+
+  while (n > 0){
+    temp = a;
+    a = a + b;
+    b = temp;
+    n--;
+  }
+
+  return b;
+}
+
+print('5th Fibonacci number: ${fib(5)}');
+print('10th Fibonacci number: ${fib(10)}');
+print('20th Fibonacci number: ${fastFib(20)}');
+print('40th Fibonacci number: ${fastFib(40)}');
+''';
