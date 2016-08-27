@@ -30,3 +30,5 @@ methods:
 - Fl_Fontsize linenumber_size()
 - void linenumber_width(int width)
 - int linenumber_width()
+
+- void scroll(int row, int collumn)

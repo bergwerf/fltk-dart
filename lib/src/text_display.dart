@@ -123,4 +123,7 @@ class TextDisplay extends Group {
   /// Set line number pixel width.
   set linenumberWidth(int width)
       native 'fldart::TextDisplay::void_linenumber_width';
+
+  /// Scroll to the given row and collumn.
+  void scroll(int row, int collumn) native 'fldart::TextDisplay::void_scroll';
 }

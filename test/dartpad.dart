@@ -181,6 +181,9 @@ main(List<String> args, SendPort __printSendPort) {
   /// Add line to console.
   void println(String line) {
     consoleBuffer.text += '$line\n';
+
+    // Scroll all the way down.
+    console.scroll(consoleBuffer.text.split('\n').length, 0);
   }
 }
 
