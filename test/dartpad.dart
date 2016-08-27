@@ -99,6 +99,7 @@ class DartPad extends fl.DoubleWindow {
     // Create console.
     final cpad = 20; // Console padding
     console = new fl.TextEditor(half1, 0, half2, height);
+    console.deactivate();
     setupEditor(console);
 
     console.color = bg2;
@@ -126,7 +127,6 @@ class DartPad extends fl.DoubleWindow {
       final regex = new RegExp(r'''\n\s*import ["'].*["'];''');
       final matches = regex.allMatches(code);
       final splixIndex = matches.isNotEmpty ? matches.last.end : 0;
-      print(splixIndex);
       final imports = code.substring(0, splixIndex);
       code = code.substring(splixIndex);
 

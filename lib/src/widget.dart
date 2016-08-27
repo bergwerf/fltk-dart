@@ -67,6 +67,12 @@ class Widget extends NativeFieldWrapperClass2 {
   /// Get widget height.
   int get h native 'fldart::Widget::int_h';
 
+  /// Activate the widget.
+  void activate() native 'fldart::Widget::void_activate';
+
+  /// Deactivate the widget.
+  void deactivate() native 'fldart::Widget::void_deactivate';
+
   /// Get label.
   String get label native 'fldart::Widget::String_label';
 

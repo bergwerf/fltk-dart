@@ -10,6 +10,9 @@ methods:
 - int w()
 - int h()
 
+- void activate()
+- void deactivate()
+
 - String label()
 - void label(String text)
 - Fl_Font labelfont()
