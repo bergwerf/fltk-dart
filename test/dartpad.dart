@@ -348,7 +348,7 @@ class DartPad extends fl.DoubleWindow {
 Future main(List<String> args) {
   var pad = new DartPad(720, 480, 'DartPad', args.isNotEmpty ? args[0] : null);
   pad.show();
-  return fl.runAsync();
+  return fl.runAsync(new Duration(milliseconds: 1));
 }
 
 String createWrappedCode(String imports, String code) {
