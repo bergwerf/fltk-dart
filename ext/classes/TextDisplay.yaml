@@ -1,5 +1,6 @@
 cname: Fl_Text_Display
 dartname: TextDisplay
+customWrapper: true
 
 constructors:
 - void (int x, int y, int w, int h, String l)
@@ -33,3 +34,6 @@ methods:
 
 - void scroll(int row, int collumn)
 - void highlight_data([custom])
+
+- void set_scrollbar_color(Fl_Color color)
+- void set_scrollbar_box(Fl_Boxtype boxtype)

@@ -140,4 +140,14 @@ class TextDisplay extends Group {
   /// Set the text highlighting data.
   void highlightData(TextBuffer buffer, List<StyleEntry> styletable)
       native 'fldart::TextDisplay::void_highlight_data';
+
+  void _scrollbarBox(int boxtype)
+      native 'fldart::TextDisplay::void_set_scrollbar_box';
+
+  /// Set boxtype of the horizontal and vertical scrollbar.
+  set scrollbarBox(Boxtype boxtype) => _scrollbarBox(boxtype.index);
+
+  /// Set color of the horizontal and vertical scrollbar track.
+  set scrollbarTrackColor(int color)
+      native 'fldart::TextDisplay::void_set_scrollbar_color';
 }

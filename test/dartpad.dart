@@ -10,6 +10,19 @@ import 'dart:isolate';
 
 import 'package:fltk/fltk.dart' as fl;
 
+/// Utility for creating style buffers.
+String strSeq(String char, int n) =>
+    new String.fromCharCodes(new List<int>.filled(n, char.codeUnitAt(0)));
+
+/// Escape every single character.
+String escapeAll(String src) {
+  var dst = '';
+  for (var i = 0; i < src.length; i++) {
+    dst += r'\x' + src.codeUnitAt(i).toRadixString(16);
+  }
+  return dst;
+}
+
 /// DartPad in Dart!
 class DartPad extends fl.DoubleWindow {
   /// Code editor
@@ -25,10 +38,17 @@ class DartPad extends fl.DoubleWindow {
   fl.Button runButton;
 
   /// Console output
-  fl.TextEditor console;
+  fl.TextDisplay console;
 
-  /// Console buffer
-  fl.TextBuffer consoleBuffer;
+  /// Console buffer and stylebuffer
+  fl.TextBuffer consoleBuffer, consoleStyleBuffer;
+
+  /// Console styletable
+  final consoleStyleTable = [
+    new fl.StyleEntry(color: fl.grayscale(223), font: fl.COURIER, size: 18),
+    new fl.StyleEntry(
+        color: fl.rgbColor(255, 80, 80), font: fl.COURIER, size: 18)
+  ];
 
   /// Constructor
   DartPad(int _w, int _h, String l, [String defaultPath = null])
@@ -36,7 +56,7 @@ class DartPad extends fl.DoubleWindow {
     // Global theme settings
     fl.scheme('gleam');
     fl.background(38, 38, 38);
-    fl.foreground(51, 51, 51);
+    fl.foreground(255, 255, 255);
     fl.option(fl.Option.VISIBLE_FOCUS, false);
     fl.setColor(fl.SELECTION_COLOR, 64, 64, 64);
 
@@ -67,15 +87,12 @@ class DartPad extends fl.DoubleWindow {
         new fl.Widget(0, 0, toolbar.w - pad - runButton.w, toolbar.h);
     toolbar.end();
 
-    // Fancy text editor setup
-    final setupEditor = (fl.TextEditor editor) {
+    // Fancy text display setup
+    final textDisplaySetup = (fl.TextDisplay editor) {
       editor.box = fl.FLAT_BOX;
       editor.cursorStyle = fl.TextDisplay.SIMPLE_CURSOR;
       editor.textFont = fl.COURIER;
       editor.textSize = 18;
-      editor.linenumberWidth = 60;
-      editor.linenumberSize = 18;
-      editor.linenumberFormat = '%d ';
       editor.linenumberFont = fl.COURIER_BOLD;
       editor.scrollbarBox = fl.FLAT_BOX;
       editor.scrollbarTrackColor = bg1;
@@ -83,11 +100,13 @@ class DartPad extends fl.DoubleWindow {
 
     // Create code editor.
     codeEditor = new fl.TextEditor(0, toolbar.h, half1, height - toolbar.h);
-    setupEditor(codeEditor);
-
+    textDisplaySetup(codeEditor);
     codeEditor.color = bg1;
+    codeEditor.linenumberWidth = 60;
     codeEditor.linenumberBgColor = bg1;
     codeEditor.linenumberFgColor = fl.grayscale(128);
+    codeEditor.linenumberFormat = '%d ';
+    codeEditor.linenumberSize = 18;
     codeEditor.cursorColor = fl.grayscale(223);
     codeEditor.textColor = fl.grayscale(223);
 
@@ -98,22 +117,25 @@ class DartPad extends fl.DoubleWindow {
 
     // Create console.
     final cpad = 20; // Console padding
-    console = new fl.TextEditor(half1, 0, half2, height);
-    console.deactivate();
-    setupEditor(console);
-
+    console = new fl.TextDisplay(half1, 0, half2, height);
+    textDisplaySetup(console);
     console.color = bg2;
-    console.linenumberBgColor = bg2;
     console.linenumberWidth = cpad;
+    console.linenumberBgColor = bg2;
     console.linenumberFormat = '';
     console.linenumberSize = 10;
-    console.textColor = fl.grayscale(128);
 
     // Setup console buffer.
     consoleBuffer = new fl.TextBuffer();
     console.buffer = consoleBuffer;
     consoleBuffer.text = '\nWelcome to DartPad!\n';
 
+    // Setup console highlighting.
+    consoleStyleBuffer = new fl.TextBuffer();
+    consoleStyleBuffer.text = strSeq('A', consoleBuffer.text.length);
+    console.highlightData(consoleStyleBuffer, consoleStyleTable);
+
+    // Make window resizable.
     resizable = new fl.Widget(0, toolbar.h, width, height - toolbar.h);
 
     // Setup run code event.
@@ -147,10 +169,23 @@ main(List<String> args, SendPort __printSendPort) {
 }
 ''';
 
+      // Code data URI.
+      final uri = new Uri.dataFromString(wrappedCode);
+
       // Receive port for isolate errors
       final onError = new ReceivePort();
       onError.listen((e) {
-        print('An error has occured:\n$e');
+        // Replace URI references in stack trace.
+        var msg = e.toString();
+        final regex = r'\(' + escapeAll(uri.toString()) + r':[0-9]*:[0-9]*\)';
+        msg = msg.replaceAll(new RegExp(regex), '(DartPad)');
+
+        // Prettify a little more.
+        msg = msg.replaceFirst("'$uri': ", '');
+        msg = msg.replaceFirst(', #0', ',\n#0');
+        msg = msg.substring(1, msg.length - 2);
+
+        println('An error has occured:\n$msg', error: true);
       });
 
       // Receive port for isolate print messages
@@ -169,18 +204,34 @@ main(List<String> args, SendPort __printSendPort) {
       });
 
       // Start isolate.
-      println('Starting isolate...');
-      Isolate.spawnUri(
-          new Uri.dataFromString(wrappedCode), [], onPrint.sendPort,
-          onError: onError.sendPort,
-          onExit: onExit.sendPort,
-          errorsAreFatal: true);
+      println('\nSpawning isolate...');
+      runZoned(() {
+        Isolate.spawnUri(uri, [], onPrint.sendPort,
+            onError: onError.sendPort,
+            onExit: onExit.sendPort,
+            errorsAreFatal: true);
+      }, onError: (e) {
+        // Remove URI reference from error message.
+        var msg = e.toString();
+        msg = msg.replaceFirst(" '$uri': ", '\n');
+
+        println(msg, error: true);
+
+        // Close send ports.
+        onError.close();
+        onPrint.close();
+        onExit.close();
+      });
     });
   }
 
   /// Add line to console.
-  void println(String line) {
-    consoleBuffer.text += '$line\n';
+  void println(String line, {bool error: false}) {
+    line = '$line\n';
+    consoleBuffer.text += line;
+
+    // Add to style buffer.
+    consoleStyleBuffer.text += strSeq(error ? 'B' : 'A', line.length);
 
     // Scroll all the way down.
     console.scroll(consoleBuffer.text.split('\n').length, 0);
