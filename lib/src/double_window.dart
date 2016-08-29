@@ -18,9 +18,6 @@ class DoubleWindow extends Window {
 
   DoubleWindow.empty() : super.empty();
 
-  /// Handle events.
-  int doHandle(int event) => handle(Event.values[event]) ? 1 : 0;
-
   /// Short native constructor
   void _createDoubleWindow(int w, int h, String l)
       native 'fldart::DoubleWindow::constructor_DoubleWindowShort';

@@ -21,9 +21,10 @@ class {{{ class }}}_Wrapper : public {{{ class }}} {
   {{{ class }}}_Wrapper(Dart_Handle ref, {{{ argsdef }}});
   {{/ constructors }}
 
-  {{# drawcb }}
+  {{# drawfn }}
   void draw();
-  {{/ drawcb }}
+  {{/ drawfn }}
+  void resize(int x, int y, int w, int h);
   int handle(int event);
   int native_handle(int event);
 

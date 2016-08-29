@@ -10,6 +10,6 @@ typedefs:
   Fl_Fontsize: int64_t  # Actually uint32_t but Dart uses int64_t
   Fl_Font: int64_t      # Actually uint32_t but Dart uses int64_t
 
-drawcb:
+drawfn:
 - Fl_Widget
 - Fl_Gl_Window

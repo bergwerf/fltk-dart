@@ -9,7 +9,7 @@ import 'package:fltk/fltk.dart' as fl;
 
 int main() {
   final window = new fl.DoubleWindow(300, 300, 'Dart');
-  final surface = new fl.CairoSurface(0, 0, window.w, window.h);
+  final surface = new fl.CairoSurface(10, 10, window.w - 20, window.h - 20);
 
   window.resizable = surface;
   window.color = fl.RED;
@@ -20,6 +20,13 @@ int main() {
 
     // Final variables
     final r1 = 80, r2 = 40, cx = surface.w / 2, cy = surface.h / 2;
+
+    ctx
+      ..save()
+      ..rectangleByCoords(0, 0, 2 * cx, 2 * cy)
+      ..setSourceRgb(1, 1, 1)
+      ..fill()
+      ..restore();
 
     // Red circle
     var a = PI / 2;

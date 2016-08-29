@@ -12,16 +12,27 @@ namespace fldart {
 }
 
 {{/ constructors }}
-{{# drawcb }}
+{{# drawfn }}
 void {{{ class }}}_Wrapper::draw() {
   HandleError(Dart_Invoke(_ref, Dart_NewStringFromCString("draw"), 0, {}));
 }
 
-{{/ drawcb }}
+{{/ drawfn }}
+void {{{ class }}}_Wrapper::resize(int x, int y, int w, int h) {
+  {{{ class }}}::resize(x, y, w, h);
+  Dart_Handle args[4] = {
+    Dart_NewInteger((int64_t)x),
+    Dart_NewInteger((int64_t)y),
+    Dart_NewInteger((int64_t)w),
+    Dart_NewInteger((int64_t)h)
+  };
+  HandleError(Dart_Invoke(_ref, Dart_NewStringFromCString("resize"), 4, args));
+}
+
 int {{{ class }}}_Wrapper::handle(int event) {
   int superRet = {{{ class }}}::handle(event);
   Dart_Handle args[1] = { Dart_NewInteger((int64_t)event) };
-  Dart_Handle ret = Dart_Invoke(_ref, Dart_NewStringFromCString("doHandle"), 1, args);
+  Dart_Handle ret = HandleError(Dart_Invoke(_ref, Dart_NewStringFromCString("doHandle"), 1, args));
   int64_t returnValue;
   Dart_IntegerToInt64(ret, &returnValue);
   return returnValue == 0 ? superRet : returnValue;

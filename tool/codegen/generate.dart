@@ -222,7 +222,7 @@ void processClassFile(
       'header': 'FLDART_${content['cname'].toUpperCase()}_WRAPPER_H',
       'class': content['cname'],
       'constructors': wrapperconstructors,
-      'drawcb': settings['drawcb'].contains(content['cname'])
+      'drawfn': settings['drawfn'].contains(content['cname'])
           ? mustacheYes
           : mustacheNo
     };

@@ -22,6 +22,7 @@ class Fl_Cairo_Window_Wrapper : public Fl_Cairo_Window {
  public:
   Fl_Cairo_Window_Wrapper(Dart_Handle ref, int w, int h, const char* l);
 
+  void resize(int x, int y, int w, int h);
   int handle(int event);
 
   static void draw_cb(Fl_Cairo_Window *self, cairo_t *ctx);

@@ -3,7 +3,6 @@
 // that can be found in the LICENSE file.
 
 #include "Fl_Cairo_Window_Wrapper.hpp"
-#include <cstdio>
 
 namespace fldart {
 Fl_Cairo_Window_Wrapper::Fl_Cairo_Window_Wrapper(Dart_Handle ref, int w, int h, const char* l) : Fl_Cairo_Window(w, h) {
@@ -31,9 +30,20 @@ void Fl_Cairo_Window_Wrapper::draw_cb(Fl_Cairo_Window *self, cairo_t *ctx) {
   HandleError(Dart_Invoke(*ref, Dart_NewStringFromCString("runDrawCb"), 1, args));
 }
 
+void Fl_Cairo_Window_Wrapper::resize(int x, int y, int w, int h) {
+  Fl_Cairo_Window::resize(x, y, w, h);
+  Dart_Handle args[4] = {
+    Dart_NewInteger((int64_t)x),
+    Dart_NewInteger((int64_t)y),
+    Dart_NewInteger((int64_t)w),
+    Dart_NewInteger((int64_t)h)
+  };
+  HandleError(Dart_Invoke(_ref, Dart_NewStringFromCString("resize"), 4, args));
+}
+
 int Fl_Cairo_Window_Wrapper::handle(int event) {
   Dart_Handle args[1] = { Dart_NewInteger((int64_t)event) };
-  Dart_Handle ret = Dart_Invoke(_ref, Dart_NewStringFromCString("doHandle"), 1, args);
+  Dart_Handle ret = HandleError(Dart_Invoke(_ref, Dart_NewStringFromCString("doHandle"), 1, args));
   int64_t returnValue;
   Dart_IntegerToInt64(ret, &returnValue);
   return returnValue;

@@ -9,6 +9,7 @@ import 'dart-ext:fldart';
 import 'dart:nativewrappers';
 import 'dart:typed_data';
 import 'dart:async';
+import 'dart:io';
 
 import 'package:image/image.dart';
 import 'package:cairodart/cairodart.dart' as cairo;

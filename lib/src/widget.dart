@@ -40,24 +40,29 @@ class Widget extends NativeFieldWrapperClass2 {
     onCallback = _onCallbackController.stream;
   }
 
-  /// Handle events.
+  /// Handle event (called by [doHandle]).
   bool handle(Event event) => false;
+
+  /// Handle event code (called by the extension using `Dart_Invoke`).
   int doHandle(int event) => handle(Event.values[event]) ? 1 : 0;
 
-  /// Native constructor
-  void _createWidget(int x, int y, int w, int h, String l)
-      native 'fldart::Widget::constructor_Widget';
-
-  /// Draw
+  /// Draw widget (called by the extension using `Dart_Invoke`)
   void draw() {}
 
-  /// Do a callback
+  /// Run callbacks (called by the extension using `Dart_Invoke`)
   void doCallback() {
     _onCallbackController.add(new WidgetCallbackData(this, userData));
     if (callback != null) {
       callback(this, userData);
     }
   }
+
+  /// The widget is resized (called by the extension using `Dart_Invoke`).
+  void resize(int x, int y, int w, int h) {}
+
+  /// Native constructor
+  void _createWidget(int x, int y, int w, int h, String l)
+      native 'fldart::Widget::constructor_Widget';
 
   /// Get widget x position.
   int get x native 'fldart::Widget::int_x';

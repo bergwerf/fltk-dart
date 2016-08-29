@@ -18,9 +18,6 @@ class Window extends Group {
 
   Window.empty() : super.empty();
 
-  /// Handle events.
-  int doHandle(int event) => handle(Event.values[event]) ? 1 : 0;
-
   /// Short native constructor
   void _createWindow(int w, int h, String l)
       native 'fldart::Window::constructor_WindowShort';

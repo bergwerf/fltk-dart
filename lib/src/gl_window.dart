@@ -13,9 +13,6 @@ class GlWindow extends Window {
 
   GlWindow.empty() : super.empty();
 
-  /// Handle events.
-  int doHandle(int event) => handle(Event.values[event]) ? 1 : 0;
-
   /// Native constructor
   void _createGlWindow(int x, int y, int w, int h, String l)
       native 'fldart::GlWindow::constructor_GlWindow';
