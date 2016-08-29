@@ -47,11 +47,11 @@ class Receiver : public Fl_Box {
     case FL_DND_ENTER:
     case FL_DND_DRAG:
     case FL_DND_RELEASE:
-      // return 1 for these events to 'accept' dnd
+      // Return 1 for these events to 'accept' dnd.
       return 1;
 
     case FL_PASTE:
-      // handle actual drop (paste) operation
+      // Handle actual drop (paste) operation.
       label(Fl::event_text());
       return 1;
     }

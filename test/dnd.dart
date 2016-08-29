@@ -36,11 +36,11 @@ class Receiver extends fl.Box {
       case fl.Event.DND_ENTER:
       case fl.Event.DND_DRAG:
       case fl.Event.DND_RELEASE:
-        // return true for these events to 'accept' dnd
+        // Return true for these events to 'accept' dnd.
         return true;
 
       case fl.Event.PASTE:
-        // handle actual drop (paste) operation
+        // Handle actual drop (paste) operation.
         label = fl.eventText;
         return true;
 
