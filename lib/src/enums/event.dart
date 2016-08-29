@@ -13,37 +13,37 @@ enum Event {
   /// You can find out what button by calling [eventButton]. You find out the
   /// mouse position by calling [eventX] and [eventY].
   ///
-  /// A widget indicates that it "wants" the mouse click by returning non-zero
-  /// from its [Widget.handle] method. It will then become the [pushed] widget
-  /// and will get [DRAG] and the matching [RELEASE] events. If [Widget.handle]
+  /// A widget indicates that it "wants" the mouse click by returning true from
+  /// its [Widget.handle] method. It will then become the [pushed] widget and
+  /// will get [DRAG] and the matching [RELEASE] events. If [Widget.handle]
   /// returns zero then FLTK will try sending the [PUSH] to another widget.
   PUSH,
 
   /// A mouse button has been released. You can find out what button by calling
   /// [eventButton]. In order to receive the [RELEASE] event, the widget must
-  /// return non-zero when handling [PUSH].
+  /// return true when handling [PUSH].
   RELEASE,
 
   /// The mouse has been moved to point at this widget. This can be used for
   /// highlighting feedback. If a widget wants to highlight or otherwise track
-  /// the mouse, it indicates this by returning non-zero from its
-  /// [Widget.handle] method. It then becomes the [belowmouse] widget and will
-  /// receive [MOVE] and [LEAVE] events.
+  /// the mouse, it indicates this by returning true from its [Widget.handle]
+  /// method. It then becomes the [belowmouse] widget and will receive [MOVE]
+  /// and [LEAVE] events.
   ENTER,
 
   /// The mouse has moved out of the widget. In order to receive the [LEAVE]
-  /// event, the widget must return non-zero when handling [ENTER].
+  /// event, the widget must return true when handling [ENTER].
   LEAVE,
 
   /// The mouse has moved with a button held down. The current button state is
   /// in [eventState]. The mouse position is in [eventX] and [eventY]. In order
-  /// to receive [DRAG] events, the widget must return non-zero when handling
+  /// to receive [DRAG] events, the widget must return true when handling
   /// [PUSH].
   DRAG,
 
   /// This indicates an attempt to give a widget the keyboard focus. If a widget
   /// wants the focus, it should change itself to display the fact that it has
-  /// the focus, and return non-zero from its [Widget.handle] method. It then
+  /// the focus, and return true from its [Widget.handle] method. It then
   /// becomes the [focus] widget and gets [KEYDOWN], [KEYUP], and [UNFOCUS]
   /// events. The focus will change either because the window manager changed
   /// which window gets the focus, or because the user tried to navigate using
@@ -61,7 +61,7 @@ enum Event {
   ///
   /// The key can be found in [eventKey]. The text that the key should insert
   /// can be found with [eventText]. If you use the key [Widget.handle] should
-  /// return 1. If you return zero then FLTK assumes you ignored the key and
+  /// return true. If you return zero then FLTK assumes you ignored the key and
   /// will then attempt to send it to a parent widget. If none of them want it,
   /// it will change the event into a [SHORTCUT] event.
   ///
@@ -87,16 +87,16 @@ enum Event {
 
   /// The mouse has moved without any mouse buttons held down. This event is
   /// sent to the [belowmouse] widget. In order to receive [MOVE] events, the
-  /// widget must return non-zero when handling [ENTER].
+  /// widget must return true when handling [ENTER].
   MOVE,
 
   /// If the [focus] widget is null or ignores a [KEYBOARD] event then FLTK
   /// tries sending this event to every widget it can, until one of them returns
-  /// non-zero.
+  /// true.
   ///
   /// SHORTCUT is first sent to the [belowmouse] widget, then its parents and
   /// siblings, and eventually to every widget in the window, trying to find an
-  /// object that returns non-zero. FLTK tries really hard to not to ignore any
+  /// object that returns true. FLTK tries really hard to not to ignore any
   /// keystrokes!
   ///
   /// You can also make global shortcuts by using [addHandler]. A global
@@ -146,7 +146,7 @@ enum Event {
   MOUSEWHEEL,
 
   /// The mouse has been moved to point at this widget. A widget that is
-  /// interested in receiving Drag And Drop data must return 1 to receive
+  /// interested in receiving Drag And Drop data must return true to receive
   /// [DND_DRAG], [DND_LEAVE] and [DND_RELEASE] events.
   DND_ENTER,
 
@@ -159,7 +159,7 @@ enum Event {
   DND_LEAVE,
 
   /// The user has released the mouse button dropping data into the widget. If
-  /// the widget returns 1, it will receive the data in the immediately
+  /// the widget returns true, it will receive the data in the immediately
   /// following [PASTE] event.
   DND_RELEASE,
 
