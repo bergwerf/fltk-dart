@@ -14,6 +14,12 @@ class WidgetCallbackData {
   WidgetCallbackData(this.target, this.userData);
 }
 
+/// [Widget.onResize] data
+class WidgetResizeData {
+  final int x, y, w, h;
+  WidgetResizeData(this.x, this.y, this.w, this.h);
+}
+
 /// Fl_Widget
 class Widget extends NativeFieldWrapperClass2 {
   /// User data
@@ -29,15 +35,30 @@ class Widget extends NativeFieldWrapperClass2 {
   final _onCallbackController =
       new StreamController<WidgetCallbackData>.broadcast(sync: useSyncStreams);
 
+  /// Resize stream
+  Stream<WidgetResizeData> onResize;
+
+  /// Resize stream controller
+  ///
+  /// Note that this is a synchronous stream because to prevent resize and draw
+  /// events from mixing up.
+  final _onResizeController =
+      new StreamController<WidgetResizeData>.broadcast(sync: true);
+
   /// Create Fl_Widget (uses a wrapper class under the hood).
   Widget(int x, int y, int w, int h, [String l = '']) {
     _createWidget(x, y, w, h, l);
+    _setupStreams();
   }
 
   Widget.empty() {
-    // Setup onCallback stream. Note that you must do this in the empty
-    // constructor so all subclasses also connect the stream.
+    _setupStreams();
+  }
+
+  /// Setup streams (call on create).
+  void _setupStreams() {
     onCallback = _onCallbackController.stream;
+    onResize = _onResizeController.stream;
   }
 
   /// Handle event (called by [doHandle]).
@@ -58,23 +79,27 @@ class Widget extends NativeFieldWrapperClass2 {
   }
 
   /// The widget is resized (called by the extension using `Dart_Invoke`).
-  void resize(int x, int y, int w, int h) {}
+  /// If you override this method you should call `super.resize` to keep the
+  /// [onResize] stream working.
+  void resize(int x, int y, int w, int h) {
+    _onResizeController.add(new WidgetResizeData(x, y, w, h));
+  }
 
   /// Native constructor
   void _createWidget(int x, int y, int w, int h, String l)
       native 'fldart::Widget::constructor_Widget';
 
   /// Get widget x position.
-  int get x native 'fldart::Widget::int_x';
+  int x() native 'fldart::Widget::int_x';
 
   /// Get widget y position.
-  int get y native 'fldart::Widget::int_y';
+  int y() native 'fldart::Widget::int_y';
 
   /// Get widget width.
-  int get w native 'fldart::Widget::int_w';
+  int w() native 'fldart::Widget::int_w';
 
   /// Get widget height.
-  int get h native 'fldart::Widget::int_h';
+  int h() native 'fldart::Widget::int_h';
 
   /// Activate the widget.
   void activate() native 'fldart::Widget::void_activate';

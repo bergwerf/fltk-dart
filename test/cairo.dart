@@ -18,7 +18,7 @@ int main() {
     ctx.lineWidth = 1.0;
 
     // Final variables
-    final r1 = 80, r2 = 40, cx = window.w / 2, cy = window.h / 2;
+    final r1 = 80, r2 = 40, cx = window.w() / 2, cy = window.h() / 2;
 
     // Red circle
     var a = PI / 2;

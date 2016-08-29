@@ -154,11 +154,11 @@ class DartPad extends fl.DoubleWindow {
     runButton.labelsize = 16;
 
     toolbar.resizable =
-        new fl.Widget(0, 0, toolbar.w - pad - runButton.w, toolbar.h);
+        new fl.Widget(0, 0, toolbar.w() - pad - runButton.w(), toolbar.h());
     toolbar.end();
 
     // Create code editor.
-    editor.d = new fl.TextEditor(0, toolbar.h, half1, height - toolbar.h);
+    editor.d = new fl.TextEditor(0, toolbar.h(), half1, height - toolbar.h());
     editor.init(editorStyleTable);
     editor.d.color = bg1;
     editor.d.linenumberWidth = 60;
@@ -190,7 +190,7 @@ class DartPad extends fl.DoubleWindow {
     console.styleBuffer.text = strSeq('A', console.textBuffer.text.length);
 
     // Make window resizable.
-    resizable = new fl.Widget(0, toolbar.h, width, height - toolbar.h);
+    resizable = new fl.Widget(0, toolbar.h(), width, height - toolbar.h());
 
     // Setup run code event.
     runButton.onCallback.listen((_) {

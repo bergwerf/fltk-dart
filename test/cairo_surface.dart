@@ -9,17 +9,26 @@ import 'package:fltk/fltk.dart' as fl;
 
 int main() {
   final window = new fl.DoubleWindow(300, 300, 'Dart');
-  final surface = new fl.CairoSurface(10, 10, window.w - 20, window.h - 20);
+  final surface = new fl.CairoSurface(10, 10, window.w() - 20, window.h() - 20);
 
   window.resizable = surface;
   window.color = fl.RED;
 
-  // Set cairo draw callback.
+  // Variables to test resize events.
+  var cx = surface.w() / 2, cy = surface.h() / 2;
+
+  // Set resize listener.
+  surface.onResize.listen((data) {
+    cx = data.w / 2;
+    cy = data.h / 2;
+  });
+
+  // Set cairo draw listener.
   surface.onDraw.listen((Context ctx) {
     ctx.lineWidth = 1.0;
 
     // Final variables
-    final r1 = 80, r2 = 40, cx = surface.w / 2, cy = surface.h / 2;
+    final r1 = 80, r2 = 40;
 
     ctx
       ..save()

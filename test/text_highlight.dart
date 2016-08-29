@@ -6,7 +6,7 @@ import 'package:fltk/fltk.dart' as fl;
 
 int main() {
   final window = new fl.DoubleWindow(120, 20, '');
-  final editor = new fl.TextEditor(0, 0, window.w, window.h);
+  final editor = new fl.TextEditor(0, 0, window.w(), window.h());
   editor.box = fl.FLAT_BOX;
   editor.deactivate();
 

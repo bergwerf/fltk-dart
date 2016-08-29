@@ -20,6 +20,7 @@ class CairoSurface extends Widget {
   Stream<cairo.Context> onDraw;
 
   /// Redraw stream controller
+  ///
   /// Note that this is a synchronous stream because all redraws have to be
   /// completed before drawing the surface data to the widget.
   final _onDrawController =
@@ -30,13 +31,12 @@ class CairoSurface extends Widget {
 
     // Initialize drawing surface.
     resizeSurface(w, h);
-  }
 
-  /// Resize surface when the widget is resized.
-  void resize(int x, int y, int w, int h) {
-    if (w != _surface.width || h != _surface.height) {
-      resizeSurface(w, h);
-    }
+    onResize.listen((data) {
+      if (data.w != _surface.width || data.h != _surface.height) {
+        resizeSurface(data.w, data.h);
+      }
+    });
   }
 
   /// Resize [_surface].
@@ -68,6 +68,6 @@ class CairoSurface extends Widget {
     final bytes = decodePng(new File(_framePath).readAsBytesSync()).getBytes();
 
     // Draw pixels.
-    drawImage(bytes, x, y, _surface.width, _surface.height, 4);
+    drawImage(bytes, x(), y(), _surface.width, _surface.height, 4);
   }
 }

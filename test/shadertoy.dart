@@ -58,8 +58,8 @@ class Gl2DCanvas extends fl.GlWindow {
 
   void draw() {
     if (!valid()) {
-      final width = w;
-      final height = h;
+      final width = w();
+      final height = h();
 
       // Set viewport.
       glViewport(0, 0, width, height);
@@ -100,7 +100,7 @@ class Gl2DCanvas extends fl.GlWindow {
       glUniformMatrix4fv(uPMatrix, 1, false, matrix);
 
       // Set viewport uniforms.
-      glUniform2f(uViewport, w.toDouble(), h.toDouble());
+      glUniform2f(uViewport, w().toDouble(), h().toDouble());
 
       // Link vertex buffer.
       glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
@@ -236,7 +236,7 @@ void main(void) {
     button.onCallback.listen((_) => compile());
 
     // Create editor.
-    editor = new fl.TextEditor(half1, button.h, half2, height - button.h);
+    editor = new fl.TextEditor(half1, button.h(), half2, height - button.h());
     editor.box = fl.FLAT_BOX;
     editor.cursorStyle = fl.TextDisplay.SIMPLE_CURSOR;
     editor.cursorColor = fl.rgbColor(64);
@@ -281,7 +281,7 @@ void main(void) {
           new File('$scriptDir/shaders/default.frag').readAsStringSync();
     }
 
-    resizable = new fl.Widget(0, button.h, width, height - button.h);
+    resizable = new fl.Widget(0, button.h(), width, height - button.h());
     end();
 
     // Update shaders.

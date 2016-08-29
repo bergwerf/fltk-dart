@@ -45,14 +45,14 @@ class MyGlWindow extends fl.GlWindow {
       }
 
       // Set viewport.
-      glViewport(0, 0, w, h);
+      glViewport(0, 0, w(), h());
 
       // Compute new matrix.
       // see: http://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/orthographic-projection-matrix
       double far = 10.0;
       double near = 0.1;
-      matrix[0] = 1.0 / w;
-      matrix[5] = 1.0 / h;
+      matrix[0] = 1.0 / w();
+      matrix[5] = 1.0 / h();
       matrix[10] = -2.0 / (far - near);
       matrix[11] = (far + near) / (far - near);
     }
@@ -172,7 +172,7 @@ gl_FragColor = vec4(color, 0.5, 1.0);
 
 int main() {
   var window = new fl.DoubleWindow(200, 200, "OpenGLES");
-  var glctx = new MyGlWindow(0, 0, window.w, window.h);
+  var glctx = new MyGlWindow(0, 0, window.w(), window.h());
   window.resizable = glctx;
   window.show();
   return fl.run();
