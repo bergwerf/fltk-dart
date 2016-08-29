@@ -41,14 +41,11 @@ void cairo_get_data(Dart_NativeArguments arguments) {
 }
 
 void draw_image_using_driver(Dart_NativeArguments arguments) {
-  uint8_t* buffer;
-  int64_t x, y, w, h, d, ld;
-
   Dart_EnterScope();
 
-  // Not so pretty, but copied from generated output.
-  buffer = (uint8_t*)*gettypeddata(arguments, 0, Dart_TypedData_Type::Dart_TypedData_kUint8);
+  uint8_t* buffer = (uint8_t*)*gettypeddata(arguments, 0, Dart_TypedData_Type::Dart_TypedData_kUint8);
 
+  int64_t x, y, w, h, d, ld;
   HandleError(Dart_IntegerToInt64(getarg(arguments, 1), &x));
   HandleError(Dart_IntegerToInt64(getarg(arguments, 2), &y));
   HandleError(Dart_IntegerToInt64(getarg(arguments, 3), &w));
