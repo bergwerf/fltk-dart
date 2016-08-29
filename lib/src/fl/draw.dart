@@ -25,6 +25,10 @@ void line(int x, int y, int x1, int y1, [int x2 = null, int y2 = null]) {
   }
 }
 
-/// Draw image data.
+/// Draw image data using `fl_draw_image`.
 void drawImage(Uint8List buffer, int x, int y, int w, int h,
     [int d = 3, int l = 0]) native 'fldart::drawImage';
+
+/// Draw image data using Fl_RGB_Image and fallback alpha blending driver.
+void drawRgbImage(Uint8List buffer, int x, int y, int w, int h,
+    [int d = 3, int l = 0]) native 'fldart::draw_image_using_driver';

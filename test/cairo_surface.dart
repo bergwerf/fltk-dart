@@ -12,7 +12,7 @@ int main() {
   final surface = new fl.CairoSurface(10, 10, window.w() - 20, window.h() - 20);
 
   window.resizable = surface;
-  window.color = fl.RED;
+  window.color = fl.rgbColor(255, 128, 128);
 
   // Variables to test resize events.
   var cx = surface.w() / 2, cy = surface.h() / 2;
@@ -30,12 +30,12 @@ int main() {
     // Final variables
     final r1 = 80, r2 = 40;
 
+    ctx.save();
     ctx
-      ..save()
-      ..rectangleByCoords(0, 0, 2 * cx, 2 * cy)
-      ..setSourceRgb(1, 1, 1)
-      ..fill()
-      ..restore();
+      ..operator = Operator.Source
+      ..setSourceRgba(0, 0, 0, 0.5)
+      ..paint();
+    ctx.restore();
 
     // Red circle
     var a = PI / 2;

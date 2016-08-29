@@ -6,7 +6,7 @@
 #define FLDART_COMMON_H
 
 #include <string.h>
-#include "dart_api.h"
+#include <dart_api.h>
 
 namespace fldart {
 struct FunctionMapping {
@@ -24,6 +24,7 @@ const char* newstr(const char *src);
 Dart_Handle getarg(Dart_NativeArguments arguments, int n);
 Dart_Handle getfield(Dart_Handle container, const char *name);
 intptr_t getptr(Dart_NativeArguments arguments, int argn);
+void **gettypeddata(Dart_NativeArguments arguments, int argn, Dart_TypedData_Type type);
 }
 
 #endif

@@ -12,8 +12,9 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Cairo_Window.H>
 
-#include "dart_api.h"
-#include "../common.h"
+#include <dart_api.h>
+
+#include "../common.hpp"
 
 namespace fldart {
 class Fl_Cairo_Window_Wrapper : public Fl_Cairo_Window {

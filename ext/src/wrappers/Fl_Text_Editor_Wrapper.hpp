@@ -8,8 +8,9 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Text_Editor.H>
 
-#include "dart_api.h"
-#include "../common.h"
+#include <dart_api.h>
+
+#include "../common.hpp"
 
 namespace fldart {
 class Fl_Text_Editor_Wrapper : public Fl_Text_Editor {

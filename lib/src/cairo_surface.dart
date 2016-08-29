@@ -10,9 +10,6 @@ part of fltk;
 /// Note: this class is not currenly working because of issues with
 /// [ImageSurface.data] in `cairodart`.
 class CairoSurface extends Widget {
-  /// Frame write location.
-  static const _framePath = '/tmp/__fltkdart_cairo_frame.png';
-
   /// Target [ImageSurface] (drawing canvas)
   cairo.ImageSurface _surface;
 
@@ -45,9 +42,7 @@ class CairoSurface extends Widget {
       _surface.finish();
     }
 
-    // RGB only for better support (TODO: implement low-level alpha blending
-    // using fl_read_image).
-    _surface = new cairo.ImageSurface(cairo.Format.RGB24, width, height);
+    _surface = new cairo.ImageSurface(cairo.Format.ARGB32, width, height);
   }
 
   /// Redraw surface
@@ -60,14 +55,10 @@ class CairoSurface extends Widget {
     _onDrawController.add(ctx); // Synchronous processing
     _surface.flush();
 
-    // The way you should be able to retrieve pixel data.
-    //final bytes = new Uint8List.fromList(_surface.data);
-
-    // The super dirty way that actually works.
-    _surface.writeTo(_framePath);
-    final bytes = decodePng(new File(_framePath).readAsBytesSync()).getBytes();
+    // Retrieve pixel data.
+    final bytes = cairoGetData(_surface);
 
     // Draw pixels.
-    drawImage(bytes, x(), y(), _surface.width, _surface.height, 4);
+    drawRgbImage(bytes, x(), y(), _surface.width, _surface.height, 4);
   }
 }

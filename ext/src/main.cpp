@@ -12,8 +12,10 @@
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Window.H>
 
-#include "dart_api.h"
-#include "common.h"
+#include <dart_api.h>
+
+#include "common.hpp"
+#include "custom.hpp"
 
 #include "gen/functions/core.hpp"
 #include "gen/functions/draw.hpp"
@@ -61,6 +63,7 @@ DART_EXPORT Dart_Handle fldart_Init(Dart_Handle parentLibrary) {
 }
 
 std::vector<fldart::FunctionMapping*> allFunctions = {
+  fldart::custom::functionMapping,
   fldart::core::functionMapping,
   fldart::draw::functionMapping,
   fldart::color::functionMapping,

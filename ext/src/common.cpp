@@ -2,7 +2,7 @@
 // Use of this source code is governed by a MIT-style license
 // that can be found in the LICENSE file.
 
-#include "common.h"
+#include "common.hpp"
 
 namespace fldart {
 Dart_Handle HandleError(Dart_Handle handle) {
@@ -32,5 +32,16 @@ intptr_t getptr(Dart_NativeArguments arguments, int argn) {
       HandleError(
         Dart_GetNativeArgument(arguments, argn)), 0, &dst));
   return dst;
+}
+
+void **gettypeddata(Dart_NativeArguments arguments, int argn, Dart_TypedData_Type t) {
+  void **data;
+  Dart_TypedData_Type *type = new Dart_TypedData_Type(t);
+  Dart_Handle handle = getarg(arguments, 0);
+  int64_t length;
+  HandleError(Dart_ListLength(handle, &length));
+  HandleError(Dart_TypedDataAcquireData(handle, type, data, &length));
+  HandleError(Dart_TypedDataReleaseData(handle));
+  return data;
 }
 }

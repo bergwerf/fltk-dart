@@ -39,7 +39,8 @@ function compile {
 }
 
 compile $EXT_SRC/main.cpp
-compile $EXT_SRC/common.c
+compile $EXT_SRC/common.cpp
+compile $EXT_SRC/custom.cpp
 
 # Compile individual classes.
 for f in {$EXT_SRC/gen/functions/*.cpp,$EXT_SRC/gen/wrappers/*.cpp,$EXT_SRC/gen/classes/*.cpp,$EXT_SRC/wrappers/*.cpp}

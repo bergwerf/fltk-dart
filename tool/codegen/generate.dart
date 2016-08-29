@@ -23,10 +23,10 @@ const mustacheNo = const [];
 const root = 'tool/codegen';
 
 /// Relative path for custom method source files from the current directory.
-const customSources = 'ext/src/custom';
+const customClassSources = 'ext/src/classes';
 
 /// Relative path for custom method source files from the gen directory.
-const customSourcesRelative = '../../custom';
+const customClassSourcesRel = '../../classes';
 
 /// All class input files.
 final classFiles = new Glob("ext/classes/*.yaml");
@@ -175,8 +175,8 @@ void processClassFile(
   };
 
   // Add custom source include.
-  if (new File('$customSources/$dartname.cpp').existsSync()) {
-    mustacheData['sourceInclude'] = ['$customSourcesRelative/$dartname.cpp'];
+  if (new File('$customClassSources/$dartname.cpp').existsSync()) {
+    mustacheData['sourceInclude'] = ['$customClassSourcesRel/$dartname.cpp'];
   }
 
   // Write header.
