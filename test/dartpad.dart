@@ -124,7 +124,7 @@ class DartPad extends fl.DoubleWindow {
   DartPad(int _w, int _h, String l, [String defaultPath = null])
       : super(_w, _h, l) {
     // Global theme settings
-    fl.scheme('gleam');
+    fl.scheme = 'gleam';
     fl.background(38, 38, 38);
     fl.foreground(128, 128, 128);
     fl.option(fl.Option.VISIBLE_FOCUS, false);
@@ -348,7 +348,7 @@ class DartPad extends fl.DoubleWindow {
 Future main(List<String> args) {
   var pad = new DartPad(720, 480, 'DartPad', args.isNotEmpty ? args[0] : null);
   pad.show();
-  return fl.runAsync(new Duration(milliseconds: 1));
+  return fl.runAsync(new Duration(milliseconds: 10));
 }
 
 String createWrappedCode(String imports, String code) {

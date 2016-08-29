@@ -8,7 +8,7 @@ import 'package:image/image.dart';
 import 'package:fltk/fltk.dart' as fl;
 
 int main() {
-  fl.scheme('gleam');
+  fl.scheme = 'gleam';
 
   // Using a single buffered window gives issues with image alpha rendering.
   var window = new fl.DoubleWindow(160, 160);

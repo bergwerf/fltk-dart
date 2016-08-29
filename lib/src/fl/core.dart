@@ -4,13 +4,18 @@
 
 part of fltk;
 
+/// Whether to used synchronous streams or not.
+bool useSyncStreams = false;
+
 /// () => void function
 typedef void _VoidFn();
 
+/// Run FLTK synchronously
+///
 /// Calls [wait] in a loop until the return value is 0.
 int run() native 'fldart::run';
 
-/// Runs FLTK asynchronously (using some black magic).
+/// Runs FLTK asynchronously (using some black magic)
 ///
 /// It is important to use [Timer.run] instead of [scheduleMicrotask] so Timer
 /// events are not blocked.
@@ -47,7 +52,7 @@ int wait() native 'fldart::wait';
 /// - `gtk+`: This scheme is inspired by the Red Hat Bluecurve theme.
 /// - `gleam`: This scheme is inspired by the Clearlooks Glossy scheme.
 /// - `plastic`: This scheme is inspired by the Aqua user interface on Mac OS X.
-int scheme(String name) native 'fldart::scheme';
+set scheme(String name) native 'fldart::scheme';
 
 void _option(int option, bool value) native 'fldart::option';
 

@@ -5,7 +5,7 @@
 import 'package:fltk/fltk.dart' as fl;
 
 int main() {
-  fl.scheme('gleam');
+  fl.scheme = 'gleam';
   var window = new fl.Window(350, 180, 'FLTK');
   var box = new fl.Box(20, 40, 310, 100, 'Hello, World!');
   box.box = fl.UP_BOX;

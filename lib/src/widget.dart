@@ -27,7 +27,7 @@ class Widget extends NativeFieldWrapperClass2 {
 
   /// Callback stream controller
   final _onCallbackController =
-      new StreamController<WidgetCallbackData>.broadcast();
+      new StreamController<WidgetCallbackData>.broadcast(sync: useSyncStreams);
 
   /// Create Fl_Widget (uses a wrapper class under the hood).
   Widget(int x, int y, int w, int h, [String l = '']) {

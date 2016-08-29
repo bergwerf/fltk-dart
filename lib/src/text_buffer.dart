@@ -19,7 +19,8 @@ class TextBuffer extends NativeFieldWrapperClass2 {
 
   /// Buffer modified event stream controller
   final _onModifyController =
-      new StreamController<TextBufferModifyData>.broadcast();
+      new StreamController<TextBufferModifyData>.broadcast(
+          sync: useSyncStreams);
 
   /// Public constuctor
   TextBuffer() {

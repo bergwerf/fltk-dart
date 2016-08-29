@@ -6,7 +6,6 @@
 /// Simple Text Editor' tutorial from FLTK.
 
 import 'dart:io';
-import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:dartgl/dartgl.dart';
@@ -302,10 +301,13 @@ void main(void) {
   }
 }
 
-Future main(List<String> args) {
-  fl.scheme('gleam');
+int main(List<String> args) {
+  fl.useSyncStreams = true;
+  fl.scheme = 'gleam';
+
   var editor =
       new ShaderEditor(720, 480, 'Shadertoy', args.isNotEmpty ? args[0] : null);
   editor.show();
-  return fl.runAsync();
+
+  return fl.run();
 }
