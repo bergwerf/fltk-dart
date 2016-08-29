@@ -13,6 +13,9 @@ class Input extends Widget {
 
   Input.empty() : super.empty();
 
+  /// Handle events.
+  int doHandle(int event) => handle(Event.values[event]) ? 1 : 0;
+
   /// Native constructor
   void _createInput(int x, int y, int w, int h, String l)
       native 'fldart::Input::constructor_Input';

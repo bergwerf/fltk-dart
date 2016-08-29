@@ -40,6 +40,10 @@ class Widget extends NativeFieldWrapperClass2 {
     onCallback = _onCallbackController.stream;
   }
 
+  /// Handle events.
+  bool handle(Event event) => false;
+  int doHandle(int event) => handle(Event.values[event]) ? 1 : 0;
+
   /// Native constructor
   void _createWidget(int x, int y, int w, int h, String l)
       native 'fldart::Widget::constructor_Widget';
@@ -126,6 +130,9 @@ class Widget extends NativeFieldWrapperClass2 {
 
   /// Show widget.
   void show() native 'fldart::Widget::void_show';
+
+  /// Hide widget.
+  void hide() native 'fldart::Widget::void_hide';
 
   /// Redraw widget.
   void redraw() native 'fldart::Widget::void_redraw';

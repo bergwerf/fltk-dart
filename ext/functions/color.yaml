@@ -1,17 +1,8 @@
-name: fl
+name: color
 include:
 - <FL/Fl.H>
 
 functions:
-- name: run
-  code: int Fl::run
-- name: wait
-  code: int Fl::wait
-- name: check
-  code: int Fl::check
-- name: scheme
-  code: void Fl::scheme
-  args: String scheme
 - name: background
   code: void Fl::background
   args: int r, int g, int b
@@ -24,6 +15,3 @@ functions:
 - name: setColor
   code: void Fl::set_color
   args: Fl_Color color, int r, int g, int b
-- name: option
-  code: void Fl::option
-  args: Fl::Fl_Option option, bool value

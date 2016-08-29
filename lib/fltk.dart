@@ -20,9 +20,12 @@ part 'src/enums/option.dart';
 part 'src/enums/color.dart';
 part 'src/enums/align.dart';
 part 'src/enums/font.dart';
+part 'src/enums/event.dart';
 
-part 'src/fl.dart';
-part 'src/draw.dart';
+part 'src/fl/core.dart';
+part 'src/fl/draw.dart';
+part 'src/fl/color.dart';
+part 'src/fl/event.dart';
 
 part 'src/widget.dart';
 part 'src/group.dart';

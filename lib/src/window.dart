@@ -6,19 +6,28 @@ part of fltk;
 
 /// Fl_Window
 class Window extends Group {
-  /// Public constuctor
+  /// Create window with the given dimensions
   Window(int w, int h, [String l = '']) : super.empty() {
     _createWindow(w, h, l);
   }
 
+  /// Create window with the given dimensions at the given position.
+  Window.at(int x, int y, int w, int h, [String l = '']) : super.empty() {
+    _createWindowAt(x, y, w, h, l);
+  }
+
   Window.empty() : super.empty();
 
-  /// Native constructor
+  /// Handle events.
+  int doHandle(int event) => handle(Event.values[event]) ? 1 : 0;
+
+  /// Short native constructor
   void _createWindow(int w, int h, String l)
       native 'fldart::Window::constructor_WindowShort';
 
-  /// Close the window.
-  void hide() native 'fldart::Window::void_hide';
+  /// Native constructor
+  void _createWindowAt(int x, int y, int w, int h, String l)
+      native 'fldart::Window::constructor_Window';
 
   void doCallback() {
     if (callback != null) {

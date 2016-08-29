@@ -1,0 +1,17 @@
+name: core
+include:
+- <FL/Fl.H>
+
+functions:
+- name: run
+  code: int Fl::run
+- name: wait
+  code: int Fl::wait
+- name: check
+  code: int Fl::check
+- name: scheme
+  code: void Fl::scheme
+  args: String scheme
+- name: option
+  code: void Fl::option
+  args: Fl::Fl_Option option, bool value

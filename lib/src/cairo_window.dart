@@ -22,6 +22,10 @@ class CairoWindow extends DoubleWindow {
 
   CairoWindow.empty() : super.empty();
 
+  /// Handle events.
+  bool handle(Event event) => false;
+  int doHandle(int event) => handle(Event.values[event]) ? 1 : 0;
+
   /// Set draw callback.
   set drawCallback(CairoDrawCb cb) => _drawCallback = cb;
 

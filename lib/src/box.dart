@@ -13,6 +13,9 @@ class Box extends Widget {
 
   Box.empty() : super.empty();
 
+  /// Handle events.
+  int doHandle(int event) => handle(Event.values[event]) ? 1 : 0;
+
   /// Native constructor
   void _createBox(int x, int y, int w, int h, String l)
       native 'fldart::Box::constructor_Box';

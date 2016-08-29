@@ -24,6 +24,9 @@ class {{{ class }}}_Wrapper : public {{{ class }}} {
   {{# drawcb }}
   void draw();
   {{/ drawcb }}
+  int handle(int event);
+  int native_handle(int event);
+
   static void callback_wrapper(Fl_Widget*, void*);
 };
 }

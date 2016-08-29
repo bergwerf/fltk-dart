@@ -12,6 +12,12 @@ methods:
 
 - void activate()
 - void deactivate()
+- int active()
+- int active_r()
+- void show()
+- void hide()
+- int visible()
+- int visible_r()
 
 - String label()
 - void label(String text)
@@ -29,7 +35,6 @@ methods:
 - int when()
 - void when(int mode)
 
-- void show()
 - void redraw()
 - void box(Fl_Boxtype type)
 - void image([custom])

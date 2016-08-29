@@ -6,14 +6,26 @@ part of fltk;
 
 /// Fl_Double_Window
 class DoubleWindow extends Window {
-  /// Public constuctor
+  /// Create window with the given dimensions
   DoubleWindow(int w, int h, [String l = '']) : super.empty() {
     _createDoubleWindow(w, h, l);
   }
 
+  /// Create window with the given dimensions at the given position.
+  DoubleWindow.at(int x, int y, int w, int h, [String l = '']) : super.empty() {
+    _createDoubleWindowAt(x, y, w, h, l);
+  }
+
   DoubleWindow.empty() : super.empty();
 
-  /// Native constructor
+  /// Handle events.
+  int doHandle(int event) => handle(Event.values[event]) ? 1 : 0;
+
+  /// Short native constructor
   void _createDoubleWindow(int w, int h, String l)
       native 'fldart::DoubleWindow::constructor_DoubleWindowShort';
+
+  /// Native constructor
+  void _createDoubleWindowAt(int x, int y, int w, int h, String l)
+      native 'fldart::DoubleWindow::constructor_DoubleWindow';
 }

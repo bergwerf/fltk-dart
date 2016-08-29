@@ -30,4 +30,12 @@ void Fl_Cairo_Window_Wrapper::draw_cb(Fl_Cairo_Window *self, cairo_t *ctx) {
   Dart_Handle args[1] = { dartCairoContext };
   HandleError(Dart_Invoke(*ref, Dart_NewStringFromCString("runDrawCb"), 1, args));
 }
+
+int Fl_Cairo_Window_Wrapper::handle(int event) {
+  Dart_Handle args[1] = { Dart_NewInteger((int64_t)event) };
+  Dart_Handle ret = Dart_Invoke(_ref, Dart_NewStringFromCString("doHandle"), 1, args);
+  int64_t returnValue;
+  Dart_IntegerToInt64(ret, &returnValue);
+  return returnValue;
+}
 }

@@ -1,0 +1,31 @@
+name: event
+include:
+- <FL/Fl.H>
+
+functions:
+- name: copy
+  code: void Fl::copy
+  args: String scheme, int length, int destination, String mime
+- name: dnd
+  code: void Fl::dnd
+
+- name: eventText
+  code: String Fl::event_text
+
+# eventX
+# eventY
+# eventDx
+# eventDy
+# eventKey
+# eventState
+# eventButton
+#
+# compose
+# copy
+# dnd
+#
+# addHandler
+#
+# pushed
+# belowmouse
+# selectionOwner

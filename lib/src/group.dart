@@ -13,6 +13,9 @@ class Group extends Widget {
 
   Group.empty() : super.empty();
 
+  /// Handle events.
+  int doHandle(int event) => handle(Event.values[event]) ? 1 : 0;
+
   /// Native constructor
   void _createGroup(int x, int y, int w, int h, String l)
       native 'fldart::Group::constructor_Group';

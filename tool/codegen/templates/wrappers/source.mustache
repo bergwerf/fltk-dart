@@ -18,6 +18,15 @@ void {{{ class }}}_Wrapper::draw() {
 }
 
 {{/ drawcb }}
+int {{{ class }}}_Wrapper::handle(int event) {
+  int superRet = {{{ class }}}::handle(event);
+  Dart_Handle args[1] = { Dart_NewInteger((int64_t)event) };
+  Dart_Handle ret = Dart_Invoke(_ref, Dart_NewStringFromCString("doHandle"), 1, args);
+  int64_t returnValue;
+  Dart_IntegerToInt64(ret, &returnValue);
+  return returnValue == 0 ? superRet : returnValue;
+}
+
 void {{{ class }}}_Wrapper::callback_wrapper(Fl_Widget*, void *ptr) {
   Dart_PersistentHandle *ref = (Dart_PersistentHandle*)ptr;
   HandleError(Dart_Invoke(*ref, Dart_NewStringFromCString("doCallback"), 0, {}));

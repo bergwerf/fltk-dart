@@ -13,6 +13,9 @@ class Choice extends Menu {
 
   Choice.empty() : super.empty();
 
+  /// Handle events.
+  int doHandle(int event) => handle(Event.values[event]) ? 1 : 0;
+
   /// Native constructor
   void _createChoice(int x, int y, int w, int h, String l)
       native 'fldart::Choice::constructor_Choice';
