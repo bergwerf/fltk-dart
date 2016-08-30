@@ -24,7 +24,7 @@ void Widget::void_image(Dart_NativeArguments arguments) {
   HandleError(Dart_IntegerToInt64(getarg(arguments, 3), &depth));
 
   // Get image data.
-  Dart_TypedData_Type *type = new Dart_TypedData_Type(Dart_TypedData_Type::Dart_TypedData_kUint8);
+  Dart_TypedData_Type *type = new Dart_TypedData_Type(Dart_TypedData_kUint8);
   int64_t length = width * height * depth;
   Dart_Handle data_handle = HandleError(Dart_GetNativeArgument(arguments, 4));
   HandleError(Dart_TypedDataAcquireData(data_handle, type, data, &length));

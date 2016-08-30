@@ -27,4 +27,4 @@ void background2(int r, int g, int b) native 'fldart::background2';
 void foreground(int r, int g, int b) native 'fldart::foreground';
 
 /// Set color index color value.
-void setColor(int index, int r, int g, int b) native 'fldart::setColor';
+void setColor(int index, int r, int g, int b) native 'fldart::set_color';

@@ -9,7 +9,7 @@ functions:
 - name: dnd
   code: void Fl::dnd
 
-- name: eventText
+- name: event_text
   code: String Fl::event_text
 
 # eventX

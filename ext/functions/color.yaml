@@ -12,6 +12,6 @@ functions:
 - name: foreground
   code: void Fl::foreground
   args: int r, int g, int b
-- name: setColor
+- name: set_color
   code: void Fl::set_color
   args: Fl_Color color, int r, int g, int b

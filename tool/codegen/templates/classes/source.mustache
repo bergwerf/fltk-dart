@@ -52,7 +52,7 @@ void {{{ name }}}(Dart_NativeArguments arguments) {
   HandleError({{{ conv }}}(getarg(arguments, {{{ argi }}}), {{{ convargs }}}));
   {{/ simpleconv }}
   {{# uint8listconv }}
-  {{{ name }}} = (uint8_t*)*gettypeddata(arguments, {{{ argi }}}, Dart_TypedData_Type::Dart_TypedData_kUint8);
+  {{{ name }}} = getUint8List(arguments, {{{ argi }}}, Dart_TypedData_kUint8);
   {{/ uint8listconv }}
   {{/ args }}
   {{! Run method call }}

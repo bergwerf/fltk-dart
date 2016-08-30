@@ -34,14 +34,24 @@ intptr_t getptr(Dart_NativeArguments arguments, int argn) {
   return dst;
 }
 
-void **gettypeddata(Dart_NativeArguments arguments, int argn, Dart_TypedData_Type t) {
-  void **data;
-  Dart_TypedData_Type *type = new Dart_TypedData_Type(t);
-  Dart_Handle handle = getarg(arguments, 0);
+uint8_t *getUint8List(Dart_NativeArguments arguments, int argn) {
+  void *data;
+  Dart_Handle handle = getarg(arguments, argn);
+
   int64_t length;
   HandleError(Dart_ListLength(handle, &length));
-  HandleError(Dart_TypedDataAcquireData(handle, type, data, &length));
+
+  // Aquire data.
+  Dart_TypedData_Type type = Dart_TypedData_kUint8;
+  HandleError(Dart_TypedDataAcquireData(handle, &type, &data, &length));
+
+  // Reallocate to create safe memory block.
+  uint8_t *byteData = (uint8_t*)malloc(length);
+  memcpy(byteData, data, length);
+
+  // Release data.
   HandleError(Dart_TypedDataReleaseData(handle));
-  return data;
+
+  return byteData;
 }
 }

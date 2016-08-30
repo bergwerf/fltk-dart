@@ -5,7 +5,8 @@
 #ifndef FLDART_COMMON_H
 #define FLDART_COMMON_H
 
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 #include <dart_api.h>
 
 namespace fldart {
@@ -24,7 +25,7 @@ const char* newstr(const char *src);
 Dart_Handle getarg(Dart_NativeArguments arguments, int n);
 Dart_Handle getfield(Dart_Handle container, const char *name);
 intptr_t getptr(Dart_NativeArguments arguments, int argn);
-void **gettypeddata(Dart_NativeArguments arguments, int argn, Dart_TypedData_Type type);
+uint8_t *getUint8List(Dart_NativeArguments arguments, int argn);
 }
 
 #endif

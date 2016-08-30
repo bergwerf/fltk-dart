@@ -55,10 +55,9 @@ class CairoSurface extends Widget {
     _onDrawController.add(ctx); // Synchronous processing
     _surface.flush();
 
-    // Retrieve pixel data.
-    final bytes = cairoGetData(_surface);
-
-    // Draw pixels.
-    drawRgbImage(bytes, x(), y(), _surface.width, _surface.height, 4);
+    // Draw pixel data. It turns out using drawRgbImage for this task is glitchy
+    // for large canvasses. So if the OS does not provide alpha blending
+    // support, no alpha for you!
+    drawImage(_surface.data, x(), y(), _surface.width, _surface.height, 4);
   }
 }

@@ -20,4 +20,4 @@ void copy(String data,
     _copy(data, data.length, destination.index, mime);
 
 /// Get the event text.
-String get eventText native 'fldart::eventText';
+String get eventText native 'fldart::event_text';

@@ -17,12 +17,10 @@
 
 namespace fldart {
 namespace custom {
-void cairo_get_data(Dart_NativeArguments arguments);
-void draw_image_using_driver(Dart_NativeArguments arguments);
+void rgb_image_draw(Dart_NativeArguments arguments);
 
 static FunctionMapping functionMapping[] = {
-  {"fldart::cairo_get_data", cairo_get_data},
-  {"fldart::draw_image_using_driver", draw_image_using_driver},
+  {"fldart::rgb_image_draw", rgb_image_draw},
   {NULL, NULL}
 };
 }
