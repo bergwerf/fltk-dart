@@ -74,7 +74,6 @@ const Map<String, String> typeToCType = const {
 /// Load settings.
 final settings = loadYaml(new File('$root/settings.yaml').readAsStringSync());
 
-/// TODO: use implicit cast with settings.yaml
 int main(List<String> args) {
   // Load templates.
   var classHeaderTemplate = new Template(
