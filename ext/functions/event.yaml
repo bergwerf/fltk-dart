@@ -9,21 +9,24 @@ functions:
 - name: dnd
   code: void Fl::dnd
 
+- name: event_x
+  code: int Fl::event_x
+- name: event_y
+  code: int Fl::event_y
+- name: event_dx
+  code: int Fl::event_dx
+- name: event_dy
+  code: int Fl::event_dy
+- name: event_key
+  code: int Fl::event_key
 - name: event_text
   code: String Fl::event_text
+- name: event_state
+  code: int Fl::event_state
+- name: event_button
+  code: int Fl::event_button
 
-# eventX
-# eventY
-# eventDx
-# eventDy
-# eventKey
-# eventState
-# eventButton
-#
 # compose
-# copy
-# dnd
-#
 # addHandler
 #
 # pushed

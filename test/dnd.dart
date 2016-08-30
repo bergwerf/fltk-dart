@@ -5,6 +5,8 @@
 import 'package:fltk/fltk.dart' as fl;
 
 class Sender extends fl.Box {
+  int counter = 0;
+
   Sender(int x, int y, int w, int h) : super(x, y, w, h) {
     box = fl.FLAT_BOX;
     color = fl.GREEN;
@@ -14,7 +16,8 @@ class Sender extends fl.Box {
   bool handle(fl.Event event) {
     switch (event) {
       case fl.Event.PUSH:
-        fl.copy('message');
+        counter++;
+        fl.copy('message $counter');
         fl.dnd();
         return true;
 
