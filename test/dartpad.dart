@@ -2,9 +2,6 @@
 // Use of this source code is governed by a MIT-style license
 // that can be found in the LICENSE file.
 
-/// A simple text editor using FLTK and Dart, inspired by the 'Designing a
-/// Simple Text Editor' tutorial from FLTK.
-
 import 'dart:async';
 import 'dart:isolate';
 
