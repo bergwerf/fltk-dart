@@ -14,7 +14,11 @@ Dart_Handle HandleError(Dart_Handle handle) {
 }
 
 const char* newstr(const char *src) {
-  return strcpy(new char[strlen(src) + 1], src);
+  if (strlen(src) > 0) {
+    return strcpy(new char[strlen(src) + 1], src);
+  } else {
+    return nullptr;
+  }
 }
 
 Dart_Handle getarg(Dart_NativeArguments arguments, int n) {

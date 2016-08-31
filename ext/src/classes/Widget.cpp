@@ -11,7 +11,6 @@ void Widget::void_image(Dart_NativeArguments arguments) {
   // Local variables
   Fl_Widget_Wrapper *_ref;
   int64_t width, height, depth;
-  void **data;
 
   Dart_EnterScope();
 
@@ -24,14 +23,10 @@ void Widget::void_image(Dart_NativeArguments arguments) {
   HandleError(Dart_IntegerToInt64(getarg(arguments, 3), &depth));
 
   // Get image data.
-  Dart_TypedData_Type *type = new Dart_TypedData_Type(Dart_TypedData_kUint8);
-  int64_t length = width * height * depth;
-  Dart_Handle data_handle = HandleError(Dart_GetNativeArgument(arguments, 4));
-  HandleError(Dart_TypedDataAcquireData(data_handle, type, data, &length));
-  HandleError(Dart_TypedDataReleaseData(data_handle)); // !!!
+  uint8_t *data = getUint8List(arguments, 4);
 
   // Set image data.
-  Fl_RGB_Image *image = new Fl_RGB_Image((uint8_t*)*data, width, height, depth);
+  auto image = new Fl_RGB_Image(data, width, height, depth);
   _ref -> image(image);
 
   // Return

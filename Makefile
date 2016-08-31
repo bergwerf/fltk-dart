@@ -27,8 +27,10 @@ compile-fltk:
 compile-ext:
 	./tool/compile-ext.sh
 
+# Find C++ and linking flags:
+# fltk-config --use-gl --use-cairo --use-images --cxxflags
+# fltk-config --use-gl --use-cairo --use-images --ldflags
 compile-example:
-	#g++ example/${name}.cpp `fltk-config --use-gl --cxxflags` `fltk-config --use-gl --ldflags`
 	g++ \
 		-std=c++11\
 		-I/usr/local/include\
@@ -47,6 +49,9 @@ compile-example:
 		-o 'binary' "example/${name}.cpp"\
 		/usr/local/lib/libfltk_cairo.a\
 		-lcairo -lpixman-1\
+		/usr/local/lib/libfltk_images.a\
+		-lpng -lz\
+		/usr/local/lib/libfltk_jpeg.a\
 		/usr/local/lib/libfltk_gl.a\
 		-lGLU -lGL\
 		/usr/local/lib/libfltk.a\
