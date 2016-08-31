@@ -4,7 +4,7 @@
 
 part of fltk;
 
-/// Whether to used synchronous streams or not.
+/// Switch to use synchronous streams everywhere
 bool useSyncStreams = false;
 
 /// () => void function
