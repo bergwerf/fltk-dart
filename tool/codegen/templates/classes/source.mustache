@@ -28,7 +28,7 @@ void constructor_{{{ dartname }}}{{{ name }}}(Dart_NativeArguments arguments) {
   {{! Create instance }}
   instance = new {{{ targetClass }}}({{{ argslist }}});
   Dart_SetNativeInstanceField(_ref, 0, (intptr_t)instance);
-  {{! Return instance memory address }}
+  {{! Return null }}
   Dart_Handle _ret = Dart_Null();
   Dart_SetReturnValue(arguments, _ret);
   Dart_ExitScope();

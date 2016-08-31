@@ -6,13 +6,11 @@
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Box.H>
 #include <FL/fl_draw.H>
-#include <cstdio>
 
 int main(int argc, char **argv) {
   Fl::scheme("gleam");
   auto window = new Fl_Window(350, 180, "FLTK");
   auto box = new Fl_Box(20, 40, 310, 100, "Hello, World!");
-  printf("%i\n", fl_can_do_alpha_blending());
   box -> box(FL_UP_BOX);
   box -> labelsize(36);
   box -> labelfont(FL_BOLD + FL_ITALIC);
