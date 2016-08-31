@@ -13,7 +13,7 @@ class Sender extends fl.Box {
     label = 'Drag from\nhere';
   }
 
-  bool handle(fl.Event event) {
+  bool handle(fl.Event event, _) {
     switch (event) {
       case fl.Event.PUSH:
         counter++;
@@ -34,7 +34,7 @@ class Receiver extends fl.Box {
     label = 'to here';
   }
 
-  bool handle(fl.Event event) {
+  bool handle(fl.Event event, fl.EventData data) {
     switch (event) {
       case fl.Event.DND_ENTER:
       case fl.Event.DND_DRAG:
@@ -44,7 +44,7 @@ class Receiver extends fl.Box {
 
       case fl.Event.PASTE:
         // Handle actual drop (paste) operation.
-        label = fl.eventText;
+        label = data.text;
         return true;
 
       default:

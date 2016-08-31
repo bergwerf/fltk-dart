@@ -7,6 +7,9 @@ part of fltk;
 /// Widget callback function
 typedef void Callback(Widget target, dynamic userData);
 
+/// Widget handle function
+typedef bool HandleFn(Event event, EventData data);
+
 /// [Widget.onCallback] data
 class WidgetCallbackData {
   final Widget target;
@@ -28,15 +31,18 @@ class Widget extends NativeFieldWrapperClass2 {
   /// Callback function (classic style)
   Callback callback;
 
+  /// Additional event handlers.
+  final _eventHandlers = new List<HandleFn>();
+
   /// Callback stream (Dart style)
   Stream<WidgetCallbackData> onCallback;
+
+  /// Resize stream
+  Stream<WidgetResizeData> onResize;
 
   /// Callback stream controller
   final _onCallbackController =
       new StreamController<WidgetCallbackData>.broadcast(sync: useSyncStreams);
-
-  /// Resize stream
-  Stream<WidgetResizeData> onResize;
 
   /// Resize stream controller
   ///
@@ -61,11 +67,28 @@ class Widget extends NativeFieldWrapperClass2 {
     onResize = _onResizeController.stream;
   }
 
-  /// Handle event (called by [doHandle]).
-  bool handle(Event event) => false;
+  /// Add event handler.
+  void addHandler(HandleFn fn) => _eventHandlers.add(fn);
 
   /// Handle event code (called by the extension using `Dart_Invoke`).
-  int doHandle(int event) => handle(Event.values[event]) ? 1 : 0;
+  int doHandle(int eventCode) {
+    final event = Event.values[eventCode];
+    final data = currentEvent;
+
+    // Run own handler.
+    var v = handle(event, data);
+
+    // Run additional handlers
+    for (final handler in _eventHandlers) {
+      final _v = handler(event, data);
+      v = v ? v : _v;
+    }
+
+    return v ? 1 : 0;
+  }
+
+  /// Handle event (called by [doHandle]).
+  bool handle(Event event, EventData data) => false;
 
   /// Draw widget (called by the extension using `Dart_Invoke`)
   void draw() {}

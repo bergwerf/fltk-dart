@@ -45,13 +45,16 @@ class CairoSurface extends Widget {
     _surface = new cairo.ImageSurface(cairo.Format.ARGB32, width, height);
   }
 
+  /// Get context for the image surface.
+  cairo.Context getContext() => new cairo.Context(_surface);
+
   /// Redraw surface
   ///
   /// Do not override this method! To draw, you should draw directly to the
   /// image surface.
   void draw() {
     // Trigger surface updates.
-    final ctx = new cairo.Context(_surface);
+    final ctx = getContext();
     _onDrawController.add(ctx); // Synchronous processing
     _surface.flush();
 
