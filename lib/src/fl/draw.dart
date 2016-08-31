@@ -7,7 +7,7 @@ part of fltk;
 /// Bindings for fl_draw.H
 
 /// Set the drawing color.
-void color(int c) native 'fldart::color';
+set color(int c) native 'fldart::color';
 
 /// Draw line from ([x], [y]) to ([x1], [y1]).
 void _line1(int x, int y, int x1, int y1) native 'fldart::line1';

@@ -10,7 +10,8 @@ import 'dart:nativewrappers';
 import 'dart:typed_data';
 import 'dart:async';
 
-import 'package:image/image.dart';
+import 'package:color/color.dart';
+import 'package:image/image.dart' hide Color;
 import 'package:cairodart/cairodart.dart' as cairo;
 
 part 'src/enums/labeltype.dart';
@@ -26,6 +27,7 @@ part 'src/fl/core.dart';
 part 'src/fl/draw.dart';
 part 'src/fl/color.dart';
 part 'src/fl/event.dart';
+part 'src/fl/xpm.dart';
 
 part 'src/widget.dart';
 part 'src/group.dart';

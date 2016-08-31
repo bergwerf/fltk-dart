@@ -2,6 +2,7 @@
 // Use of this source code is governed by a MIT-style license
 // that can be found in the LICENSE file.
 
+import 'package:color/color.dart';
 import 'package:fltk/fltk.dart' as fl;
 
 int main() {
@@ -13,7 +14,7 @@ int main() {
   box.labelfont = fl.BOLD + fl.ITALIC;
   box.labeltype = fl.SHADOW_LABEL;
   box.labelcolor = fl.YELLOW;
-  box.color = fl.rgbColor(255, 0, 0);
+  box.color = fl.toColor(new HexColor('#ff0000'));
   window.end();
   window.show();
 

@@ -10,7 +10,7 @@ class XWidget extends fl.Widget {
 
   /// Draws the lines
   void draw() {
-    fl.color(fl.BLACK);
+    fl.color = fl.BLACK;
     int x1 = this.x(), y1 = this.y();
     int x2 = this.x() + this.w() - 1, y2 = this.y() + this.h() - 1;
     fl.line(x1, y1, x2, y2);

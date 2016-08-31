@@ -18,7 +18,7 @@ Integrations
 ------------
 - `image`
 - `dartgl`
-- `cairodart` (experimental)
+- `cairodart`
 
 State of the art
 ----------------

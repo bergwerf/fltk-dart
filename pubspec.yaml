@@ -6,6 +6,7 @@ homepage:     https://github.com/hermanbergwerf/fltk-dart
 environment:
   sdk:        '>=1.8.0 <2.0.0'
 dependencies:
+  color:      ^2.0.0
   image:      ^1.1.26
   dartgl:     ^0.1.3
   cairodart:  ^0.2.2

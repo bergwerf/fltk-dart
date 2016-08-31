@@ -4,7 +4,7 @@
 
 part of fltk;
 
-/// Color utility function
+/// Get color value from RGB values.
 int rgbColor(int r, [int g = -1, int b = -1]) {
   // if g and b are -1, use r as grayscale.
   if (g + b == -2) {
@@ -16,6 +16,12 @@ int rgbColor(int r, [int g = -1, int b = -1]) {
 
 /// Alias for calling [rgbColor] with only one argument.
 int grayscale(int l) => rgbColor(l);
+
+/// Get color values from Color object.
+int toColor(Color color) {
+  final rgb = color.toRgbColor();
+  return rgbColor(rgb.r, rgb.g, rgb.b);
+}
 
 /// Set application-wide background color.
 void background(int r, int g, int b) native 'fldart::background';
