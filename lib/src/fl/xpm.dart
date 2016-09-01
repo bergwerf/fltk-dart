@@ -35,7 +35,7 @@ Image readXpm(List<String> xpm) {
   final charspp = int.parse(match.group(4));
 
   // Read colors.
-  final colRegex = new RegExp('(.{$charspp}) c (.+)');
+  final colRegex = new RegExp('(.{$charspp}).+c (.+)');
   final colors = new Map<String, int>();
   for (var i = 1; i <= ncolors; i++) {
     match = colRegex.firstMatch(xpm[i]);
@@ -47,9 +47,11 @@ Image readXpm(List<String> xpm) {
     final colorString = match.group(2).toLowerCase();
     int color = 0;
     if (colorString != 'none') {
-      if (RgbColor.namedColors.containsKey(colorString)) {
+      // [RgbColor.namedColors] color keys do not contain spaces.
+      final colorNoSpaces = colorString.replaceAll(' ', '');
+      if (RgbColor.namedColors.containsKey(colorNoSpaces)) {
         // Use named color.
-        color = _colorToImageColor(RgbColor.namedColors[colorString]);
+        color = _colorToImageColor(RgbColor.namedColors[colorNoSpaces]);
       } else {
         // Parse as full hex color.
         color = _colorToImageColor(new HexColor(colorString));
