@@ -5,6 +5,7 @@
 import 'dart:async';
 import 'dart:isolate';
 
+import 'package:image/image.dart';
 import 'package:fltk/fltk.dart' as fl;
 
 /// Utility for creating style buffers.
@@ -144,7 +145,10 @@ class DartPad extends fl.DoubleWindow {
     toolbar.color = bg1;
 
     // Create run button.
-    runButton = new fl.Button(half1 - 80 - pad, pad, 80, bh, '▶  Run');
+    runButton = new fl.Button(half1 - 90 - pad, pad, 90, bh, ' Run');
+    runButton.image =
+        copyResize(copyRotate(fl.readXpm(fl.xpmDartIcon), -45.0), 24);
+    runButton.align = fl.ALIGN_IMAGE_NEXT_TO_TEXT;
     runButton.box = fl.FLAT_BOX;
     runButton.color = bg1;
     runButton.labelcolor = fl.grayscale(255);

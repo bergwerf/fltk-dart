@@ -16,6 +16,7 @@ methods:
 - int active_r()
 - void show()
 - void hide()
+- void redraw()
 - int visible()
 - int visible_r()
 
@@ -32,9 +33,11 @@ methods:
 - Fl_Color color()
 - void color(Fl_Color bg)
 
-- int when()
-- void when(int mode)
+- Fl_Align align()
+- void align(Fl_Align align)
 
-- void redraw()
 - void box(Fl_Boxtype type)
 - void image([custom])
+
+- int when()
+- void when(int mode)

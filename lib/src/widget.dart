@@ -130,6 +130,15 @@ class Widget extends NativeFieldWrapperClass2 {
   /// Deactivate the widget.
   void deactivate() native 'fldart::Widget::void_deactivate';
 
+  /// Show widget.
+  void show() native 'fldart::Widget::void_show';
+
+  /// Hide widget.
+  void hide() native 'fldart::Widget::void_hide';
+
+  /// Redraw widget.
+  void redraw() native 'fldart::Widget::void_redraw';
+
   /// Get label.
   String get label native 'fldart::Widget::String_label';
 
@@ -170,25 +179,16 @@ class Widget extends NativeFieldWrapperClass2 {
   /// Set background color.
   set color(int color) native 'fldart::Widget::void_color';
 
-  /// Get callback flags.
-  int get when native 'fldart::Widget::int_when';
+  /// Get label alignment.
+  int get align native 'fldart::Widget::Fl_Align_align';
 
-  /// Set callback flags.
-  set when(int mode) native 'fldart::Widget::void_when';
+  /// Set label alignment.
+  set align(int align) native 'fldart::Widget::void_align';
 
   void _boxSet(int type) native 'fldart::Widget::void_box';
 
   /// Set widget box style.
   set box(Boxtype type) => _boxSet(type.index);
-
-  /// Show widget.
-  void show() native 'fldart::Widget::void_show';
-
-  /// Hide widget.
-  void hide() native 'fldart::Widget::void_hide';
-
-  /// Redraw widget.
-  void redraw() native 'fldart::Widget::void_redraw';
 
   void _image(int width, int height, int depth, Uint8List data)
       native 'fldart::Widget::void_image';
@@ -196,4 +196,10 @@ class Widget extends NativeFieldWrapperClass2 {
   /// Change widget background image.
   set image(Image image) => _image(image.width, image.height, 4,
       new Uint8List.fromList(image.data.buffer.asUint8List()));
+
+  /// Get callback flags.
+  int get when native 'fldart::Widget::int_when';
+
+  /// Set callback flags.
+  set when(int mode) native 'fldart::Widget::void_when';
 }
