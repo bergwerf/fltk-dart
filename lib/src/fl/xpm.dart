@@ -19,13 +19,11 @@ Image readXpm(List<String> xpm) {
 
   if (xpm.isEmpty) {
     throw new ArgumentError('xpm cannot be empty');
-    return null;
   }
 
   var match = dimRegex.firstMatch(xpm[0]);
   if (match == null) {
     throw new ArgumentError('xpm is not formatted correctly');
-    return null;
   }
 
   // Parse dimensions.
@@ -41,7 +39,6 @@ Image readXpm(List<String> xpm) {
     match = colRegex.firstMatch(xpm[i]);
     if (match == null) {
       throw new ArgumentError('xpm is not formatted correctly');
-      return null;
     }
 
     final colorString = match.group(2).toLowerCase();
