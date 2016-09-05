@@ -27,8 +27,7 @@ class HvifPath {
 
     if (usesCommands) {
       // Read command bits.
-      throw new UnimplementedError(
-          'Paths that use commands are not yet implemented.');
+      throw new UnimplementedError('Command paths are not implemented.');
     } else if (noCurves) {
       // npoints * 2 coords per point
       points = new List<HvifPoint>.generate(
@@ -40,7 +39,7 @@ class HvifPath {
     }
   }
 
-  void render(cairo.Context ctx, int size) {
+  void render(cairo.Context ctx, int size, List<HvifTransformer> transformers) {
     if (points.isNotEmpty) {
       final scale = size / 64;
       ctx.matrix = new cairo.Matrix.zero()..initScale(scale, scale);
@@ -60,7 +59,17 @@ class HvifPath {
       if (closed) {
         ctx.closePath();
       }
-      ctx.fill();
+
+      // Run transformers.
+      bool doFill = true;
+      for (final transformer in transformers) {
+        doFill = doFill ? transformer.doFill : doFill;
+        transformer.afterPath(ctx, size);
+      }
+
+      if (doFill) {
+        ctx.fill();
+      }
     }
   }
 }

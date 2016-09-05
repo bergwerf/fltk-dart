@@ -52,6 +52,11 @@ class HvifStyle {
         gradientFlags = buffer.read();
         int gradientStops = buffer.read();
 
+        if (gradientFlags & hvifGradientFlag16BitColors != 0) {
+          throw new UnimplementedError(
+              '16 bit gradient colors are not implemented.');
+        }
+
         // Read 6x24bit affine transformation matrix.
         if (gradientFlags & hvifGradientFlagTransform != 0) {
           matrix.init(
@@ -64,12 +69,11 @@ class HvifStyle {
         }
 
         // Read gradient color stops.
+        bool grays = gradientFlags & hvifGradientFlagGrays != 0;
+        bool noAlpha = gradientFlags & hvifGradientFlagNoAlpha != 0;
         while (gradientStops-- > 0) {
           stopValues.add(buffer.read());
-          colors.add(hvifReadColor(
-              buffer,
-              gradientFlags & hvifGradientFlagGrays != 0,
-              gradientFlags & hvifGradientFlagNoAlpha != 0));
+          colors.add(hvifReadColor(buffer, grays, noAlpha));
         }
         break;
 
@@ -78,24 +82,40 @@ class HvifStyle {
     }
   }
 
+  /// Common code for configuring a gradient.
+  void configureGradient(
+      cairo.Context ctx, cairo.Gradient gradient, double scale) {
+    // Note! It turns out you need to invert the matrix for Cairo.
+    gradient.matrix = matrix
+      ..invert()
+      ..scale(scale, scale);
+
+    // Add color stops.
+    for (var i = 0; i < stopValues.length; i++) {
+      gradient
+          .addColorStop(new cairo.ColorStop(colors[i], stopValues[i] / 255));
+    }
+
+    ctx.source = gradient;
+  }
+
+  /// Configure this style in the given context.
   void configure(cairo.Context ctx, int size) {
     if (style == HvifStyleType.gadient) {
       final scale = 64 / size;
-      if (gradient == HvifGradientType.circular) {
-        final radialGradient = new cairo.RadialGradient(0, 0, 0, 0, 0, 64);
+      switch (gradient) {
+        case HvifGradientType.circular:
+          final radialGradient = new cairo.RadialGradient(0, 0, 0, 0, 0, 64);
+          configureGradient(ctx, radialGradient, scale);
+          break;
 
-        // Note! It turns out you need to invert the matrix for Cairo.
-        radialGradient.matrix = matrix
-          ..invert()
-          ..scale(scale, scale);
+        case HvifGradientType.linear:
+          final linearGradient = new cairo.LinearGradient(0, 32, 64, 32);
+          configureGradient(ctx, linearGradient, scale);
+          break;
 
-        // Add color stops.
-        for (var i = 0; i < stopValues.length; i++) {
-          radialGradient.addColorStop(
-              new cairo.ColorStop(colors[i], stopValues[i] / 255));
-        }
-
-        ctx.source = radialGradient;
+        default:
+          throw new UnimplementedError('$gradient is not implemented');
       }
     } else {
       final c = colors[0];

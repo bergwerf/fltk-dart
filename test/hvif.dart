@@ -2,7 +2,7 @@
 // Use of this source code is governed by a MIT-style license
 // that can be found in the LICENSE file.
 
-import 'dart:typed_data';
+import 'dart:io';
 
 import 'package:fltk/hvif.dart';
 import 'package:fltk/fltk.dart' as fl;
@@ -39,12 +39,13 @@ const hvifRedMarble = const [
 
 int main() {
   final window = new fl.DoubleWindow(96 + 48 + 24, 96);
-  final hvif96 = new fl.Box(0, 0, 96, 96);
+  final hvif64 = new fl.Box(0, 0, 96, 96);
   final hvif32 = new fl.Box(96, 0, 48, 96);
   final hvif16 = new fl.Box(96 + 48, 0, 24, 96);
-  hvif96.image = hvifRender(new Uint8List.fromList(hvifRedMarble), 96);
-  hvif32.image = hvifRender(new Uint8List.fromList(hvifRedMarble), 32);
-  hvif16.image = hvifRender(new Uint8List.fromList(hvifRedMarble), 16);
+  final data = new File('test/fltk.hvif').readAsBytesSync();
+  hvif64.image = hvifRender(data, 64);
+  hvif32.image = hvifRender(data, 32);
+  hvif16.image = hvifRender(data, 16);
   window.end();
   window.show();
   return fl.run();

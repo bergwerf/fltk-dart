@@ -17,6 +17,7 @@ const hvifShapeFlagTranslation = 1 << 5;
 class HvifShape {
   int type, style, flags;
   List<int> pathIndices;
+  final transformers = new List<HvifTransformer>();
   num translateX = 0, translateY = 0;
   num lodMin = 0, lodMax = 4;
 
@@ -35,6 +36,21 @@ class HvifShape {
       if (flags & hvifShapeFlagLodScale != 0) {
         lodMin = hvifReadLodValue(buffer);
         lodMax = hvifReadLodValue(buffer);
+      }
+
+      if (flags & hvifShapeFlagTransform != 0) {
+        throw new UnimplementedError('Shape transforming is not implemented.');
+      }
+
+      if (flags & hvifShapeFlagHinting != 0) {
+        throw new UnimplementedError('Shape pixel hinting is not implemented.');
+      }
+
+      if (flags & hvifShapeFlagHasTransformers != 0) {
+        int ntransformers = buffer.read();
+        while (ntransformers-- > 0) {
+          transformers.add(new HvifTransformer.read(buffer));
+        }
       }
     } else {
       throw new UnsupportedError('HVIF contains unknown shape type $type.');
@@ -56,7 +72,7 @@ class HvifShape {
 
       // Draw paths.
       for (final i in pathIndices) {
-        paths[i].render(ctx, size);
+        paths[i].render(ctx, size, transformers);
       }
 
       ctx.restore();

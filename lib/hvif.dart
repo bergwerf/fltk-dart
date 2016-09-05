@@ -11,8 +11,9 @@ import 'package:cairodart/cairodart.dart' as cairo;
 
 import 'src/utils/cairo.dart';
 
+part 'src/hvif/hvif.dart';
+part 'src/hvif/path.dart';
 part 'src/hvif/utils.dart';
 part 'src/hvif/style.dart';
-part 'src/hvif/path.dart';
 part 'src/hvif/shape.dart';
-part 'src/hvif/hvif.dart';
+part 'src/hvif/transformer.dart';
