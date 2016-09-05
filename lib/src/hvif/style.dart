@@ -110,7 +110,7 @@ class HvifStyle {
           break;
 
         case HvifGradientType.linear:
-          final linearGradient = new cairo.LinearGradient(0, 32, 64, 32);
+          final linearGradient = new cairo.LinearGradient(-64, 32, 64, 32);
           configureGradient(ctx, linearGradient, scale);
           break;
 
