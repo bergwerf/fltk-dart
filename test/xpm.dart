@@ -49,7 +49,6 @@ const xpmCat = const [
 
 int main() {
   final window = new fl.DoubleWindow(2 * 96, 96);
-  window.color = fl.grayscale(51);
   final dartIcon = new fl.Box(32, 32, 32, 32);
   dartIcon.image = fl.readXpm(fl.xpmDartIcon);
   final catImage = new fl.Box(96 + 32, 32, 32, 32);

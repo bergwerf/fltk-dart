@@ -61,6 +61,9 @@ class CairoSurface extends Widget {
     // Draw pixel data. It turns out using drawRgbImage for this task is glitchy
     // for large canvasses. So if the OS does not provide alpha blending
     // support, no alpha for you!
-    drawImage(_surface.data, x(), y(), _surface.width, _surface.height, 4);
+    final pixeldata = _surface.data;
+    bgraToRgba(pixeldata);
+    unpremultiply(pixeldata);
+    drawImage(pixeldata, x(), y(), _surface.width, _surface.height, 4);
   }
 }

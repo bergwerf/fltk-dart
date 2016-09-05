@@ -59,6 +59,9 @@ DART_EXPORT Dart_Handle fldart_Init(Dart_Handle parentLibrary) {
   fl_define_FL_ENGRAVED_LABEL();
   fl_define_FL_EMBOSSED_LABEL();
 
+  // Prevent dithering.
+  Fl::visual(FL_RGB);
+
   return Dart_Null();
 }
 

@@ -22,13 +22,17 @@ int main() {
 
     // Red circle
     var a = PI / 2;
+    final redGradient = new RadialGradient(0, 0, 0, 0, 0, 100);
+    redGradient.addColorStop(new ColorStop(new Color.rgb(1, 1, 1), 0.0));
+    redGradient.addColorStop(new ColorStop(new Color.rgb(1, 0, 0), 0.5));
+    redGradient.addColorStop(new ColorStop(new Color.rgb(0, 0, 0), 1.0));
     ctx
       ..save()
       ..translate(cx + r2 * cos(a), cy - r2 * sin(a))
       ..setSourceRgb(0, 0, 0)
       ..arc(0, 0, r1, 0, 2 * PI)
       ..strokePreserve()
-      ..setSourceRgba(1, 0, 0, 0.7)
+      ..source = redGradient
       ..fill()
       ..restore();
 

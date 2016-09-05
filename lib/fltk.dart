@@ -14,6 +14,8 @@ import 'package:color/color.dart';
 import 'package:image/image.dart' hide Color;
 import 'package:cairodart/cairodart.dart' as cairo;
 
+import 'src/utils/cairo.dart';
+
 part 'src/enums/labeltype.dart';
 part 'src/enums/shortcut.dart';
 part 'src/enums/boxtype.dart';
