@@ -384,7 +384,7 @@ int fib(int n) {
 int fastFib(int n) {
   int a = 1, b = 0, temp;
 
-  while (n > 0){
+  while (n > 0) {
     temp = a;
     a = a + b;
     b = temp;
