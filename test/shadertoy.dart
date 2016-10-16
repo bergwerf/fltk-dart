@@ -3,6 +3,7 @@
 // that can be found in the LICENSE file.
 
 import 'dart:io';
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:dartgl/dartgl.dart';
@@ -40,7 +41,13 @@ class Gl2DCanvas extends fl.GlWindow {
   /// Shader and buffer update state.
   int shaderState = 0, bufferState = 0;
 
-  Gl2DCanvas(int x, int y, int w, int h) : super(x, y, w, h);
+  /// Shader compile state.
+  final _compileState = new StreamController<bool>(sync: true);
+  Stream<bool> compileState;
+
+  Gl2DCanvas(int x, int y, int w, int h) : super(x, y, w, h) {
+    compileState = _compileState.stream;
+  }
 
   void updateShaders(String _vertexShader, String _fragmentShader) {
     vertexShader = _vertexShader;
@@ -80,7 +87,7 @@ class Gl2DCanvas extends fl.GlWindow {
     }
 
     if (shaderState == 1) {
-      compileShaders();
+      _compileState.add(compileShaders());
       shaderState = 2;
     }
 
@@ -142,7 +149,7 @@ class Gl2DCanvas extends fl.GlWindow {
     }
   }
 
-  void compileShaders() {
+  bool compileShaders() {
     // Compile vertex shader.
     int vshader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vshader, 1, [vertexShader], null);
@@ -167,6 +174,9 @@ class Gl2DCanvas extends fl.GlWindow {
       glEnableVertexAttribArray(aVertexPosition);
       uPMatrix = glGetUniformLocation(program, 'uPMatrix');
       uViewport = glGetUniformLocation(program, 'viewport');
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -204,8 +214,8 @@ void main(void) {
   /// Fragment shader editor
   fl.TextEditor editor;
 
-  /// Recompile button
-  fl.Button button;
+  /// Status box
+  fl.Box status;
 
   /// Text buffer for the editor
   fl.TextBuffer buffer;
@@ -226,14 +236,14 @@ void main(void) {
     canvas = new Gl2DCanvas(0, 0, half1, height);
 
     // Create button.
-    button = new fl.Button(half1, 0, half2, 40, 'Recompile!');
-    button.box = fl.FLAT_BOX;
-    button.color = fl.WHITE;
-    button.labelsize = 20;
-    button.onCallback.listen((_) => compile());
+    status = new fl.Box(half1, 0, half2, 40, '');
+    status.box = fl.FLAT_BOX;
+    status.color = fl.WHITE;
+    status.labelsize = 20;
+    status.onCallback.listen((_) => compile());
 
     // Create editor.
-    editor = new fl.TextEditor(half1, button.h(), half2, height - button.h());
+    editor = new fl.TextEditor(half1, status.h(), half2, height - status.h());
     editor.box = fl.FLAT_BOX;
     editor.cursorStyle = fl.TextDisplay.SIMPLE_CURSOR;
     editor.cursorColor = fl.rgbColor(64);
@@ -249,18 +259,15 @@ void main(void) {
     // Setup buffer.
     buffer = new fl.TextBuffer();
     buffer.onModify.listen((data) {
-      if (data.nInserted > 0 || data.nDeleted > 0) {
-        if (buffer.text == lastShader) {
-          button.labelfont = fl.COURIER;
-          button.labelcolor = fl.BLACK;
-          button.label = 'Recompile';
-        } else {
-          button.labelfont = fl.COURIER_BOLD_ITALIC;
-          button.labelcolor = fl.DARK_GREEN;
-          button.label = 'Recompile!';
-        }
+      compile();
+    });
 
-        button.redraw();
+    // Bind status to compileStatus stream.
+    canvas.compileState.listen((status) {
+      if (status) {
+        setStatus('Shader is correct', false);
+      } else {
+        setStatus('Failed to compile shader', true);
       }
     });
 
@@ -278,7 +285,7 @@ void main(void) {
           new File('$scriptDir/shaders/default.frag').readAsStringSync();
     }
 
-    resizable = new fl.Widget(0, button.h(), width, height - button.h());
+    resizable = new fl.Widget(0, status.h(), width, height - status.h());
     end();
 
     // Update shaders.
@@ -287,14 +294,24 @@ void main(void) {
 
   /// Compile shader.
   void compile() {
-    button.labelfont = fl.COURIER;
-    button.labelcolor = fl.BLACK;
-    button.label = 'Recompile';
-    button.redraw();
-
     lastShader = buffer.text;
     canvas.updateShaders(defaultVertexShader, lastShader);
     canvas.redraw();
+  }
+
+  /// Set status label.
+  void setStatus(String text, bool error) {
+    if (error) {
+      status.labelfont = fl.COURIER_BOLD_ITALIC;
+      status.labelcolor = fl.RED;
+      status.label = text;
+    } else {
+      status.labelfont = fl.COURIER;
+      status.labelcolor = fl.DARK_GREEN;
+      status.label = text;
+    }
+
+    status.redraw();
   }
 }
 
