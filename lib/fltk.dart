@@ -16,14 +16,8 @@ import 'package:cairodart/cairodart.dart' as cairo;
 
 import 'src/utils/cairo.dart';
 
-part 'src/enums/labeltype.dart';
-part 'src/enums/shortcut.dart';
-part 'src/enums/boxtype.dart';
-part 'src/enums/option.dart';
-part 'src/enums/color.dart';
-part 'src/enums/align.dart';
-part 'src/enums/font.dart';
-part 'src/enums/event.dart';
+import 'enums.dart';
+export 'enums.dart';
 
 part 'src/fl/core.dart';
 part 'src/fl/draw.dart';

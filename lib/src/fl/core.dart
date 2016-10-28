@@ -19,8 +19,8 @@ int run() native 'fldart::run';
 ///
 /// It is important to use [Timer.run] instead of [scheduleMicrotask] so Timer
 /// events are not blocked.
-Future runAsync([Duration interval = Duration.ZERO]) {
-  final completer = new Completer();
+Future<Null> runAsync([Duration interval = Duration.ZERO]) {
+  final completer = new Completer<Null>();
   _VoidFn cycle;
   cycle = () {
     final state = check();
