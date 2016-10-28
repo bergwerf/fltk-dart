@@ -67,8 +67,11 @@ Future<Null> setupHotReload() async {
 
   // Figure out main isolate ID.
   final vm = await serviceClient.getVM();
+
+  // This is probably not the best way. Also, maybe we want to support hot
+  // reloading secondary isolates?
   isolateId =
-      vm.isolates.first.id; // TODO: scan for the main isolate instead of this.
+      vm.isolates.reduce((a, b) => a.name.endsWith('\$main') ? a : b).id;
 
   // Watch for changes under current directory.
   new DirectoryWatcher(Directory.current.path).events.listen((event) {
