@@ -12,41 +12,39 @@ import 'package:vm_service_lib/vm_service_lib.dart' hide Null;
 const vmServicePort = 8282;
 const vmServiceHost = 'localhost';
 
-VmService createServiceClient(
-    WebSocket socket, StreamController<String> controller,
-    [Log log]) {
-  return new VmService(
-      controller.stream, (String message) => socket.add(message),
-      log: log, disposeHandler: () => socket.close());
-}
-
 Future<Null> main(List<String> args) async {
   // Return if there are no args.
   if (args.isEmpty) {
     print('Please specify the entry Dart file.');
-    exit(0);
+    return;
   }
 
   // Run entry point.
   final process = await Process
       .start('dart', ['--enable-vm-service=$vmServicePort', args.first]);
-  process.stdout.transform(UTF8.decoder).listen(print);
   process.stderr.transform(UTF8.decoder).listen(print);
 
-  // Wait for 500ms.
-  // This is a super ugly solution for listening to the process output untill it
-  // prints the Observatory URL.
-  await new Future.delayed(new Duration(milliseconds: 500));
+  // Wait until observatory is launched.
+  StreamSubscription sub;
+  sub = process.stdout.transform(UTF8.decoder).listen((str) async {
+    if (str.startsWith('Observatory listening on http://')) {
+      sub.onData(print);
+      setupHotReload();
+    }
+  });
+}
 
+Future<Null> setupHotReload() async {
   var isolateId = '';
   final controller = new StreamController<String>();
 
   // Connect to WebSocket interface.
-  final ws =
-      await await WebSocket.connect('ws://$vmServiceHost:$vmServicePort/ws');
+  final ws = await WebSocket.connect('ws://$vmServiceHost:$vmServicePort/ws');
   ws.listen((json) {
+    // Add message to the stream to the VM service lib client.
     controller.add(json);
 
+    // Decode and check if this is a positive source reload.
     final data = JSON.decode(json) as Map;
     if (data.containsKey('result') &&
         (data['result'] as Map).containsKey('type') &&
@@ -63,7 +61,9 @@ Future<Null> main(List<String> args) async {
   });
 
   // Create VM service client from WebSocket.
-  final serviceClient = createServiceClient(ws, controller);
+  final serviceClient = new VmService(
+      controller.stream, (String message) => ws.add(message),
+      log: null, disposeHandler: () => ws.close());
 
   // Figure out main isolate ID.
   final vm = await serviceClient.getVM();
