@@ -20,6 +20,6 @@ fl.App buildApp() => new fl.App(windows: {
       })
     }, scheme: 'gleam');
 
-Future main() {
+Future<int> main() {
   return fl.runApp(buildApp);
 }

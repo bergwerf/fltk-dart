@@ -20,8 +20,9 @@ Future<Null> main(List<String> args) async {
   }
 
   // Run entry point.
-  final process = await Process
-      .start('dart', ['--enable-vm-service=$vmServicePort', args.first]);
+  final process = await Process.start(
+      'dart', ['--enable-vm-service=$vmServicePort', args.first],
+      environment: {'FLFN_MODE': 'debug'});
   process.stderr.transform(UTF8.decoder).listen(print);
 
   // Wait until observatory is launched.

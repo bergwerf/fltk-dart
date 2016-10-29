@@ -6,10 +6,9 @@ import 'dart:async';
 
 import 'package:fltk/flfn.dart' as fl;
 
-// !IMPORTANT: this is unimplemented syntax.
 fl.App buildApp() => new fl.App(windows: {
       'main': new fl.Window(300, 200, 'Click the button...', children: {
-        'btn-one': new fl.Button(0, 0, 150, 200, label: 'ON', box: fl.UP_BOX,
+        'btn-one': new fl.Button(0, 0, 150, 200, label: '1', box: fl.UP_BOX,
             callback: (app, button) {
           final btn = app.getButton('main/btn-two');
           btn.label = btn.label == 'ON' ? 'OFF' : 'ON';
@@ -17,11 +16,11 @@ fl.App buildApp() => new fl.App(windows: {
         'btn-two': new fl.Button(150, 0, 150, 200, label: 'ON', box: fl.UP_BOX,
             callback: (app, button) {
           final btn = app.getButton('main/btn-one');
-          btn.label = btn.label == 'ON' ? 'OFF' : 'ON';
+          btn.label = btn.label == '1' ? '0' : '1';
         })
       })
     }, scheme: 'plastic');
 
-Future<Null> main() async {
+Future<int> main() async {
   return fl.runApp(buildApp);
 }

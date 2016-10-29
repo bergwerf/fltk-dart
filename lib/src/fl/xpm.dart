@@ -73,7 +73,7 @@ Image readXpm(List<String> xpm) {
 }
 
 /// XPM data for a 32x32 pixels version of the Dart icon!
-const xpmDartIcon = const [
+const List<String> xpmDartIcon = const [
   '32 32 5 2',
   '## c #0082c8',
   '++ c #00a4e4',

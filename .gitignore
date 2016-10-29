@@ -1,3 +1,4 @@
+.atom
 compile
 libfldart.so
 ext/src/gen
