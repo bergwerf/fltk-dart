@@ -49,7 +49,6 @@ DART_EXPORT Dart_Handle fldart_Init(Dart_Handle parentLibrary) {
 
   Dart_Handle resultCode = Dart_SetNativeResolver(
                              parentLibrary, ResolveName, NULL);
-
   if (Dart_IsError(resultCode)) {
     return resultCode;
   }
@@ -65,6 +64,7 @@ DART_EXPORT Dart_Handle fldart_Init(Dart_Handle parentLibrary) {
   return Dart_Null();
 }
 
+// TODO: use hashtable?
 std::vector<fldart::FunctionMapping*> allFunctions = {
   fldart::custom::functionMapping,
   fldart::core::functionMapping,
