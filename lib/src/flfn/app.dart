@@ -13,7 +13,7 @@ class App {
   void build() {
     fl.scheme = scheme;
     for (final window in windows.values) {
-      window.build();
+      window.build(this);
     }
   }
 
@@ -24,7 +24,7 @@ class App {
         windows[key].merge(other.windows[key]);
       } else {
         windows[key] = other.windows[key];
-        windows[key].build();
+        windows[key].build(this);
       }
     }
 
@@ -33,6 +33,15 @@ class App {
         //windows[key].destroy();
         windows.remove(key);
       }
+    }
+  }
+
+  Button getButton(String id) {
+    final selector = id.split('/');
+    if (windows.containsKey(selector.first)) {
+      return windows[selector.first].getButton(selector.sublist(1));
+    } else {
+      return null;
     }
   }
 }

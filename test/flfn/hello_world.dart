@@ -9,7 +9,8 @@ import 'package:fltk/flfn.dart' as fl;
 
 fl.App buildApp() => new fl.App(windows: {
       'window': new fl.Window(350, 180, 'FLTK', children: {
-        'box': new fl.Box(20, 40, 310, 100, 'Hello, World!',
+        'box': new fl.Box(20, 40, 310, 100,
+            label: 'Hello, World!',
             box: fl.UP_BOX,
             labelsize: 36,
             labelfont: fl.BOLD + fl.ITALIC,

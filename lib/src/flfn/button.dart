@@ -4,30 +4,31 @@
 
 part of fltk.flfn;
 
-class Button extends Widget {
-  final int x, y, w, h, labelsize, labelfont, labelcolor, color;
-  final String l;
-  final fl.Boxtype box;
-  final fl.Labeltype labeltype;
-  fl.Button _button;
+class Button extends Widget<fl.Button> {
+  Button(int x, int y, int w, int h,
+      {String label: '',
+      int labelsize: 16,
+      int labelfont: 0,
+      int labelcolor: fl.BLACK,
+      fl.Boxtype box: fl.NO_BOX,
+      fl.Labeltype labeltype: fl.NORMAL_LABEL,
+      Color color: const RgbColor(255, 255, 255),
+      Callback<Button> callback: null})
+      : super({
+          'x': x,
+          'y': y,
+          'w': w,
+          'h': h,
+          'label': label,
+          'labelsize': labelsize,
+          'labelfont': labelfont,
+          'labelcolor': labelcolor,
+          'labeltype': labeltype,
+          'box': box,
+          'color': fl.toColor(color),
+          'callback': callback
+        });
 
-  Button(this.x, this.y, this.w, this.h, this.l,
-      {this.box: fl.NO_BOX,
-      this.labelsize: 16,
-      this.labelfont: 0,
-      this.labeltype: fl.NORMAL_LABEL,
-      this.labelcolor: fl.BLACK,
-      Color color: const RgbColor(255, 255, 255)})
-      : color = fl.toColor(color);
-
-  void build() {
-    _button = new fl.Button(x, y, w, h, l);
-    _button
-      ..labelsize = labelsize
-      ..labelfont = labelfont
-      ..labelcolor = labelcolor
-      ..color = color
-      ..box = box
-      ..labeltype = labeltype;
-  }
+  fl.Button _createInstance() => new fl.Button(
+      _props['x'], _props['y'], _props['w'], _props['h'], _props['label']);
 }

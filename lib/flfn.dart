@@ -4,8 +4,8 @@
 
 library fltk.flfn;
 
-import 'dart:developer';
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:color/color.dart';
 import 'package:fltk/fltk.dart' as fl;

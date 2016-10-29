@@ -4,30 +4,29 @@
 
 part of fltk.flfn;
 
-class Box extends Widget {
-  final int x, y, w, h, labelsize, labelfont, labelcolor, color;
-  final String l;
-  final fl.Boxtype box;
-  final fl.Labeltype labeltype;
-  fl.Box _box;
-
-  Box(this.x, this.y, this.w, this.h, this.l,
-      {this.box: fl.NO_BOX,
-      this.labelsize: 16,
-      this.labelfont: 0,
-      this.labeltype: fl.NORMAL_LABEL,
-      this.labelcolor: fl.BLACK,
+class Box extends Widget<fl.Box> {
+  Box(int x, int y, int w, int h,
+      {String label: '',
+      int labelsize: 16,
+      int labelfont: 0,
+      int labelcolor: fl.BLACK,
+      fl.Boxtype box: fl.NO_BOX,
+      fl.Labeltype labeltype: fl.NORMAL_LABEL,
       Color color: const RgbColor(255, 255, 255)})
-      : color = fl.toColor(color);
+      : super({
+          'x': x,
+          'y': y,
+          'w': w,
+          'h': h,
+          'label': label,
+          'labelsize': labelsize,
+          'labelfont': labelfont,
+          'labelcolor': labelcolor,
+          'labeltype': labeltype,
+          'box': box,
+          'color': fl.toColor(color)
+        });
 
-  void build() {
-    _box = new fl.Box(x, y, w, h, l);
-    _box
-      ..labelsize = labelsize
-      ..labelfont = labelfont
-      ..labelcolor = labelcolor
-      ..color = color
-      ..box = box
-      ..labeltype = labeltype;
-  }
+  fl.Box _createInstance() => new fl.Box(
+      _props['x'], _props['y'], _props['w'], _props['h'], _props['label']);
 }

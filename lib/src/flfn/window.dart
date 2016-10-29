@@ -11,10 +11,10 @@ class Window {
   fl.DoubleWindow _window;
   Window(this.w, this.h, this.l, {this.children: const {}});
 
-  void build() {
+  void build(App app) {
     _window = new fl.DoubleWindow(w, h, l);
     for (final child in children.values) {
-      child.build();
+      child.build(app);
     }
     _window.end();
     _window.show();
@@ -22,5 +22,13 @@ class Window {
 
   void merge(Window other) {
     _window.label = other.l;
+  }
+
+  Button getButton(List<String> selector) {
+    if (children.containsKey(selector.first)) {
+      return children[selector.first] as Button;
+    } else {
+      return null;
+    }
   }
 }
