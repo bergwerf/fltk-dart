@@ -7,8 +7,8 @@ part of fltk;
 /// Switch to use synchronous streams everywhere
 bool useSyncStreams = false;
 
-/// () => void function
-typedef void _VoidFn();
+/// (Timer time) => void function
+typedef void _PeriodicTimerCallback(Timer timer);
 
 /// Run FLTK synchronously
 ///
@@ -21,17 +21,16 @@ int run() native 'fldart::run';
 /// events are not blocked.
 Future<int> runAsync([Duration interval = Duration.ZERO]) {
   final completer = new Completer<int>();
-  _VoidFn cycle;
-  cycle = () {
+  _PeriodicTimerCallback cycle;
+  cycle = (Timer timer) {
     final state = check();
     if (state == 0) {
+      timer.cancel();
       completer.complete(state);
-    } else {
-      new Timer(interval, cycle);
     }
   };
 
-  new Timer(interval, cycle);
+  new Timer.periodic(interval, cycle);
   return completer.future;
 }
 
