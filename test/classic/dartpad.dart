@@ -394,8 +394,12 @@ int fastFib(int n) {
   return b;
 }
 
+int ffib(int n, [int a = 1, int b = 0]) =>
+  n == 2 ? a + b : ffib(n - 1, a + b, a);
+
 print('5th Fibonacci number: ${fib(5)}');
 print('10th Fibonacci number: ${fib(10)}');
 print('20th Fibonacci number: ${fastFib(20)}');
 print('40th Fibonacci number: ${fastFib(40)}');
+print('40th Fibonacci number: ${ffib(40)}');
 ''';
