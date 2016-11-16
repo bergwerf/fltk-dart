@@ -10,15 +10,15 @@ import 'package:fltk/flfn.dart' as fl;
 fl.App buildApp() => new fl.App(windows: {
       'window': new fl.Window(350, 180, 'FLTK', children: {
         'box': new fl.Box(20, 40, 310, 100,
-            label: 'Hello, World!',
-            box: fl.UP_BOX,
+            label: 'Hi, World!',
+            box: fl.DOWN_BOX,
             labelsize: 36,
-            labelfont: fl.BOLD + fl.ITALIC,
+            labelfont: fl.COURIER,
             labeltype: fl.SHADOW_LABEL,
             labelcolor: fl.YELLOW,
-            color: new HexColor('#ff0000'))
+            color: new RgbColor.name('cyan'))
       })
-    }, scheme: 'gleam');
+    }, scheme: 'gtk+');
 
 Future<int> main() {
   return fl.runApp(buildApp);

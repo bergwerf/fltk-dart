@@ -18,6 +18,9 @@ class Window extends Group {
 
   Window.empty() : super.empty();
 
+  /// Setting the label must be done via copy_label.
+  set label(String text) native 'fldart::Window::void_copy_label';
+
   /// Short native constructor
   void _createWindow(int w, int h, String l)
       native 'fldart::Window::constructor_WindowShort';

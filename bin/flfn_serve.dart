@@ -42,6 +42,8 @@ Future<Null> setupHotReload() async {
   // Connect to WebSocket interface.
   final ws = await WebSocket.connect('ws://$vmServiceHost:$vmServicePort/ws');
   ws.listen((json) {
+    print(json);
+
     // Add message to the stream to the VM service lib client.
     controller.add(json);
 
@@ -74,11 +76,14 @@ Future<Null> setupHotReload() async {
   isolateId =
       vm.isolates.reduce((a, b) => a.name.endsWith('\$main') ? a : b).id;
 
+  int id = 100;
+
   // Watch for changes under current directory.
   new DirectoryWatcher(Directory.current.path).events.listen((event) {
     if (event.type == ChangeType.MODIFY && event.path.endsWith('.dart')) {
       // Send `_reloadSources` to Dart VM to triger code reload.
       ws.add(JSON.encode({
+        'id': ++id,
         'jsonrpc': '2.0',
         'method': '_reloadSources',
         'params': {'isolateId': '$isolateId'}

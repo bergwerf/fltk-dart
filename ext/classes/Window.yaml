@@ -5,4 +5,5 @@ constructors:
 - void Short(int w, int h, String l)
 - void (int x, int y, int w, int h, String l)
 
-methods: []
+methods:
+- void copy_label(String text)

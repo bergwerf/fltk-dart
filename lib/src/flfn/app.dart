@@ -21,7 +21,7 @@ class App {
     fl.scheme = other.scheme;
     for (final key in other.windows.keys) {
       if (windows.containsKey(key)) {
-        windows[key].merge(other.windows[key]);
+        windows[key].merge(other.windows[key], this);
       } else {
         windows[key] = other.windows[key];
         windows[key].build(this);

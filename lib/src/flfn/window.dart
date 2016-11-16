@@ -20,8 +20,26 @@ class Window {
     _window.show();
   }
 
-  void merge(Window other) {
+  void merge(Window other, App parent) {
     _window.label = other.l;
+
+    // TODO: hot rescale
+
+    for (final key in other.children.keys) {
+      if (children.containsKey(key)) {
+        children[key].merge(other.children[key], parent);
+      } else {
+        children[key] = other.children[key];
+        children[key].build(parent);
+      }
+    }
+
+    for (final key in children.keys) {
+      if (!other.children.containsKey(key)) {
+        //children[key].destroy();
+        children.remove(key);
+      }
+    }
   }
 
   Button getButton(List<String> selector) {

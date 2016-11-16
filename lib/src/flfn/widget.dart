@@ -12,6 +12,8 @@ abstract class Widget<W extends fl.Widget> {
 
   Widget(this._props);
 
+  Map<String, dynamic> get props => _props;
+
   void build(App app) {
     _widget = _createInstance();
     applyProps(app);
@@ -31,6 +33,11 @@ abstract class Widget<W extends fl.Widget> {
 
   void unset(String prop) => _props.remove(prop);
 
+  void merge(Widget other, App parent) {
+    mergeProps(other.props);
+    applyProps(parent);
+  }
+
   void mergeProps(Map<String, dynamic> others) {
     // I'm not sure if Map.addAll overwrites.
     for (final key in others.keys) {
@@ -39,6 +46,9 @@ abstract class Widget<W extends fl.Widget> {
   }
 
   void applyProps(App app) {
+    if (_props.containsKey('label')) {
+      _widget.label = _props['label'];
+    }
     if (_props.containsKey('labelsize')) {
       _widget.labelsize = _props['labelsize'];
     }
